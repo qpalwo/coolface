@@ -41,6 +41,8 @@ captures/
 .idea/dictionaries
 .idea/libraries
 .idea/caches
+.idea/codeStyles
+.idea/encodings.xml
 
 # Keystore files
 # Uncomment the following line if you do not want to check your keystore files in.
@@ -64,7 +66,7 @@ fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
 .idea/codeStyles/
-.idea/encodings.xml
+
 app/src/main/java/com/hustunique/coolface/community/
 app/src/main/java/com/hustunique/coolface/detection/
 app/src/main/java/com/hustunique/coolface/me/
