@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="LikeButton">
+        <attr name="accentColor" format="color" />
+        <attr name="ltheme">
+            <enum name="heart" value="1" />
+            <enum name="star" value="2" />
+            <enum name="thumb" value="3" />
+        </attr>
+    </declare-styleable>
+</resources>

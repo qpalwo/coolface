@@ -6,7 +6,18 @@ import com.hustunique.coolface.bean.Post
 
 class MainViewModel : ViewModel() {
     fun init() {
-        posts.value = listOf(Post("a", "a", "a", 1, null))
+        posts.value = listOf(
+            Post("a", "a", "a", 1, null),
+            Post("a", "a", "a", 1, null),
+            Post("a", "a", "a", 1, null),
+            Post("a", "a", "a", 1, null),
+            Post("a", "a", "a", 1, null),
+            Post("a", "a", "a", 1, null),
+            Post("a", "a", "a", 1, null),
+            Post("a", "a", "a", 1, null),
+            Post("a", "a", "a", 1, null),
+            Post("a", "a", "a", 1, null)
+        )
     }
 
     val posts = MutableLiveData<List<Post>>()
