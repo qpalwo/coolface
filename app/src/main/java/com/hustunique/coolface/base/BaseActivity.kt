@@ -26,22 +26,22 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int, viewModelClass: Class<
     /**
      * 第一个调用的初始化方法
      */
-    fun init() {}
+    open fun init() {}
 
     /**
      * 用于初始化数据，如获取Intent、saveInstanceState
      */
-    fun initData(savedInstanceState: Bundle?) {}
+    open fun initData(savedInstanceState: Bundle?) {}
 
 
     /**
      * 初始化View
      */
-    fun initView() {}
+    open fun initView() {}
 
 
     /**
      * 用于初始化MVVM绑定关系
      */
-    fun initContact() {}
+    open fun initContact() {}
 }
