@@ -6,13 +6,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 
-abstract class BaseActivity(@LayoutRes val layoutId: Int, viewModelClass: Class<out ViewModel>? = null) :
+abstract class BaseActivity(@LayoutRes val layoutId: Int, private val viewModelClass: Class<out ViewModel>? = null) :
     AppCompatActivity() {
-    val viewModel: ViewModel? = viewModelClass?.let { ViewModelProviders.of(this).get(viewModelClass) }
+    var viewModel: ViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layoutId)
+
+        viewModel = viewModelClass?.let { ViewModelProviders.of(this).get(viewModelClass) }
 
         init()
 
@@ -22,7 +24,6 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int, viewModelClass: Class<
 
         initContact()
     }
-
     /**
      * 第一个调用的初始化方法
      */
