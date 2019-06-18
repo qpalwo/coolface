@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CoolFace.iml" filepath="$PROJECT_DIR$/CoolFace.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/coolface-CoolFace.iml" filepath="$PROJECT_DIR$/coolface-CoolFace.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/coolface-app.iml" filepath="$PROJECT_DIR$/app/coolface-app.iml" />
     </modules>
   </component>
 </project>

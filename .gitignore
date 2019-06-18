@@ -63,3 +63,8 @@ fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
+.idea/codeStyles/
+.idea/encodings.xml
+app/src/main/java/com/hustunique/coolface/community/
+app/src/main/java/com/hustunique/coolface/detection/
+app/src/main/java/com/hustunique/coolface/me/
