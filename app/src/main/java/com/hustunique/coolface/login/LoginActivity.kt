@@ -1,9 +1,9 @@
 package com.hustunique.coolface.login
 
-import cn.bmob.v3.BmobQuery
+import android.content.Intent
+import android.widget.Toast
 import cn.bmob.v3.BmobUser
 import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.FindListener
 import cn.bmob.v3.listener.SaveListener
 import com.hustunique.coolface.R
 import com.hustunique.coolface.base.BaseActivity
@@ -17,7 +17,8 @@ class LoginActivity : BaseActivity(R.layout.activity_login) {
 
     override fun initContact() {
         super.initContact()
-
+        btn_login_login.setOnClickListener { login() }
+        tv_login_forget.setOnClickListener { forget() }
     }
 
 
@@ -31,6 +32,8 @@ class LoginActivity : BaseActivity(R.layout.activity_login) {
             override fun done(p0: User?, p1: BmobException?) {
                 if (p1 == null) {
                     // 登录成功
+                    Toast.makeText(applicationContext, "登录成功", Toast.LENGTH_SHORT).show()
+
                 } else {
                     // 登录失败
                 }
@@ -39,5 +42,10 @@ class LoginActivity : BaseActivity(R.layout.activity_login) {
         })
     }
 
+    private fun forget() {
+        val intent = Intent()
+        startActivity(intent)
+        this.finish()
+    }
 
 }
