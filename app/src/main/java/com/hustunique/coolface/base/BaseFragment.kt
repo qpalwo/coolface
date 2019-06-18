@@ -24,19 +24,19 @@ class BaseFragment(@LayoutRes val layoutId: Int, viewModelClass: Class<out ViewM
         return view
     }
 
-    fun init() {
+    open fun init() {
 
     }
 
-    fun initData() {
+    open fun initData() {
 
     }
 
-    fun initView(view: View) {
+    open fun initView(view: View) {
 
     }
 
-    fun initContact() {
+    open fun initContact() {
 
     }
 }
