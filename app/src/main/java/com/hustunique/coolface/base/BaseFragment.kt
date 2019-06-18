@@ -17,11 +17,16 @@ class BaseFragment(@LayoutRes val layoutId: Int, viewModelClass: Class<out ViewM
 
         initData()
 
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         initView(view)
 
         initContact()
 
-        return view
     }
 
     open fun init() {

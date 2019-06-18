@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="titleText">25dp</dimen>
+    <dimen name="postMessage">20dp</dimen>
+    <dimen name="postUsername">16dp</dimen>
 </resources>

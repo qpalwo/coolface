@@ -1,16 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="10dp"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageView
+            android:id="@+id/post_image"
+            tools:src="@drawable/ic_me_circle_36dp"
             android:adjustViewBounds="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-    </LinearLayout>
+
+        <TextView
+            android:id="@+id/post_message"
+            tools:text="我是一个黑豆豆"
+            android:textSize="@dimen/postMessage"
+            android:textColor="@color/colorText"
+            android:layout_below="@id/post_image"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/post_username"
+            tools:text="我是谁？"
+            android:layout_alignStart="@id/post_message"
+            android:layout_below="@id/post_message"
+            android:textSize="@dimen/postUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 </androidx.cardview.widget.CardView>

@@ -10,5 +10,6 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
     override fun initView() {
         super.initView()
         main_list.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
+
     }
 }

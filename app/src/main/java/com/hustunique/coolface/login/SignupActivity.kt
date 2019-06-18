@@ -1,6 +1,5 @@
 package com.hustunique.coolface.login
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.hustunique.coolface.R
 import com.hustunique.coolface.base.BaseActivity
