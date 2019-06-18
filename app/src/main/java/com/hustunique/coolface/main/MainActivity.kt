@@ -13,7 +13,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
 
     override fun init() {
         super.init()
-
+        (viewModel as MainViewModel).init()
     }
 
     override fun initView() {
