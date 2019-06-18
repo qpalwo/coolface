@@ -25,6 +25,16 @@ abstract class BaseAdapter<Data>(
         return ViewHolder.get(itemLayoutRes, parent)
     }
 
+    override fun getItemCount(): Int = if (data == null) 0 else data?.size!!
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.itemView.setOnClickListener {
+            clickListener?.onClick(position, holder.itemView)
+        }
+        onBindView(holder, position)
+    }
+
+
     /**
      * 第一个调用的初始化
      */
@@ -35,13 +45,6 @@ abstract class BaseAdapter<Data>(
      */
     open fun initData() {}
 
-
-    override fun getItemCount(): Int = if (data == null) 0 else data?.size!!
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.itemView.setOnClickListener {
-            clickListener?.onClick(position, holder.itemView)
-        }
-    }
+    open fun onBindView(holder: ViewHolder, position: Int) {}
 
 }
