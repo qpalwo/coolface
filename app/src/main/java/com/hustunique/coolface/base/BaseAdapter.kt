@@ -45,6 +45,9 @@ abstract class BaseAdapter<Data>(
      */
     open fun initData() {}
 
+    /**
+     * 绑定视图的时候调用
+     */
     open fun onBindView(holder: ViewHolder, position: Int) {}
 
 }
