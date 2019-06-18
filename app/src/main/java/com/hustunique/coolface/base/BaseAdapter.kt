@@ -21,9 +21,16 @@ abstract class BaseAdapter<Data>(@LayoutRes val itemLayoutRes: Int, var data: Li
         return ViewHolder.get(itemLayoutRes, parent)
     }
 
+    /**
+     * 第一个调用的初始化
+     */
     fun init() {}
 
+    /**
+     * 初始化数据
+     */
     fun initData() {}
+
 
     override fun getItemCount(): Int = if (data == null) 0 else data?.size!!
 

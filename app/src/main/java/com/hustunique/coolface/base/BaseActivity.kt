@@ -33,13 +33,15 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int, viewModelClass: Class<
      */
     fun initData(savedInstanceState: Bundle?) {}
 
-    /**
-     * 用于初始化MVVM绑定关系
-     */
-    fun initContact() {}
 
     /**
      * 初始化View
      */
     fun initView() {}
+
+
+    /**
+     * 用于初始化MVVM绑定关系
+     */
+    fun initContact() {}
 }
