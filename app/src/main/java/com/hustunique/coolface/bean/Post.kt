@@ -9,4 +9,10 @@ package com.hustunique.coolface.bean
  * @param likeCount 点赞数
  * @param faceBean 从服务器获取的人脸照片的检测的数据
  */
-data class Post(var imageUrl: String, var message: String, var username: String, var likeCount: Int, var faceBean: FaceBean)
+data class Post(
+    var imageUrl: String,
+    var message: String,
+    var username: String,
+    var likeCount: Int,
+    var faceBean: FaceBean?
+)
