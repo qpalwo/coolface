@@ -7,6 +7,7 @@
     tools:context=".login.SignupActivity">
 
     <TextView
+        android:id="@+id/tv_login_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="创建你的账号"
@@ -19,25 +20,15 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/et_signup_phone"
+            android:id="@+id/et_signup_username"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="手机号码" />
+            android:hint="设置账号" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="获取验证码" />
 
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/et_signup_verify"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="验证码"
-        android:inputType="number" />
 
     <EditText
         android:id="@+id/et_signup_password"
