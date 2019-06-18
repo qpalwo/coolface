@@ -2,13 +2,17 @@ package com.hustunique.coolface.base
 
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
 
 /**
  * 这个是最基础的Adapter，特殊类型的要单独写
  * 泛型T写的是这个Adapter对应的Bean的类型，可以不写
  */
-abstract class BaseAdapter<Data>(@LayoutRes val itemLayoutRes: Int, var data: List<Data>? = null) :
+abstract class BaseAdapter<Data>(
+    @LayoutRes val itemLayoutRes: Int, var data: List<Data>? = null,
+    var viewModel: ViewModel? = null
+) :
     RecyclerView.Adapter<ViewHolder>() {
 
     var clickListener: ListOnClickListener? = null
