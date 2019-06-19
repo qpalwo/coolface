@@ -23,5 +23,5 @@ class MainViewModel : ViewModel() {
 
     val posts = MutableLiveData<List<Post>>()
 
-    fun getPictureFile(context: Context) = PictureRepo.getInstance(context).getFile()
+    fun getPictureFile(context: Context) = PictureRepo.getInstance(context).getNewFile()
 }

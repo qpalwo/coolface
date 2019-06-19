@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.hustunique.coolface.R
+import com.hustunique.coolface.showscore.ShowScoreActivity
 import com.hustunique.coolface.base.BaseActivity
 import com.hustunique.coolface.util.FileUtil
 import kotlinx.android.synthetic.main.activity_main.*
@@ -52,7 +53,13 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
-
+            when (requestCode) {
+                CAMERA_CODE -> {
+                    val intent = Intent(this, ShowScoreActivity::class.java)
+                    startActivity(intent)
+                }
+                else -> {}
+            }
         }
     }
 

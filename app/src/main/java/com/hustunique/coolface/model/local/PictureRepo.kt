@@ -8,7 +8,7 @@ import java.io.File
  * @author  : Xiao Yuxuan
  * @date    : 6/19/19
  */
-class PictureRepo private constructor(context: Context) {
+class PictureRepo private constructor(val context: Context) {
     companion object {
         private lateinit var Instance: PictureRepo
         fun getInstance(context: Context): PictureRepo {
@@ -19,7 +19,12 @@ class PictureRepo private constructor(context: Context) {
         }
     }
 
-    var imageFile: File? = FileUtil.createImageFile(context)
+    private var imageFile: File? = FileUtil.createImageFile(context)
 
     fun getFile() = imageFile
+
+    fun getNewFile(): File? {
+        imageFile = FileUtil.createImageFile(context)
+        return imageFile
+    }
 }
