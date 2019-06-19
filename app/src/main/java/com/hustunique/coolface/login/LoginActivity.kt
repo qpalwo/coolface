@@ -1,6 +1,7 @@
 package com.hustunique.coolface.login
 
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import cn.bmob.v3.BmobUser
 import cn.bmob.v3.exception.BmobException
@@ -19,6 +20,11 @@ class LoginActivity : BaseActivity(R.layout.activity_login) {
         super.initContact()
         btn_login_login.setOnClickListener { login() }
         tv_login_forget.setOnClickListener { forget() }
+
+        if (BmobUser.isLogin()) {
+            val user = BmobUser.getCurrentUser(User::class.java)
+            Log.d("bmob", user.username)
+        }
     }
 
 
@@ -33,9 +39,10 @@ class LoginActivity : BaseActivity(R.layout.activity_login) {
                 if (p1 == null) {
                     // 登录成功
                     Toast.makeText(applicationContext, "登录成功", Toast.LENGTH_SHORT).show()
-
+                    this@LoginActivity.finish()
                 } else {
                     // 登录失败
+                    Toast.makeText(applicationContext, "用户名或密码错误", Toast.LENGTH_SHORT).show()
                 }
             }
 

@@ -34,7 +34,15 @@
         android:id="@+id/et_signup_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textPassword"
         android:hint="设置密码" />
+    
+    <TextView
+        android:id="@+id/tv_signup_show"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        />
 
     <Button
         android:id="@+id/btn_signup_signup"

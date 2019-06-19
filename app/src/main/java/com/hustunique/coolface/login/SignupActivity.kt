@@ -1,6 +1,7 @@
 package com.hustunique.coolface.login
 
-import android.os.Bundle
+import android.text.InputType
+import android.util.Log
 import android.widget.Toast
 import cn.bmob.v3.BmobUser
 import cn.bmob.v3.exception.BmobException
@@ -17,17 +18,11 @@ class SignupActivity : BaseActivity(R.layout.activity_signup) {
         const val RESET = 1
     }
 
-
-    init {
-        val status = intent.flags
-
-    }
-
     override fun initContact() {
         super.initContact()
-        btn_signup_signup.setOnClickListener {
-            signUp()
-        }
+        btn_signup_signup.setOnClickListener { signUp() }
+
+        tv_signup_show.setOnClickListener { showOrHide() }
     }
 
     private fun signUp() {
@@ -38,14 +33,20 @@ class SignupActivity : BaseActivity(R.layout.activity_signup) {
         user.setPassword(password)
         user.signUp(object : SaveListener<User>() {
             override fun done(p0: User?, p1: BmobException?) {
-                if (p1 == null) {
-                    Toast.makeText(applicationContext, "注册成功", Toast.LENGTH_SHORT).show()
-                } else {
-
+                when {
+                    p1 == null -> {
+                        Toast.makeText(applicationContext, "注册成功", Toast.LENGTH_SHORT).show()
+                        this@SignupActivity.finish()
+                    }
+                    p1.errorCode == 202 -> Toast.makeText(applicationContext, "该用户名已被占用", Toast.LENGTH_SHORT).show()
+                    else -> Toast.makeText(applicationContext, p1.errorCode.toString() + p1.message, Toast.LENGTH_SHORT).show()
                 }
             }
-
         })
+    }
+
+    private fun showOrHide() {
+        et_signup_password.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
     }
 
 
