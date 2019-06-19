@@ -1,9 +1,7 @@
 package com.hustunique.coolface.login
 
-import cn.bmob.v3.BmobQuery
 import cn.bmob.v3.BmobUser
 import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.FindListener
 import cn.bmob.v3.listener.SaveListener
 import com.hustunique.coolface.R
 import com.hustunique.coolface.base.BaseActivity

@@ -23,8 +23,8 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
     private lateinit var mViewModel: MainViewModel
     override fun init() {
         super.init()
-        (viewModel as MainViewModel).init()
         mViewModel = viewModel as MainViewModel
+        mViewModel.init()
     }
 
     override fun initView() {
@@ -36,7 +36,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
 
     override fun initContact() {
         super.initContact()
-        (viewModel as MainViewModel).posts.observe(this, Observer {
+        mViewModel.posts.observe(this, Observer {
             (main_list.adapter as MainAdapter).data = it
             (main_list.adapter as MainAdapter).notifyDataSetChanged()
         })

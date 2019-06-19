@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:layout_margin="5dp"
+    android:orientation="vertical"
     app:cardCornerRadius="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,37 +25,47 @@
             android:id="@+id/post_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="3dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="我是一个黑豆豆"
+            android:maxWidth="180dp"
+            android:text="我长得很白，白得五官都看不到了。看呀，多美"
             android:textColor="@color/colorText"
             android:textSize="@dimen/postMessage"
-            app:layout_constraintEnd_toStartOf="@+id/likeButton"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/post_image" />
 
         <com.hustunique.coolface.view.LikeButton
-            android:id="@+id/likeButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:id="@+id/like_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:src="@drawable/ic_me_circle_36dp"
             app:accentColor="@color/colorPrimaryDark"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/post_image"
+            app:layout_constraintEnd_toStartOf="@+id/post_like_count"
+            app:layout_constraintTop_toBottomOf="@+id/post_message"
             app:ltheme="star" />
+
+        <TextView
+            android:id="@+id/post_like_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            app:layout_constraintBottom_toBottomOf="@+id/like_button"
+            app:layout_constraintEnd_toEndOf="@+id/post_message"
+            app:layout_constraintTop_toTopOf="@+id/like_button" />
 
         <TextView
             android:id="@+id/post_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="我是谁？"
-            android:textSize="@dimen/postUsername"
             android:layout_margin="3dp"
+            android:maxWidth="200dp"
+            android:text="肖宇轩"
+            android:textSize="@dimen/postUsername"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/post_message"
             app:layout_constraintTop_toBottomOf="@+id/post_message" />
     </androidx.constraintlayout.widget.ConstraintLayout>

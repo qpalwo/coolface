@@ -11,12 +11,12 @@ import com.hustunique.coolface.R
 
 class LikeButton(context: Context?, attrs: AttributeSet?) : ImageView(context, attrs) {
 
-    private lateinit var drawables: Array<Drawable>
+    private var drawables: Array<Drawable>
 
     private companion object {
         val HEART = 1
         val STAR = 2
-        val thumb = 3
+        val THUMB = 3
     }
 
     init {
@@ -39,6 +39,8 @@ class LikeButton(context: Context?, attrs: AttributeSet?) : ImageView(context, a
         drawables.forEach { it.setTintList(colors) }
 
         setImageDrawable(drawables[0])
+
+        ta?.recycle()
     }
 
     private var isChecked = false
@@ -75,4 +77,6 @@ class LikeButton(context: Context?, attrs: AttributeSet?) : ImageView(context, a
         isChecked = false
         setImageDrawable(drawables[0])
     }
+
+    fun isChecked() = isChecked
 }
