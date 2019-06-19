@@ -5,7 +5,6 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
-import pub.devrel.easypermissions.EasyPermissions
 
 abstract class BaseActivity(@LayoutRes val layoutId: Int, private val viewModelClass: Class<out ViewModel>? = null) :
     AppCompatActivity() {
@@ -24,11 +23,6 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int, private val viewModelC
         initView()
 
         initContact()
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
     /**

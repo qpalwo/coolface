@@ -1,4 +1,4 @@
-package com.hustunique.coolface.remote.interceptors
+package com.hustunique.coolface.model.remote.interceptors
 
 import okhttp3.FormBody
 import okhttp3.Interceptor

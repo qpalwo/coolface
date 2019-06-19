@@ -1,6 +1,6 @@
-package com.hustunique.coolface.remote
+package com.hustunique.coolface.model.remote
 
-import com.hustunique.coolface.remote.bean.FacePPReturn
+import com.hustunique.coolface.model.remote.bean.FacePPReturn
 import io.reactivex.Single
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded

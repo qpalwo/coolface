@@ -1,4 +1,4 @@
-package com.hustunique.coolface.remote.bean
+package com.hustunique.coolface.model.remote.bean
 
 /**
  * @author  : Xiao Yuxuan

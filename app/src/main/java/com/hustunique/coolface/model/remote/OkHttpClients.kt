@@ -1,6 +1,6 @@
-package com.hustunique.coolface.remote
+package com.hustunique.coolface.model.remote
 
-import com.hustunique.coolface.remote.interceptors.FacePPKeyInterceptor
+import com.hustunique.coolface.model.remote.interceptors.FacePPKeyInterceptor
 import okhttp3.OkHttpClient
 
 /**
