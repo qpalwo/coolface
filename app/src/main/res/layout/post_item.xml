@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
@@ -25,9 +26,10 @@
             android:id="@+id/post_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:maxWidth="180dp"
+            android:maxWidth="130dp"
             android:text="我长得很白，白得五官都看不到了。看呀，多美"
             android:textColor="@color/colorText"
             android:textSize="@dimen/postMessage"
@@ -35,38 +37,43 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/post_image" />
 
-        <com.hustunique.coolface.view.LikeButton
-            android:id="@+id/like_button"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:src="@drawable/ic_me_circle_36dp"
-            app:accentColor="@color/colorPrimaryDark"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/post_like_count"
-            app:layout_constraintTop_toBottomOf="@+id/post_message"
-            app:ltheme="star" />
+            android:layout_marginEnd="8dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/post_message">
 
-        <TextView
-            android:id="@+id/post_like_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            app:layout_constraintBottom_toBottomOf="@+id/like_button"
-            app:layout_constraintEnd_toEndOf="@+id/post_message"
-            app:layout_constraintTop_toTopOf="@+id/like_button" />
+            <TextView
+                android:id="@+id/post_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="50dp"
+                android:maxWidth="200dp"
+                android:text="肖宇轩"
+                android:textSize="@dimen/postUsername" />
 
-        <TextView
-            android:id="@+id/post_username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="3dp"
-            android:maxWidth="200dp"
-            android:text="肖宇轩"
-            android:textSize="@dimen/postUsername"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/post_message"
-            app:layout_constraintTop_toBottomOf="@+id/post_message" />
+            <com.hustunique.coolface.view.LikeButton
+                android:id="@+id/like_button"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_me_circle_36dp"
+                app:accentColor="@color/colorPrimaryDark"
+                app:ltheme="star" />
+
+            <TextView
+                android:id="@+id/post_like_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="200" />
+
+
+        </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

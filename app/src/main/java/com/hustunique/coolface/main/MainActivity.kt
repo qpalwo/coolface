@@ -1,15 +1,15 @@
 package com.hustunique.coolface.main
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.view.Gravity.START
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.hustunique.coolface.R
@@ -34,6 +34,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
     }
 
 
+    @SuppressLint("WrongConstant")
     override fun initContact() {
         super.initContact()
         mViewModel.posts.observe(this, Observer {
@@ -42,6 +43,9 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         })
         mainactivity_fb.setOnClickListener {
             startCamera()
+        }
+        main_me.setOnClickListener {
+            main_drawerlayout.openDrawer(START)
         }
     }
 
