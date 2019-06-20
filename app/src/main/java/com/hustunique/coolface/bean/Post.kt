@@ -1,5 +1,7 @@
 package com.hustunique.coolface.bean
 
+import cn.bmob.v3.BmobObject
+
 
 /**
  * 该类表示一条动态
@@ -15,4 +17,4 @@ data class Post(
     var username: String,
     var likeCount: Int,
     var faceBean: FaceBean?
-)
+): BmobObject()

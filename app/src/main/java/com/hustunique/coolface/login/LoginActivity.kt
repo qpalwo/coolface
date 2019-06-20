@@ -50,7 +50,7 @@ class LoginActivity : BaseActivity(R.layout.activity_login) {
     }
 
     private fun forget() {
-        val intent = Intent()
+        val intent = Intent(this, ResetActivity::class.java)
         startActivity(intent)
         this.finish()
     }

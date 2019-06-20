@@ -24,6 +24,7 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int, private val viewModelC
 
         initContact()
     }
+
     /**
      * 第一个调用的初始化方法
      */

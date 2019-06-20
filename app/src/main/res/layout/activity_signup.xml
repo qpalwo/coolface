@@ -24,7 +24,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="设置账号" />
+            android:hint="邮箱" />
 
 
     </LinearLayout>
@@ -38,10 +38,11 @@
         android:hint="设置密码" />
     
     <TextView
-        android:id="@+id/tv_signup_show"
+        android:id="@+id/tv_signup_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+        android:textSize="20sp"
+        android:text="已有账号？"
         />
 
     <Button
