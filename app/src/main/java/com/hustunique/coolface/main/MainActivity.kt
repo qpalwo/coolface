@@ -1,19 +1,20 @@
 package com.hustunique.coolface.main
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.view.Gravity.START
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import cn.bmob.v3.Bmob
 import com.hustunique.coolface.R
+import com.hustunique.coolface.showscore.ShowScoreActivity
 import com.hustunique.coolface.base.BaseActivity
 import com.hustunique.coolface.login.LoginActivity
 import com.hustunique.coolface.login.SignupActivity
@@ -26,10 +27,10 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
     private lateinit var mViewModel: MainViewModel
     override fun init() {
         super.init()
-        (viewModel as MainViewModel).init()
         mViewModel = viewModel as MainViewModel
 
         Bmob.initialize(this, "12087a50147473005dcbe686a04bf4f1")
+        mViewModel.init()
     }
 
     override fun initView() {
@@ -39,26 +40,31 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
     }
 
 
+    @SuppressLint("WrongConstant")
     override fun initContact() {
         super.initContact()
-        (viewModel as MainViewModel).posts.observe(this, Observer {
+        mViewModel.posts.observe(this, Observer {
             (main_list.adapter as MainAdapter).data = it
             (main_list.adapter as MainAdapter).notifyDataSetChanged()
         })
         mainactivity_fb.setOnClickListener {
             startCamera()
         }
-
         main_me.setOnClickListener {
-            val intent = Intent(this, SignupActivity::class.java)
-            startActivity(intent)
+            main_drawerlayout.openDrawer(START)
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
-
+            when (requestCode) {
+                CAMERA_CODE -> {
+                    val intent = Intent(this, ShowScoreActivity::class.java)
+                    startActivity(intent)
+                }
+                else -> {}
+            }
         }
     }
 
