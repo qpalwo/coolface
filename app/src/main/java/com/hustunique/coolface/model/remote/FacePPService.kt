@@ -2,9 +2,7 @@ package com.hustunique.coolface.model.remote
 
 import com.hustunique.coolface.model.remote.bean.FacePPReturn
 import io.reactivex.Single
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import retrofit2.http.*
 
 /**
  * @author  : Xiao Yuxuan
@@ -12,8 +10,8 @@ import retrofit2.http.POST
  */
 interface FacePPService {
 
-    @POST(NetConfig.facePPMethodDetect)
+    @POST(NetConfig.FACEPP_METHOD_DETECT)
     @FormUrlEncoded
-    fun detect(@Field("image_base64") image: String,
+    fun detect(@Field("image_file") picture_path: String,
                @Field("return_attributes") attr: String): Single<FacePPReturn>
 }

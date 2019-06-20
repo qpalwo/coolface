@@ -1,4 +1,4 @@
-package com.hustunique.coolface.model.remote.interceptors
+package com.hustunique.coolface.model.remote
 
 /**
  * @author  : Xiao Yuxuan

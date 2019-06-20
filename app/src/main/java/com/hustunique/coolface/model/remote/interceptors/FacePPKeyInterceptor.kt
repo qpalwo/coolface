@@ -1,7 +1,9 @@
 package com.hustunique.coolface.model.remote.interceptors
 
+import com.hustunique.coolface.model.remote.FacePPConfig
 import okhttp3.FormBody
 import okhttp3.Interceptor
+import okhttp3.MultipartBody
 import okhttp3.Response
 
 /**
@@ -18,7 +20,7 @@ class FacePPKeyInterceptor : Interceptor{
         if (request.body() is FormBody) {
             val oldBody = request.body() as FormBody
             for (i in 0 until oldBody.size()) {
-                formBody.add(oldBody.encodedName(i), oldBody.encodedValue(i))
+                formBody.add(oldBody.encodedName(i), oldBody.value(i))
             }
         }
         return chain.proceed(requestBuilder.post(formBody.build()).build())
