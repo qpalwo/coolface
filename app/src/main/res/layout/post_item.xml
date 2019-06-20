@@ -2,15 +2,18 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/post_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
     android:orientation="vertical"
+    android:transitionName="@string/post_shared"
     app:cardCornerRadius="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
 
         <ImageView
             android:id="@+id/post_image"
@@ -22,12 +25,26 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/post_like_ani"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/post_image"
+            app:layout_constraintEnd_toEndOf="@+id/post_image"
+            app:layout_constraintStart_toStartOf="@+id/post_image"
+            app:layout_constraintTop_toTopOf="@id/post_image"
+            app:lottie_fileName="like.json" />
+
         <TextView
             android:id="@+id/post_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="8dp"
             android:maxWidth="130dp"
             android:text="我长得很白，白得五官都看不到了。看呀，多美"
@@ -59,12 +76,12 @@
                 android:textSize="@dimen/postUsername" />
 
             <com.hustunique.coolface.view.LikeButton
-                android:id="@+id/like_button"
+                android:id="@+id/post_like_button"
                 android:layout_width="30dp"
                 android:layout_height="40dp"
                 android:src="@drawable/ic_me_circle_36dp"
                 app:accentColor="@color/colorPrimaryDark"
-                app:ltheme="star" />
+                app:ltheme="heart" />
 
             <TextView
                 android:id="@+id/post_like_count"

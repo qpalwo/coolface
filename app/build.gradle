@@ -50,5 +50,9 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation 'top.zibin:Luban:1.1.8'
     testImplementation 'junit:junit:4.12'
+<<<<<<< HEAD
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
+=======
+    implementation 'com.airbnb.android:lottie:3.0.6'
+>>>>>>> a7206e2... [feat] 共享元素 | 字体 | lottie动画
 }
