@@ -92,6 +92,7 @@ class FacePPAttrUtil private constructor() {
         fun default() =
             addBeauty()
                 .addEmotion()
+                .addGender()
                 .build()
     }
 

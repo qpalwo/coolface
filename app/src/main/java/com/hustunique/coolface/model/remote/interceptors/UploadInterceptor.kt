@@ -26,7 +26,7 @@ class UploadInterceptor : Interceptor {
             .setType(MultipartBody.FORM)
         for (i in 0 until oldBody.size()) {
             if (i != upload) {
-                multipartBody.addFormDataPart(oldBody.encodedName(i), oldBody.encodedValue(i))
+                multipartBody.addFormDataPart(oldBody.encodedName(i), oldBody.value(i))
                 continue
             }
             val filePath = oldBody.value(i).split("]")
