@@ -14,12 +14,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import cn.bmob.v3.Bmob
 import com.hustunique.coolface.R
-import com.hustunique.coolface.showscore.ShowScoreActivity
 import com.hustunique.coolface.base.BaseActivity
-import com.hustunique.coolface.login.LoginActivity
-import com.hustunique.coolface.login.SignupActivity
+import com.hustunique.coolface.showscore.ShowScoreActivity
 import com.hustunique.coolface.util.FileUtil
 import kotlinx.android.synthetic.main.activity_main.*
+import android.view.View
+import com.hustunique.coolface.base.ListOnClickListener
+import com.hustunique.coolface.showcard.ShowActivity
 
 class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.java) {
 
@@ -57,6 +58,11 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             val intent = Intent(this, SignupActivity::class.java)
             startActivity(intent)
         }
+        (main_list.adapter as MainAdapter).clickListener = object : ListOnClickListener {
+            override fun onClick(position: Int, v: View) {
+                startActivity(Intent(this@MainActivity, ShowActivity::class.java))
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -67,7 +73,8 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                     val intent = Intent(this, ShowScoreActivity::class.java)
                     startActivity(intent)
                 }
-                else -> {}
+                else -> {
+                }
             }
         }
     }
