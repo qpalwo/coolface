@@ -1,8 +1,17 @@
 package com.hustunique.coolface.model.local
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
+import com.hustunique.coolface.bean.Resource
+import com.hustunique.coolface.bean.Status
+import com.hustunique.coolface.model.remote.FacePPService
+import com.hustunique.coolface.model.remote.RetrofitService
+import com.hustunique.coolface.model.remote.SMMSService
 import com.hustunique.coolface.model.remote.bean.FacePPReturn
+import com.hustunique.coolface.util.FacePPAttrUtil
+import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import top.zibin.luban.Luban
 import java.io.File
 
@@ -10,7 +19,7 @@ import java.io.File
  * @author  : Xiao Yuxuan
  * @date    : 6/19/19
  */
-class ScoringRepo private constructor(val context: Context){
+class ScoringRepo private constructor(val context: Context) {
 
     companion object {
         private lateinit var Instance: ScoringRepo
@@ -22,9 +31,23 @@ class ScoringRepo private constructor(val context: Context){
         }
     }
 
-    fun scoring(picture: File, liveData: MutableLiveData<FacePPReturn>) {
-        Luban.with(context)
-            .load(picture)
-            .launch()
+    val facePPService = RetrofitService.Instance.facePPRetrofit.create(FacePPService::class.java)
+    val smmsService = RetrofitService.Instance.smmsRetrofit.create(SMMSService::class.java)
+
+    @SuppressLint("CheckResult")
+    fun scoring(picture: File, liveData: MutableLiveData<Resource<FacePPReturn>>) {
+        Single.just(picture)
+            .subscribeOn(Schedulers.io())
+            .flatMap {
+                val compressedFile = Luban.with(context)
+                    .load(it)
+                    .get()
+                facePPService.detect("[upload]${compressedFile[0].absolutePath}", FacePPAttrUtil.Builder().default())
+            }
+            .subscribe({
+                liveData.postValue(Resource.success(it))
+            }, {
+                liveData.postValue(Resource.error(it.message ?: ""))
+            })
     }
 }

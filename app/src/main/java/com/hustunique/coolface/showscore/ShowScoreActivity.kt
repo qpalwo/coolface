@@ -17,6 +17,12 @@ class ShowScoreActivity : BaseActivity(R.layout.activity_show_score, ShowScoreVi
     override fun initView() {
         super.initView()
         Glide.with(this).load(mViewModel.getPictureFile()).into(show_score_imgview)
+        mViewModel.scoring()
+    }
+
+    override fun initContact() {
+        super.initContact()
+
     }
 
 }

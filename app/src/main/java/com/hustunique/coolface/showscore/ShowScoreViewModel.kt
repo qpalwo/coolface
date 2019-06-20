@@ -3,17 +3,17 @@ package com.hustunique.coolface.showscore
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.hustunique.coolface.bean.Resource
 import com.hustunique.coolface.model.local.PictureRepo
 import com.hustunique.coolface.model.local.ScoringRepo
 import com.hustunique.coolface.model.remote.bean.FacePPReturn
-import java.io.File
 
 /**
  * @author  : Xiao Yuxuan
  * @date    : 6/19/19
  */
 class ShowScoreViewModel : ViewModel() {
-    val scoringData: MutableLiveData<FacePPReturn> = MutableLiveData()
+    val scoringData: MutableLiveData<Resource<FacePPReturn>> = MutableLiveData()
     lateinit var mContext: Context
 
     fun init(context: Context) {
@@ -22,8 +22,13 @@ class ShowScoreViewModel : ViewModel() {
 
     fun getPictureFile() = PictureRepo.getInstance(mContext).getFile()
 
-    fun scoring(picture: File) {
-        ScoringRepo.getInstance(mContext).scoring(picture, scoringData)
+    fun scoring() {
+        if (getPictureFile()?.let {
+                scoringData.value = Resource.loading()
+                ScoringRepo.getInstance(mContext).scoring(it, scoringData)
+            } == null) {
+            scoringData.value = Resource.error("load file error")
+        }
     }
 
 }
