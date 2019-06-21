@@ -1,8 +1,6 @@
 package com.hustunique.coolface.login
 
 import android.content.Intent
-import android.text.InputType
-import android.util.Log
 import android.widget.Toast
 import cn.bmob.v3.BmobUser
 import cn.bmob.v3.exception.BmobException
@@ -54,7 +52,11 @@ class SignupActivity : BaseActivity(R.layout.activity_signup) {
                         this@SignupActivity.finish()
                     }
                     p1.errorCode == 202 -> Toast.makeText(applicationContext, "该用户名已被占用", Toast.LENGTH_SHORT).show()
-                    else -> Toast.makeText(applicationContext, p1.errorCode.toString() + p1.message, Toast.LENGTH_SHORT).show()
+                    else -> Toast.makeText(
+                        applicationContext,
+                        p1.errorCode.toString() + p1.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         })

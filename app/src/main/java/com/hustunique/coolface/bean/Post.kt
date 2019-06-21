@@ -17,5 +17,6 @@ data class Post(
     var message: String,
     var username: String,
     var likeCount: Int,
-    var faceBean: FaceBean?
+    var faceBean: FaceBean?,
+    var comments: List<String>? = null
 ) : BmobObject(), Serializable

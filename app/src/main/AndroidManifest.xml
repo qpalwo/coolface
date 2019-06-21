@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".showcard.ShowActivity"
+            android:name=".showcard.ShowCardActivity"
             android:theme="@style/Transparent" />
 
         <provider
