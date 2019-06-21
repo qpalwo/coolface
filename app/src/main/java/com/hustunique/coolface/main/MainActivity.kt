@@ -4,8 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.net.Uri
-import android.os.Build
+import android.os.Bundle
 import android.provider.MediaStore
 import android.transition.ChangeTransform
 import android.view.Gravity.START
@@ -20,7 +19,9 @@ import com.hustunique.coolface.R
 import com.hustunique.coolface.base.BaseActivity
 import com.hustunique.coolface.base.ListOnClickListener
 import com.hustunique.coolface.login.SignupActivity
-import com.hustunique.coolface.showcard.ShowCardActivity
+
+import com.hustunique.coolface.show.BaseShowCard
+import com.hustunique.coolface.showcard.ShowCardFragment
 import com.hustunique.coolface.showscore.ShowScoreActivity
 import com.hustunique.coolface.util.FileUtil
 import kotlinx.android.synthetic.main.activity_main.*
@@ -67,15 +68,21 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         }
         (main_list.adapter as MainAdapter).clickListener = object : ListOnClickListener {
             override fun onClick(position: Int, v: View) {
-                val intent = Intent(this@MainActivity, ShowCardActivity::class.java)
-                intent.putExtra(getString(R.string.post), mViewModel.posts.value?.get(position))
+//                val intent = Intent(this@MainActivity, ShowCardActivity::class.java)
+//                intent.putExtra(getString(R.string.post), mViewModel.posts.value?.get(position))
                 val options =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
                         this@MainActivity,
                         (main_list.adapter as MainAdapter).getSharedWeight(position),
                         getString(R.string.post_shared)
                     )
-                startActivity(intent, options.toBundle())
+                BaseShowCard.start(this@MainActivity, ShowCardFragment(), Bundle().apply {
+                    putSerializable(
+                        getString(R.string.post),
+                        mViewModel.posts.value?.get(position)
+                    )
+                }, options.toBundle())
+//                startActivity(intent, options.toBundle())
             }
         }
     }

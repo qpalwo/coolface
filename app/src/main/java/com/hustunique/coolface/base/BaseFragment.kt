@@ -1,5 +1,6 @@
 package com.hustunique.coolface.base
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 
-class BaseFragment(@LayoutRes val layoutId: Int, viewModelClass: Class<out ViewModel>? = null) : Fragment() {
-    val viewModel = viewModelClass?.let { ViewModelProviders.of(this).get(viewModelClass) }
+abstract class BaseFragment(@LayoutRes val layoutId: Int, val viewModelClass: Class<out ViewModel>? = null) :
+    Fragment() {
+    lateinit var viewModel: ViewModel
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        viewModel = viewModelClass?.let { ViewModelProviders.of(this).get(viewModelClass) }!!
         val view = inflater.inflate(layoutId, container, false)
         init()
 
@@ -25,8 +28,7 @@ class BaseFragment(@LayoutRes val layoutId: Int, viewModelClass: Class<out ViewM
 
         initView(view)
 
-        initContact()
-
+        initContact(view.context)
     }
 
     open fun init() {
@@ -42,6 +44,10 @@ class BaseFragment(@LayoutRes val layoutId: Int, viewModelClass: Class<out ViewM
     }
 
     open fun initContact() {
+
+    }
+
+    open fun initContact(context: Context?) {
 
     }
 }
