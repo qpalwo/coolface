@@ -51,4 +51,5 @@ dependencies {
     implementation 'top.zibin:Luban:1.1.8'
     testImplementation 'junit:junit:4.12'
     implementation 'com.airbnb.android:lottie:3.0.6'
+    implementation 'com.getbase:floatingactionbutton:1.10.1'
 }

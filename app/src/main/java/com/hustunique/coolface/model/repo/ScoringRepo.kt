@@ -1,4 +1,4 @@
-package com.hustunique.coolface.model.local
+package com.hustunique.coolface.model.repo
 
 import android.annotation.SuppressLint
 import android.content.Context
