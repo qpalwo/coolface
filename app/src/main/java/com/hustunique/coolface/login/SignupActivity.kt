@@ -9,11 +9,8 @@ import android.widget.Toast
 import cn.bmob.v3.BmobUser
 import cn.bmob.v3.exception.BmobException
 import cn.bmob.v3.listener.SaveListener
-import cn.bmob.v3.listener.UpdateListener
 import com.hustunique.coolface.R
 import com.hustunique.coolface.base.BaseActivity
-import com.hustunique.coolface.bean.FaceBean
-import com.hustunique.coolface.bean.Post
 import com.hustunique.coolface.bean.User
 import com.hustunique.coolface.util.TextUtil
 import kotlinx.android.synthetic.main.activity_signup.*
@@ -43,6 +40,7 @@ class SignupActivity : BaseActivity(R.layout.activity_signup) {
                     et_signup_username.setHelperText(null)
                 }
             }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
@@ -73,6 +71,7 @@ class SignupActivity : BaseActivity(R.layout.activity_signup) {
                     et_signup_password.setHelperText(null)
                 }
             }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
