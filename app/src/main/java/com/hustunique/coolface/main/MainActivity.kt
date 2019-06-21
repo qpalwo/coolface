@@ -24,12 +24,14 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.java) {
 
     val CAMERA_CODE = 666
+    private val BMOB_APP_KEY = "12087a50147473005dcbe686a04bf4f1"
+
     private lateinit var mViewModel: MainViewModel
     override fun init() {
         super.init()
         mViewModel = viewModel as MainViewModel
 
-        Bmob.initialize(this, "12087a50147473005dcbe686a04bf4f1")
+        Bmob.initialize(this, BMOB_APP_KEY)
         mViewModel.init()
     }
 
@@ -51,7 +53,9 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             startCamera()
         }
         main_me.setOnClickListener {
-            main_drawerlayout.openDrawer(START)
+            // main_drawerlayout.openDrawer(START)
+            val intent = Intent(this, SignupActivity::class.java)
+            startActivity(intent)
         }
     }
 

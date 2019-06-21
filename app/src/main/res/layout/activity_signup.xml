@@ -3,53 +3,125 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".login.SignupActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_signup_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="取消"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="15sp"
+            />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@mipmap/logo"
+            />
+
+
+        <TextView
+            android:id="@+id/tv_signup_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+
+            android:text="已有账号？"
+            android:textSize="15sp"
+            android:layout_marginStart="30dp"
+            android:textColor="@color/colorPrimaryDark"
+            />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/tv_login_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
         android:text="创建你的账号"
         android:textSize="30sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/colorText"
+        />
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/et_signup_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="20dp"
+        android:singleLine="true"
+        android:inputType="textEmailAddress"
+        android:hint="设置邮箱"
+        app:met_floatingLabelText="邮箱"
+        app:met_floatingLabel="highlight"
+        app:met_floatingLabelTextSize="15sp"
+        app:met_helperTextAlwaysShown="true"
+        app:met_helperTextColor="@color/colorHelperText"
+        />
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/et_signup_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="20dp"
+        android:hint="设置昵称"
+        app:met_floatingLabelText="昵称"
+        app:met_floatingLabelTextSize="15sp"
+        app:met_floatingLabel="highlight"
+        app:met_helperTextColor="@color/colorPrimary"
+        app:met_helperTextAlwaysShown="true"
+        />
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/et_signup_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="设置密码"
+        android:inputType="textPassword"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="20dp"
+        android:singleLine="true"
+        app:met_floatingLabel="highlight"
+        app:met_floatingLabelText="密码"
+        app:met_floatingLabelTextSize="15sp"
+        app:met_helperTextAlwaysShown="true"
+        app:met_helperTextColor="@color/colorHelperText"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        >
 
-        <EditText
-            android:id="@+id/et_signup_username"
-            android:layout_width="0dp"
+        <Button
+            android:id="@+id/btn_signup_signup"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="邮箱" />
-
-
+            android:layout_gravity="center"
+            android:background="@color/colorPrimary"
+            android:textColor="#ffffff"
+            android:text="注册"
+            android:layout_marginEnd="20dp"
+            />
     </LinearLayout>
-
-
-    <EditText
-        android:id="@+id/et_signup_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:hint="设置密码" />
-    
-    <TextView
-        android:id="@+id/tv_signup_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="已有账号？"
-        />
-
-    <Button
-        android:id="@+id/btn_signup_signup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="注册" />
 
 </LinearLayout>

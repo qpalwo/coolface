@@ -50,4 +50,5 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation 'top.zibin:Luban:1.1.8'
     testImplementation 'junit:junit:4.12'
+    implementation 'com.rengwuxian.materialedittext:library:2.1.4'
 }
