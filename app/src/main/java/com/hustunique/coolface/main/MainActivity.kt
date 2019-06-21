@@ -4,9 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.net.Uri
-import android.os.Build
 import android.provider.MediaStore
+import android.view.Gravity.START
 import android.view.View
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.FileProvider
@@ -96,13 +95,10 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         val file = mViewModel.getPictureFile(applicationContext)
         file?.let {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION + Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                val imgUri = FileProvider.getUriForFile(this, FileUtil.FILE_PROVIDER_AUTHORITY, it)
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri)
-            } else {
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(it))
-            }
+            intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION +
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            val imgUri = FileProvider.getUriForFile(this, FileUtil.FILE_PROVIDER_AUTHORITY, it)
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri)
             intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString())
             intent.resolveActivity(packageManager)?.let {
                 startActivityForResult(intent, CAMERA_CODE)
