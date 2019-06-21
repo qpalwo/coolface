@@ -67,117 +67,139 @@ class DragCardView(context: Context, attrs: AttributeSet?) : CardView(context, a
      */
     private var finishCallback: FinishCallback? = null
 
+    /**
+     * 是否允许拖拽
+     */
+    private var dragable = true
+
     init {
         firstPx = pivotX
         firstPy = pivotY
     }
 
+    /**
+     * 启动拖拽
+     */
+    fun enableDrag() {
+        dragable = true
+    }
+
+    /**
+     * 禁止拖拽
+     */
+    fun disableDrag() {
+        dragable = false
+    }
+
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         speedTracker.addMovement(event)
-        when (event?.action) {
-            ACTION_DOWN -> {
-                startX = event.rawX
-                lastX = startX
-                startY = event.rawY
-                lastY = startY
-                startTime = System.currentTimeMillis()
+        if (dragable) {
+            when (event?.action) {
+                ACTION_DOWN -> {
+                    startX = event.rawX
+                    lastX = startX
+                    startY = event.rawY
+                    lastY = startY
+                    startTime = System.currentTimeMillis()
 
-                pivotY = top.toFloat() + 100
-                pivotX = left.toFloat() + 100
+                    pivotY = top.toFloat() + 100
+                    pivotX = left.toFloat() + 100
 
-                rotationR = dis(left.toFloat() + 30, top.toFloat() + 30, startX, startY)
-            }
-            ACTION_MOVE -> {
-                val cX = event.rawX - lastX
-                val cY = event.rawY - lastY
-                lastX = event.rawX
-                lastY = event.rawY
-
-                // 透明度
-                if (isFinish(event.rawX, event.rawY)) {
-                    alpha = 0.6f
-                } else {
-                    alpha = 1f
+                    rotationR = dis(left.toFloat() + 30, top.toFloat() + 30, startX, startY)
                 }
+                ACTION_MOVE -> {
+                    val cX = event.rawX - lastX
+                    val cY = event.rawY - lastY
+                    lastX = event.rawX
+                    lastY = event.rawY
 
-                // 旋转
-                pivotY = top.toFloat() + 100
-                pivotX = left.toFloat() + 100
-
-                isVer = Math.abs(cX) < Math.abs(cY)
-
-                val smallB = if (isVer) cX else cY
-                val arc = dis(0f, smallB, smallB, 0f)
-                val degree = Math.toDegrees(arc * 180 / (rotationR * Math.PI)).toFloat()
-                rotation += (if (cX > 0) -degree else degree) / 20
-
-                // 平移
-                translationX += cX
-                translationY += cY
-
-                isMoving = true
-            }
-            ACTION_UP -> {
-                speedTracker.computeCurrentVelocity(1000)
-                val speed =
-                    Math.sqrt(speedTracker.xVelocity * speedTracker.xVelocity + speedTracker.yVelocity * speedTracker.yVelocity.toDouble())
-                if (isMoving && (isFinish(event.rawX, event.rawY) || speed >= 2000)) {
-                    isVer = Math.abs(speedTracker.yVelocity) > Math.abs(speedTracker.xVelocity)
-                    isLeft = speedTracker.xVelocity < 0
-                    isUp = speedTracker.yVelocity < 0
-
-                    val animatorSet = AnimatorSet()
-                    animatorSet.duration = 500
-                    val objectAnimator1 = ObjectAnimator.ofFloat(0f, 10f).setDuration(500)
-
-                    objectAnimator1.addUpdateListener {
-                        val value = if (isLeft) it.animatedValue as Float else -(it.animatedValue as Float)
-                        rotation += value
+                    // 透明度
+                    if (isFinish(event.rawX, event.rawY)) {
+                        alpha = 0.6f
+                    } else {
+                        alpha = 1f
                     }
-                    val objectAnimator2 = ObjectAnimator.ofFloat(0f, 200f).setDuration(1000)
-                    objectAnimator2.addUpdateListener {
-                        if (isVer) {
-                            translationY += if (isUp) {
-                                -(it.animatedValue as Float)
+
+                    // 旋转
+                    pivotY = top.toFloat() + 100
+                    pivotX = left.toFloat() + 100
+
+                    isVer = Math.abs(cX) < Math.abs(cY)
+
+                    val smallB = if (isVer) cX else cY
+                    val arc = dis(0f, smallB, smallB, 0f)
+                    val degree = Math.toDegrees(arc * 180 / (rotationR * Math.PI)).toFloat()
+                    rotation += (if (cX > 0) -degree else degree) / 20
+
+                    // 平移
+                    translationX += cX
+                    translationY += cY
+
+                    isMoving = true
+                }
+                ACTION_UP -> {
+                    speedTracker.computeCurrentVelocity(1000)
+                    val speed =
+                        Math.sqrt(speedTracker.xVelocity * speedTracker.xVelocity + speedTracker.yVelocity * speedTracker.yVelocity.toDouble())
+                    if (isMoving && (isFinish(event.rawX, event.rawY) || speed >= 2000)) {
+                        isVer = Math.abs(speedTracker.yVelocity) > Math.abs(speedTracker.xVelocity)
+                        isLeft = speedTracker.xVelocity < 0
+                        isUp = speedTracker.yVelocity < 0
+
+                        val animatorSet = AnimatorSet()
+                        animatorSet.duration = 500
+                        val objectAnimator1 = ObjectAnimator.ofFloat(0f, 10f).setDuration(500)
+
+                        objectAnimator1.addUpdateListener {
+                            val value = if (isLeft) it.animatedValue as Float else -(it.animatedValue as Float)
+                            rotation += value
+                        }
+                        val objectAnimator2 = ObjectAnimator.ofFloat(0f, 200f).setDuration(1000)
+                        objectAnimator2.addUpdateListener {
+                            if (isVer) {
+                                translationY += if (isUp) {
+                                    -(it.animatedValue as Float)
+                                } else {
+                                    it.animatedValue as Float
+                                }
                             } else {
-                                it.animatedValue as Float
+                                translationX += if (isLeft) {
+                                    -(it.animatedValue as Float)
+                                } else {
+                                    it.animatedValue as Float
+                                }
                             }
-                        } else {
-                            translationX += if (isLeft) {
-                                -(it.animatedValue as Float)
-                            } else {
-                                it.animatedValue as Float
+                            if (it.animatedValue as Float > 190) {
+                                finishCallback?.onGoAway()
                             }
                         }
-                        if (it.animatedValue as Float > 190) {
-                            finishCallback?.onGoAway()
-                        }
-                    }
-                    animatorSet.playTogether(objectAnimator1, objectAnimator2)
-                    animatorSet.start()
-                } else {
-                    val animatorSet = AnimatorSet()
-                    animatorSet.duration = 500
-                    val objectAnimator1 = ObjectAnimator.ofFloat(rotation, 0f).setDuration(500)
+                        animatorSet.playTogether(objectAnimator1, objectAnimator2)
+                        animatorSet.start()
+                    } else {
+                        val animatorSet = AnimatorSet()
+                        animatorSet.duration = 500
+                        val objectAnimator1 = ObjectAnimator.ofFloat(rotation, 0f).setDuration(500)
 
-                    objectAnimator1.addUpdateListener {
-                        rotation = it.animatedValue as Float
+                        objectAnimator1.addUpdateListener {
+                            rotation = it.animatedValue as Float
+                        }
+                        val objectAnimator2 = ObjectAnimator.ofFloat(translationX, 0f).setDuration(800)
+                        objectAnimator2.addUpdateListener {
+                            translationX = it.animatedValue as Float
+                        }
+                        val objectAnimator3 = ObjectAnimator.ofFloat(translationY, 0f).setDuration(800)
+                        objectAnimator3.addUpdateListener {
+                            translationY = it.animatedValue as Float
+                        }
+                        animatorSet.playTogether(objectAnimator1, objectAnimator2, objectAnimator3)
+                        animatorSet.start()
                     }
-                    val objectAnimator2 = ObjectAnimator.ofFloat(translationX, 0f).setDuration(800)
-                    objectAnimator2.addUpdateListener {
-                        translationX = it.animatedValue as Float
-                    }
-                    val objectAnimator3 = ObjectAnimator.ofFloat(translationY, 0f).setDuration(800)
-                    objectAnimator3.addUpdateListener {
-                        translationY = it.animatedValue as Float
-                    }
-                    animatorSet.playTogether(objectAnimator1, objectAnimator2, objectAnimator3)
-                    animatorSet.start()
+                    isMoving = false
                 }
-                isMoving = false
             }
+            return true
         }
-        return true
+        return super.onTouchEvent(event)
     }
 
     private fun dis(x1: Float, y1: Float, x2: Float, y2: Float): Float =
@@ -214,7 +236,6 @@ class DragCardView(context: Context, attrs: AttributeSet?) : CardView(context, a
         super.onDetachedFromWindow()
         speedTracker.recycle()
     }
-
 
     interface FinishCallback {
         fun onGoAway()

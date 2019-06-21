@@ -24,7 +24,7 @@ class SignupActivity : BaseActivity(R.layout.activity_signup) {
     }
 
     private fun testSavePost() {
-        val post = Post("URL", "message", "username", 1, FaceBean())
+        val post = Post("URL", "message", "username", 1, null)
         post.save(object : SaveListener<String>() {
             override fun done(p0: String?, p1: BmobException?) {
                 if (p1 == null) {
