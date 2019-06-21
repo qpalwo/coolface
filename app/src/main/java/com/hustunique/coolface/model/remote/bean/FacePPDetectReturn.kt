@@ -4,7 +4,7 @@ package com.hustunique.coolface.model.remote.bean
  * @author  : Xiao Yuxuan
  * @date    : 6/18/19
  */
-data class FacePPReturn(
+data class FacePPDetectReturn(
     val faces: List<Face>,
     val image_id: String,
     val request_id: String,

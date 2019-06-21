@@ -1,6 +1,7 @@
 package com.hustunique.coolface.model.remote
 
 import com.hustunique.coolface.model.remote.interceptors.FacePPKeyInterceptor
+import com.hustunique.coolface.model.remote.interceptors.UploadInterceptor
 import okhttp3.OkHttpClient
 
 /**
@@ -10,5 +11,10 @@ import okhttp3.OkHttpClient
 object OkHttpClients {
     val facepp = OkHttpClient.Builder()
         .addInterceptor(FacePPKeyInterceptor())
+        .addInterceptor(UploadInterceptor())
+        .build()
+
+    val smms = OkHttpClient.Builder()
+        .addInterceptor(UploadInterceptor())
         .build()
 }

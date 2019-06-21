@@ -1,6 +1,7 @@
 package com.hustunique.coolface.bean
 
 import cn.bmob.v3.BmobObject
+import java.io.Serializable
 
 
 /**
@@ -16,5 +17,6 @@ data class Post(
     var message: String,
     var username: String,
     var likeCount: Int,
-    var faceBean: FaceBean?
-): BmobObject()
+    var faceBean: FaceBean?,
+    var comments: List<String>? = null
+) : BmobObject(), Serializable

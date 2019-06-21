@@ -14,9 +14,16 @@ class RetrofitService private constructor() {
     }
 
     val facePPRetrofit = Retrofit.Builder()
-        .baseUrl(NetConfig.facePPBaseUrl)
+        .baseUrl(NetConfig.FACEPP_BASE_URL)
         .addConverterFactory(MoshiConverterFactory.create())
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .client(OkHttpClients.facepp)
+        .build()
+
+    val smmsRetrofit = Retrofit.Builder()
+        .baseUrl(NetConfig.SMMS_BASE_URL)
+        .addConverterFactory(MoshiConverterFactory.create())
+        .client(OkHttpClients.smms)
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .build()
 }

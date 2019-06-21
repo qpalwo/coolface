@@ -10,7 +10,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.hustunique.coolface"
-        minSdkVersion 21
+        minSdkVersion 26
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -51,4 +51,11 @@ dependencies {
     implementation 'top.zibin:Luban:1.1.8'
     testImplementation 'junit:junit:4.12'
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
+    implementation 'com.airbnb.android:lottie:3.0.6'
+    implementation 'com.getbase:floatingactionbutton:1.10.1'
+    implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
+    implementation 'com.github.ctiao:ndkbitmap-armv7a:0.9.21'
+
+    implementation 'com.github.ctiao:ndkbitmap-armv5:0.9.21'
+    implementation 'com.github.ctiao:ndkbitmap-x86:0.9.21'
 }

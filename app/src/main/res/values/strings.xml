@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CoolFace</string>
+    <string name="post">POST</string>
+    <string name="post_shared">post_shared</string>
 </resources>

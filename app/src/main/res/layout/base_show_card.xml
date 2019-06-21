@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/colorTranGray"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.hustunique.coolface.view.DragCardView
+        android:id="@+id/card_container"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="30dp"
+        app:cardCornerRadius="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </com.hustunique.coolface.view.DragCardView>
+</FrameLayout>

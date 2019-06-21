@@ -33,6 +33,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".show.BaseShowCard"
+            android:theme="@style/Transparent"/>
+
         <provider
             android:name="cn.bmob.v3.util.BmobContentProvider"
             android:authorities="com.hustunique.coolface.BmobContentProvider"></provider>

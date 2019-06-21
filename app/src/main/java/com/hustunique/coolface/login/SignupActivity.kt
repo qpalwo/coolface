@@ -95,6 +95,7 @@ class SignupActivity : BaseActivity(R.layout.activity_signup) {
                         Toast.makeText(context, "注册成功", Toast.LENGTH_SHORT).show()
                         this@SignupActivity.finish()
                     }
+                    202 -> Toast.makeText(context, "该邮箱已被占用", Toast.LENGTH_SHORT).show()
                     else -> {
                         Toast.makeText(context, "注册失败", Toast.LENGTH_SHORT).show()
                     }

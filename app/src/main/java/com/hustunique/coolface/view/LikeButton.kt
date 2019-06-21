@@ -13,6 +13,8 @@ class LikeButton(context: Context?, attrs: AttributeSet?) : ImageView(context, a
 
     private var drawables: Array<Drawable>
 
+    var onCheckedListener: OnCheckedListener? = null
+
     private companion object {
         val HEART = 1
         val STAR = 2
@@ -48,12 +50,11 @@ class LikeButton(context: Context?, attrs: AttributeSet?) : ImageView(context, a
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event?.action == ACTION_DOWN) {
             performAnimation()
-
             if (isChecked)
                 unCheck()
             else
                 check()
-
+            return true
         }
         return super.onTouchEvent(event)
 
@@ -71,12 +72,19 @@ class LikeButton(context: Context?, attrs: AttributeSet?) : ImageView(context, a
     private fun check() {
         isChecked = true
         setImageDrawable(drawables[1])
+        onCheckedListener?.onChanged(true)
     }
 
     private fun unCheck() {
         isChecked = false
         setImageDrawable(drawables[0])
+        onCheckedListener?.onChanged(false)
     }
 
     fun isChecked() = isChecked
+
+
+    interface OnCheckedListener {
+        fun onChanged(isChecked: Boolean)
+    }
 }

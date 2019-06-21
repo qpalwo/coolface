@@ -4,20 +4,24 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.net.Uri
-import android.os.Build
+import android.os.Bundle
 import android.provider.MediaStore
+import android.transition.ChangeTransform
 import android.view.Gravity.START
+import android.view.View
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import cn.bmob.v3.Bmob
 import com.hustunique.coolface.R
-import com.hustunique.coolface.showscore.ShowScoreActivity
 import com.hustunique.coolface.base.BaseActivity
-import com.hustunique.coolface.login.LoginActivity
+import com.hustunique.coolface.base.ListOnClickListener
 import com.hustunique.coolface.login.SignupActivity
+import com.hustunique.coolface.show.BaseShowCard
+import com.hustunique.coolface.showcard.ShowCardFragment
+import com.hustunique.coolface.showscore.ShowScoreActivity
 import com.hustunique.coolface.util.FileUtil
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -39,6 +43,11 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         super.initView()
         main_list.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
         main_list.adapter = MainAdapter()
+        setupEnterExitAni()
+    }
+
+    private fun setupEnterExitAni() {
+        window.sharedElementReturnTransition = ChangeTransform()
     }
 
 
@@ -57,6 +66,25 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             val intent = Intent(this, SignupActivity::class.java)
             startActivity(intent)
         }
+        (main_list.adapter as MainAdapter).clickListener = object : ListOnClickListener {
+            override fun onClick(position: Int, v: View) {
+//                val intent = Intent(this@MainActivity, ShowCardActivity::class.java)
+//                intent.putExtra(getString(R.string.post), mViewModel.posts.value?.get(position))
+                val options =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        this@MainActivity,
+                        (main_list.adapter as MainAdapter).getSharedWeight(position),
+                        getString(R.string.post_shared)
+                    )
+                BaseShowCard.start(this@MainActivity, ShowCardFragment(), Bundle().apply {
+                    putSerializable(
+                        getString(R.string.post),
+                        mViewModel.posts.value?.get(position)
+                    )
+                }, options.toBundle())
+//                startActivity(intent, options.toBundle())
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -67,7 +95,8 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                     val intent = Intent(this, ShowScoreActivity::class.java)
                     startActivity(intent)
                 }
-                else -> {}
+                else -> {
+                }
             }
         }
     }
@@ -76,13 +105,10 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         val file = mViewModel.getPictureFile(applicationContext)
         file?.let {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION + Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                val imgUri = FileProvider.getUriForFile(this, FileUtil.FILE_PROVIDER_AUTHORITY, it)
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri)
-            } else {
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(it))
-            }
+            intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION +
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            val imgUri = FileProvider.getUriForFile(this, FileUtil.FILE_PROVIDER_AUTHORITY, it)
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri)
             intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString())
             intent.resolveActivity(packageManager)?.let {
                 startActivityForResult(intent, CAMERA_CODE)
