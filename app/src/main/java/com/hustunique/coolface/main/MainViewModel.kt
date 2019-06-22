@@ -4,24 +4,23 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hustunique.coolface.bean.Post
+import com.hustunique.coolface.bean.Resource
 import com.hustunique.coolface.model.repo.PictureRepo
-import com.hustunique.coolface.model.remote.service.PostService
-import com.hustunique.coolface.util.Callback
+import com.hustunique.coolface.model.repo.PostRepo
 
 class MainViewModel : ViewModel() {
-    fun init() {
-        PostService.getAllPost(object : Callback<List<Post>> {
-            override fun onResponse(result: List<Post>?) {
-                if (result != null) {
-                    posts.postValue(result)
-                } else {
-                    posts.postValue(null)
-                }
-            }
-        })
+    private lateinit var postRepo: PostRepo
+
+    val postsData: MutableLiveData<Resource<List<Post>>> = MutableLiveData()
+
+    fun init(context: Context) {
+        postRepo = PostRepo.getInstance(context)
+        getPosts()
     }
 
-    val posts = MutableLiveData<List<Post>>()
+    fun getPosts() {
+        postRepo.getPosts(postsData)
+    }
 
     fun getPictureFile(context: Context) = PictureRepo.getInstance(context).getNewFile()
 }

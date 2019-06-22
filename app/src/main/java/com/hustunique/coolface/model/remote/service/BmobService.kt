@@ -22,4 +22,7 @@ interface BmobService {
     @GET("${NetConfig.BMOB_METHOD_CLASS}{table}/{objid}")
     fun getData(@Path("table") tableName: String,
                 @Path("objid") objId: String): Single<ResponseBody>
+
+    @GET("${NetConfig.BMOB_METHOD_CLASS}{table}")
+    fun getData(@Path("table") tableName: String): Single<ResponseBody>
 }

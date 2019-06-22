@@ -22,4 +22,4 @@ class FaceBean(
      * face的信息：json格式
      */
     val faceInfo: String
-): BmobObject()
+)

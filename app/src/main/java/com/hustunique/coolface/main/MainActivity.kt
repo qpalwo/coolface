@@ -22,6 +22,7 @@ import com.hustunique.coolface.show.BaseShowCard
 import com.hustunique.coolface.showcard.ShowCardFragment
 import com.hustunique.coolface.showscore.ShowScoreActivity
 import com.hustunique.coolface.util.FileUtil
+import com.hustunique.coolface.util.LivaDataUtil
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.java) {
@@ -32,7 +33,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         super.init()
         mViewModel = viewModel as MainViewModel
         Bmob.initialize(this, BmobConfig.APPLICATION_ID)
-        mViewModel.init()
+        mViewModel.init(applicationContext)
     }
 
     override fun initView() {
@@ -45,9 +46,12 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
     @SuppressLint("WrongConstant")
     override fun initContact() {
         super.initContact()
-        mViewModel.posts.observe(this, Observer {
-            (main_list.adapter as MainAdapter).data = it
-            (main_list.adapter as MainAdapter).notifyDataSetChanged()
+        mViewModel.postsData.observe(this, Observer {
+            LivaDataUtil.useData(it, {
+                (main_list.adapter as MainAdapter).data = it
+                (main_list.adapter as MainAdapter).notifyDataSetChanged()
+
+            })
         })
         main_activity_camera_fb.setOnClickListener {
             startCamera()
@@ -60,18 +64,21 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         }
         (main_list.adapter as MainAdapter).clickListener = object : ListOnClickListener {
             override fun onClick(position: Int, v: View) {
-                val options =
-                    ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        this@MainActivity,
-                        (main_list.adapter as MainAdapter).getSharedWeight(position),
-                        getString(R.string.post_shared)
-                    )
-                BaseShowCard.start(this@MainActivity, ShowCardFragment(), Bundle().apply {
-                    putSerializable(
-                        getString(R.string.post),
-                        mViewModel.posts.value?.get(position)
-                    )
-                }, options.toBundle())
+                LivaDataUtil.useData(mViewModel.postsData, {
+                    val options =
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            this@MainActivity,
+                            (main_list.adapter as MainAdapter).getSharedWeight(position),
+                            getString(R.string.post_shared)
+                        )
+                    BaseShowCard.start(this@MainActivity, ShowCardFragment(), Bundle().apply {
+                        putSerializable(
+                            getString(R.string.post),
+                            it?.get(position)
+                        )
+                    }, options.toBundle())
+                })
+
             }
         }
     }

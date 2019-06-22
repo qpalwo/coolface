@@ -3,19 +3,20 @@ package com.hustunique.coolface.model.repo
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
-import cn.bmob.v3.BmobQuery
 import cn.bmob.v3.BmobUser
 import com.hustunique.coolface.bean.FaceBean
 import com.hustunique.coolface.bean.Post
 import com.hustunique.coolface.bean.Resource
 import com.hustunique.coolface.bean.User
 import com.hustunique.coolface.model.remote.RetrofitService
+import com.hustunique.coolface.model.remote.bean.BmobPostsReturn
 import com.hustunique.coolface.model.remote.bean.Face
+import com.hustunique.coolface.model.remote.config.BmobConfig
 import com.hustunique.coolface.model.remote.config.FacePPConfig
+import com.hustunique.coolface.model.remote.service.BmobService
 import com.hustunique.coolface.model.remote.service.FacePPService
 import com.hustunique.coolface.model.remote.service.SMMSService
 import com.hustunique.coolface.util.JsonUtil
-import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 
 /**
@@ -37,6 +38,8 @@ class PostRepo private constructor(val context: Context) {
 
     private val facePPService = RetrofitService.Instance.facePPRetrofit.create(FacePPService::class.java)
 
+    private val bmobService = RetrofitService.Instance.bombRetrofit.create(BmobService::class.java)
+
     private val pictureRepo = PictureRepo.getInstance(context)
 
     @SuppressLint("CheckResult")
@@ -55,35 +58,22 @@ class PostRepo private constructor(val context: Context) {
                 smmsService.upload("[upload]${pictureRepo.beautifiedPicture!!.absolutePath}")
             }
             .flatMap {
-                val faceBean = FaceBean(
-                    faceData.face_token,
-                    it.data.url,
-                    it.data.delete,
-                    JsonUtil.toJson(faceData)
-                )
-//                post = Post(
-//                    message,
-//                    user.nickname,
-//                    user.username,
-//                    0, faceBean
                 post = Post(
                     message,
                     "testuser",
                     "test_account",
-                    0, faceBean
+                    0,
+                    FaceBean(
+                        faceData.face_token,
+                        it.data.url,
+                        it.data.delete,
+                        JsonUtil.toJson(faceData)
+                    )
                 )
-                post?.run {
-//                    user.apply {
-//                        posts.add(post!!)
-//                        updateSync()
-//                    }
-                    updateObservable()
-                        .singleOrError()
-                }
-                Single.just(post)
+                bmobService.addData(BmobConfig.TABLE_POST, post!!)
             }
             .subscribe({
-                callback.postValue(Resource.success(it))
+                callback.postValue(Resource.success(post))
             }, {
                 callback.postValue(Resource.error("post error"))
             })
@@ -93,12 +83,17 @@ class PostRepo private constructor(val context: Context) {
     @SuppressLint("CheckResult")
     fun getPosts(liveData: MutableLiveData<Resource<List<Post>>>) {
         liveData.value = Resource.loading()
-        BmobQuery<Post>().findObjectsObservable(Post::class.java)
+        bmobService.getData(BmobConfig.TABLE_POST)
             .subscribeOn(Schedulers.io())
             .subscribe({
-                liveData.postValue(Resource.success(it))
+                val list = JsonUtil.toBean<BmobPostsReturn>(it.source())
+                if (list?.let {
+                        liveData.postValue(Resource.success(it.results))
+                    } == null) {
+                    liveData.postValue(Resource.success(ArrayList()))
+                }
             }, {
-                liveData.postValue(Resource.error("load error"))
+                liveData.postValue(Resource.error("get data error"))
             })
     }
 

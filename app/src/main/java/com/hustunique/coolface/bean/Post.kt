@@ -13,11 +13,10 @@ import java.io.Serializable
  * @param faceBean 从服务器获取的人脸照片的检测的数据
  */
 data class Post(
-    var imageUrl: String,
     var message: String,
     var username: String,
     var userAccount: String,
     var likeCount: Int,
-    var faceBean: FaceBean
+    var faceBean: FaceBean,
     var comments: List<String>? = null
-) : BmobObject(), Serializable
+) : Serializable

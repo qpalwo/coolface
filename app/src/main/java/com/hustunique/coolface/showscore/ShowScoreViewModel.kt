@@ -56,4 +56,9 @@ class ShowScoreViewModel : ViewModel() {
         }
     }
 
+    fun test() {
+        val livedata = MutableLiveData<Resource<List<Post>>>()
+        postRepo.getPosts(livedata)
+    }
+
 }
