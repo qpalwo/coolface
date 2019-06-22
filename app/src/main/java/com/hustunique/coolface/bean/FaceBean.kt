@@ -1,6 +1,6 @@
 package com.hustunique.coolface.bean
 
-import cn.bmob.v3.BmobObject
+import java.io.Serializable
 
 /**
  * 该类表示人脸分析所得的数据
@@ -22,4 +22,4 @@ class FaceBean(
      * face的信息：json格式
      */
     val faceInfo: String
-)
+) : Serializable

@@ -45,7 +45,7 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
         super.initView(view)
         // 先延迟进入的动画，让图片加载完再进来
         postponeEnterTransition()
-        Glide.with(this).load(post?.imageUrl).addListener(object : RequestListener<Drawable> {
+        Glide.with(this).load(post?.faceBean?.faceUrl).addListener(object : RequestListener<Drawable> {
             override fun onLoadFailed(
                 e: GlideException?,
                 model: Any?,
