@@ -38,6 +38,7 @@ class ShowCardViewModel : ViewModel() {
 
     fun addDanmu(content: String, context: Context, dmContext: DanmakuContext, dmView: DanmakuView) {
         // TODO: 将弹幕的内容添加到数据结构中
+
         if (dmView.isPaused)
             dmView.resume()
         showDanmu(createDanmu(dmContext, dmView.currentTime, content, Color.RED, Color.GREEN), dmView)
@@ -55,6 +56,7 @@ class ShowCardViewModel : ViewModel() {
         context.setDanmakuStyle(IDisplayer.DANMAKU_STYLE_STROKEN, 3f).setDuplicateMergingEnabled(true)
             .setScrollSpeedFactor(1.2f).setScaleTextSize(1.2f).setMaximumLines(maxLines).preventOverlapping(overMap)
             .setDanmakuMargin(50)
+        context.isDuplicateMergingEnabled = true
         return context
     }
 
@@ -70,7 +72,7 @@ class ShowCardViewModel : ViewModel() {
             dmContext,
             time,
             content,
-            context.getColor(R.color.colorPrimary),
+            context.getColor(R.color.colorPrimaryDark),
             context.getColor(R.color.colorAccent)
         )
 
@@ -97,8 +99,4 @@ class ShowCardViewModel : ViewModel() {
         return danmaku
     }
 
-    private fun sp2px(context: Context, spValue: Float): Float {
-        val fontScale = context.resources.displayMetrics.scaledDensity
-        return spValue * fontScale + 0.5f
-    }
 }

@@ -32,7 +32,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.java) {
 
-    val CAMERA_CODE = 666
+    private val CAMERA_CODE = 666
     private val BMOB_APP_KEY = "12087a50147473005dcbe686a04bf4f1"
 
     private lateinit var mViewModel: MainViewModel
@@ -48,11 +48,6 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         super.initView()
         main_list.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
         main_list.adapter = MainAdapter()
-        setupEnterExitAni()
-    }
-
-    private fun setupEnterExitAni() {
-
     }
 
 
@@ -67,14 +62,13 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             startCamera()
         }
         main_me.setOnClickListener {
+            // TODO 如果已经登录 弹出抽屉 如果没有登录 跳转登录页面
             // main_drawerlayout.openDrawer(START)
             val intent = Intent(this, SignupActivity::class.java)
             startActivity(intent)
         }
         (main_list.adapter as MainAdapter).clickListener = object : ListOnClickListener {
             override fun onClick(position: Int, v: View) {
-//                val intent = Intent(this@MainActivity, ShowCardActivity::class.java)
-//                intent.putExtra(getString(R.string.post), mViewModel.posts.value?.get(position))
                 val options =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
                         this@MainActivity,
@@ -87,7 +81,6 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                         mViewModel.posts.value?.get(position)
                     )
                 }, options.toBundle())
-//                startActivity(intent, options.toBundle())
             }
         }
     }

@@ -4,6 +4,9 @@
     <color name="colorPrimaryDark">#EC3C7A</color>
     <color name="colorAccent">#589E63</color>
     <color name="colorText">#000000</color>
+    <color name="colorAccentLight">#34C648</color>
+    <color name="colorAccent2">#FBC000</color>
+
     <color name="colorBlurryTran">#995E5E5E</color>
     <color name="colorHelperText">#FFA5C4</color>
     <color name="colorTranGray">#80626262</color>

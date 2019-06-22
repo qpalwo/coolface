@@ -1,8 +1,6 @@
 package com.hustunique.coolface.main
 
-import android.animation.Animator
 import android.view.View
-import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,6 +10,7 @@ import com.hustunique.coolface.R
 import com.hustunique.coolface.base.BaseAdapter
 import com.hustunique.coolface.base.ViewHolder
 import com.hustunique.coolface.bean.Post
+import com.hustunique.coolface.util.AnimationUtil
 import com.hustunique.coolface.view.LikeButton
 
 class MainAdapter : BaseAdapter<Post>(R.layout.post_item) {
@@ -29,22 +28,7 @@ class MainAdapter : BaseAdapter<Post>(R.layout.post_item) {
             override fun onChanged(isChecked: Boolean) {
                 if (isChecked) {
                     holder.getView<LottieAnimationView>(R.id.post_like_ani).apply {
-                        addAnimatorListener(object : Animator.AnimatorListener {
-                            override fun onAnimationRepeat(animation: Animator?) {
-                            }
-
-                            override fun onAnimationEnd(animation: Animator?) {
-                                visibility = INVISIBLE
-                            }
-
-                            override fun onAnimationCancel(animation: Animator?) {
-                            }
-
-                            override fun onAnimationStart(animation: Animator?) {
-
-                            }
-
-                        })
+                        AnimationUtil.lottiePlayOnce(this)
                         visibility = VISIBLE
                         playAnimation()
                     }

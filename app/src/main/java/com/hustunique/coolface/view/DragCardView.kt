@@ -4,14 +4,13 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Point
-import android.graphics.Typeface
 import android.util.AttributeSet
 import android.util.Log
 import android.view.*
 import android.view.MotionEvent.*
-import android.widget.TextView
 import androidx.cardview.widget.CardView
 import com.hustunique.coolface.R
+import com.hustunique.coolface.util.TextUtil
 
 class DragCardView(context: Context, attrs: AttributeSet?) : CardView(context, attrs) {
     private var isMoving: Boolean = false
@@ -88,16 +87,15 @@ class DragCardView(context: Context, attrs: AttributeSet?) : CardView(context, a
     init {
         firstPx = pivotX
         firstPy = pivotY
+
         loadingView = LayoutInflater.from(context).inflate(
             R.layout.view_girl_loading,
             this,
             false
         )
-        loadingView.findViewById<TextView>(R.id.view_loading_text).typeface = Typeface.createFromAsset(
-            context.assets, context.getString(
-                R.string.font
-            )
-        )
+
+        TextUtil.setDefaultTypeface(loadingView.findViewById(R.id.view_loading_text))
+
         addView(loadingView)
         if (isLoading)
             startLoading()
@@ -268,8 +266,6 @@ class DragCardView(context: Context, attrs: AttributeSet?) : CardView(context, a
         display = Point()
         val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         wm.defaultDisplay.getSize(display)
-        val height = display?.y
-        val width = display?.x
         return display!!
     }
 

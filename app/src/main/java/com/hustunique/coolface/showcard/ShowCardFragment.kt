@@ -1,12 +1,10 @@
 package com.hustunique.coolface.showcard
 
 import android.content.Context
-import android.graphics.Typeface
 import android.graphics.drawable.Drawable
-import android.transition.ChangeTransform
-import android.transition.Fade
 import android.view.View
-import android.widget.Toast
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -16,7 +14,10 @@ import com.bumptech.glide.request.target.Target
 import com.hustunique.coolface.R
 import com.hustunique.coolface.bean.Post
 import com.hustunique.coolface.show.BaseShowFragment
+import com.hustunique.coolface.util.AnimationUtil
+import com.hustunique.coolface.util.TextUtil
 import com.hustunique.coolface.view.DragCardView
+import com.hustunique.coolface.view.LikeButton
 import kotlinx.android.synthetic.main.fra_show_card.*
 import master.flame.danmaku.controller.DrawHandler
 import master.flame.danmaku.danmaku.model.BaseDanmaku
@@ -63,23 +64,25 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
                 isFirstResource: Boolean
             ): Boolean {
                 // 展示所有的视图
-                showView(resource)
+                initShowView(resource)
                 // 进入动画开始
                 startPostponedEnterTransition()
                 return true
             }
         }).into(fra_show_card_image)
 
-        fra_show_card_score.typeface = Typeface.createFromAsset(activity?.assets, getString(R.string.font))
+        TextUtil.setDefaultTypeface(fra_show_card_score)
 
         dmContext = mViewModel.getDmContext()
+
+        // 让动画只播放一次
+        AnimationUtil.lottiePlayOnce(fra_show_like_ani, fra_show_colle_ani)
     }
 
     override fun initContact(context: Context?) {
         super.initContact(context)
         dragCardView.setFinishCallback(object : DragCardView.FinishCallback {
             override fun onGoAway() {
-                Toast.makeText(context, "离开屏幕", Toast.LENGTH_SHORT).show()
                 activity?.finish()
             }
         })
@@ -105,21 +108,60 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
                 }
             })
             fra_show_dm.prepare(parser, dmContext)
-//            show_dm.enableDanmakuDrawingCache(true)
-
+            fra_show_dm.enableDanmakuDrawingCache(true)
         })
 
         fra_show_card_comment_send.setOnClickListener {
             sendDm()
         }
+
+        fra_show_like.onCheckedListener = object : LikeButton.OnCheckedListener {
+            override fun onChanged(isChecked: Boolean) {
+                likeOrNot(isChecked)
+            }
+        }
+
+        fra_show_collect.onCheckedListener = object : LikeButton.OnCheckedListener {
+            override fun onChanged(isChecked: Boolean) {
+                collectOrNot(isChecked)
+            }
+        }
+
+
+    }
+
+    /**
+     * 是否点赞
+     */
+    private fun likeOrNot(isLiked: Boolean) {
+        fra_show_like_ani.visibility = if (isLiked) {
+            fra_show_like_ani.playAnimation()
+            VISIBLE
+        } else GONE
+
+        fra_show_likecount.text = (fra_show_likecount.text.toString().toInt() + if (isLiked) 1 else -1).toString()
+        // TODO 修改数据结构的likecount
+        post?.likeCount?.plus(1)
+    }
+
+    /**
+     * 是否收藏
+     */
+    private fun collectOrNot(isCollected: Boolean) {
+        fra_show_colle_ani.visibility = if (isCollected) {
+            fra_show_colle_ani.playAnimation()
+            VISIBLE
+        } else GONE
+
+        // TODO 修改数据结构的 collect
     }
 
     /**
      * 展示所有视图
      */
-    fun showView(image: Drawable?) {
+    fun initShowView(image: Drawable?) {
         fra_show_card_image.setImageDrawable(image)
-        fra_show_card_score.text = post?.likeCount?.toString()
+        fra_show_likecount.text = post?.likeCount?.toString()
     }
 
 
@@ -141,7 +183,7 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
                         dm
                     ), fra_show_dm
                 )
-                Thread.sleep(3000)
+                Thread.sleep(2000)
             }
         }.start()
     }
