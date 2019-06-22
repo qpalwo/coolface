@@ -1,5 +1,6 @@
-package com.hustunique.coolface.model.remote
+package com.hustunique.coolface.model.remote.service
 
+import com.hustunique.coolface.model.remote.config.NetConfig
 import com.hustunique.coolface.model.remote.bean.FacePPBeautifyReturn
 import com.hustunique.coolface.model.remote.bean.FacePPDetectReturn
 import com.hustunique.coolface.model.remote.bean.FacePPSetAddReturn
@@ -17,6 +18,10 @@ interface FacePPService {
     @FormUrlEncoded
     fun detect(@Field("image_file") picture_path: String,
                @Field("return_attributes") attr: String): Single<FacePPDetectReturn>
+
+    @POST(NetConfig.FACEPP_METHOD_DETECT)
+    @FormUrlEncoded
+    fun detect(@Field("image_url") picture_path: String): Single<FacePPDetectReturn>
 
     @POST(NetConfig.FACEPP_METHOD_BEAUTIFY)
     @FormUrlEncoded

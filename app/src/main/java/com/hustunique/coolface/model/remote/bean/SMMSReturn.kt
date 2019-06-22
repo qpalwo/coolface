@@ -2,7 +2,8 @@ package com.hustunique.coolface.model.remote.bean
 
 data class SMMSReturn(
     val data: Data,
-    val code: String
+    val code: String,
+    val msg: String
 )
 
 data class Data(

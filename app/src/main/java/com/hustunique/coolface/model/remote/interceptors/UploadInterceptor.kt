@@ -24,6 +24,7 @@ class UploadInterceptor : Interceptor {
         val requestBuilder = request.newBuilder()
         val multipartBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
+
         for (i in 0 until oldBody.size()) {
             if (i != upload) {
                 multipartBody.addFormDataPart(oldBody.encodedName(i), oldBody.value(i))

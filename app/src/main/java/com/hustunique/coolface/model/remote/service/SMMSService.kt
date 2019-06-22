@@ -1,8 +1,8 @@
-package com.hustunique.coolface.model.remote
+package com.hustunique.coolface.model.remote.service
 
+import com.hustunique.coolface.model.remote.config.NetConfig
 import com.hustunique.coolface.model.remote.bean.SMMSReturn
 import io.reactivex.Single
-import okhttp3.Response
 import okhttp3.ResponseBody
 import retrofit2.http.*
 

@@ -20,4 +20,9 @@
         <item name="android:windowIsTranslucent">true</item>
         <!--<item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>-->
     </style>
+
+    <style name="menu_labels_style">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+    </style>
 </resources>

@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hustunique.coolface.bean.Post
 import com.hustunique.coolface.model.repo.PictureRepo
-import com.hustunique.coolface.model.remote.PostService
+import com.hustunique.coolface.model.remote.service.PostService
 import com.hustunique.coolface.util.Callback
 
 class MainViewModel : ViewModel() {

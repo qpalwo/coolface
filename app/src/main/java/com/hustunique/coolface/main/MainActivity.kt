@@ -6,13 +6,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
-import android.transition.ChangeBounds
-import android.transition.ChangeTransform
-import android.transition.Fade
-import android.transition.Slide
-import android.view.Gravity.START
 import android.view.View
-import android.view.Window
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
@@ -23,7 +17,7 @@ import com.hustunique.coolface.R
 import com.hustunique.coolface.base.BaseActivity
 import com.hustunique.coolface.base.ListOnClickListener
 import com.hustunique.coolface.login.SignupActivity
-
+import com.hustunique.coolface.model.remote.config.BmobConfig
 import com.hustunique.coolface.show.BaseShowCard
 import com.hustunique.coolface.showcard.ShowCardFragment
 import com.hustunique.coolface.showscore.ShowScoreActivity
@@ -32,16 +26,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.java) {
 
-    private val CAMERA_CODE = 666
-    private val BMOB_APP_KEY = "12087a50147473005dcbe686a04bf4f1"
-
+    val CAMERA_CODE = 666
     private lateinit var mViewModel: MainViewModel
     override fun init() {
         super.init()
         mViewModel = viewModel as MainViewModel
-        Bmob.initialize(this, BMOB_APP_KEY)
+        Bmob.initialize(this, BmobConfig.APPLICATION_ID)
         mViewModel.init()
-
     }
 
     override fun initView() {
@@ -58,7 +49,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             (main_list.adapter as MainAdapter).data = it
             (main_list.adapter as MainAdapter).notifyDataSetChanged()
         })
-        mainactivity_fb.setOnClickListener {
+        main_activity_camera_fb.setOnClickListener {
             startCamera()
         }
         main_me.setOnClickListener {

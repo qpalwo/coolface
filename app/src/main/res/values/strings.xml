@@ -2,4 +2,6 @@
     <string name="app_name">CoolFace</string>
     <string name="post">POST</string>
     <string name="post_shared">post_shared</string>
+    <string name="get_from_camera">从相机获取</string>
+    <string name="get_from_gallery">从相册获取</string>
 </resources>

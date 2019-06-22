@@ -3,10 +3,11 @@ package com.hustunique.coolface.showscore
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.hustunique.coolface.bean.Post
 import com.hustunique.coolface.bean.Resource
+import com.hustunique.coolface.model.remote.bean.Face
 import com.hustunique.coolface.model.repo.PictureRepo
-import com.hustunique.coolface.model.repo.ScoringRepo
-import com.hustunique.coolface.model.remote.bean.FacePPDetectReturn
+import com.hustunique.coolface.model.repo.PostRepo
 
 /**
  * @author  : Xiao Yuxuan
@@ -15,11 +16,13 @@ import com.hustunique.coolface.model.remote.bean.FacePPDetectReturn
 class ShowScoreViewModel : ViewModel() {
     private lateinit var pictureRepo: PictureRepo
 
-    private lateinit var scoringRepo: ScoringRepo
+    private lateinit var postRepo: PostRepo
 
-    val scoringData: MutableLiveData<Resource<FacePPDetectReturn>> = MutableLiveData()
+    val scoringData: MutableLiveData<Resource<Face>> = MutableLiveData()
 
     val pictureData: MutableLiveData<Resource<String>> = MutableLiveData()
+
+    val postData: MutableLiveData<Resource<Post>> = MutableLiveData()
 
     lateinit var mContext: Context
 
@@ -27,8 +30,7 @@ class ShowScoreViewModel : ViewModel() {
     fun init(context: Context) {
         mContext = context
         pictureRepo = PictureRepo.getInstance(mContext)
-        scoringRepo = ScoringRepo.getInstance(mContext)
-
+        postRepo = PostRepo.getInstance(mContext)
         pictureData.value = Resource.loading()
         if (getPictureFile()?.let {
                 pictureRepo.beautify(it.absolutePath, pictureData)
@@ -42,9 +44,15 @@ class ShowScoreViewModel : ViewModel() {
     fun scoring() {
         if (getPictureFile()?.let {
                 scoringData.value = Resource.loading()
-                scoringRepo.scoring(it, scoringData)
+                pictureRepo.scoring(it, scoringData)
             } == null) {
             scoringData.value = Resource.error("load file error")
+        }
+    }
+
+    fun post(message: String) {
+        scoringData.value?.data?.let {
+            postRepo.post(message, it, postData)
         }
     }
 

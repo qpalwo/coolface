@@ -1,5 +1,6 @@
 package com.hustunique.coolface.model.remote
 
+import com.hustunique.coolface.model.remote.config.NetConfig
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -25,5 +26,12 @@ class RetrofitService private constructor() {
         .addConverterFactory(MoshiConverterFactory.create())
         .client(OkHttpClients.smms)
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .build()
+
+    val bombRetrofit = Retrofit.Builder()
+        .baseUrl(NetConfig.BMOB_BASE_URL)
+        .addConverterFactory(MoshiConverterFactory.create())
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .client(OkHttpClients.bmob)
         .build()
 }

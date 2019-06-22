@@ -5,4 +5,4 @@ import cn.bmob.v3.BmobUser
 /**
  * 用户
  */
-data class User(var nickname: String, var posts: List<Post>) : BmobUser()
+data class User(var nickname: String, var posts: MutableList<Post>) : BmobUser()

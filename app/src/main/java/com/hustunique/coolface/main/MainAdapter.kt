@@ -19,7 +19,7 @@ class MainAdapter : BaseAdapter<Post>(R.layout.post_item) {
     override fun onBindView(holder: ViewHolder, position: Int) {
         super.onBindView(holder, position)
         val post = data!![position]
-        Glide.with(holder.itemView.context).load(post.imageUrl)
+        Glide.with(holder.itemView.context).load(post.faceBean.faceUrl)
             .into(holder.getView(R.id.post_image))
         holder.getView<TextView>(R.id.post_message).text = post.message
         holder.getView<TextView>(R.id.post_username).text = post.username

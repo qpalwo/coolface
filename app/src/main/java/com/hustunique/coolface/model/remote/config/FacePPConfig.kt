@@ -1,4 +1,4 @@
-package com.hustunique.coolface.model.remote
+package com.hustunique.coolface.model.remote.config
 
 /**
  * @author  : Xiao Yuxuan

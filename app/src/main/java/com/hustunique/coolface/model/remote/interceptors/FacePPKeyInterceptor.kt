@@ -1,9 +1,8 @@
 package com.hustunique.coolface.model.remote.interceptors
 
-import com.hustunique.coolface.model.remote.FacePPConfig
+import com.hustunique.coolface.model.remote.config.FacePPConfig
 import okhttp3.FormBody
 import okhttp3.Interceptor
-import okhttp3.MultipartBody
 import okhttp3.Response
 
 /**
