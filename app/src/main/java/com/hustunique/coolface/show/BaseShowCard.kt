@@ -19,7 +19,7 @@ class BaseShowCard : BaseActivity(R.layout.base_show_card) {
         }
 
         fun start(context: Context, baseShowFragment: BaseShowFragment, fragmentArgs: Bundle?) {
-            Companion.start(context, baseShowFragment, fragmentArgs, null)
+            start(context, baseShowFragment, fragmentArgs, null)
         }
 
         fun start(
@@ -42,9 +42,5 @@ class BaseShowCard : BaseActivity(R.layout.base_show_card) {
         baseShowFragment.setDragCard(card_container)
         supportFragmentManager.beginTransaction().add(R.id.card_container, baseShowFragment).commit()
         baseShowFragment.arguments = intent.getBundleExtra(FRA_ARGS)
-    }
-
-    override fun initView() {
-        super.initView()
     }
 }

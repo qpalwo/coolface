@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.Point
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.util.Log
 import android.view.*
 import android.view.MotionEvent.*
 import android.widget.TextView
@@ -150,6 +151,7 @@ class DragCardView(context: Context, attrs: AttributeSet?) : CardView(context, a
                     pivotX = left.toFloat() + 100
 
                     rotationR = dis(left.toFloat() + 30, top.toFloat() + 30, startX, startY)
+                    Log.i("DragCardR", rotationR.toString())
                 }
                 ACTION_MOVE -> {
                     val cX = event.rawX - lastX
@@ -172,7 +174,9 @@ class DragCardView(context: Context, attrs: AttributeSet?) : CardView(context, a
 
                     val smallB = if (isVer) cX else cY
                     val arc = dis(0f, smallB, smallB, 0f)
-                    val degree = Math.toDegrees(arc * 180 / (rotationR * Math.PI)).toFloat()
+
+                    // 这里的1000是固定的旋转半径 经测试1000是比较合适的值，但可以使用上面的rotationR，是真正的半径
+                    val degree = Math.toDegrees(arc * 180 / (1000 * Math.PI)).toFloat()
                     rotation += (if (cX > 0) -degree else degree) / 20
 
                     // 平移
