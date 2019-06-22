@@ -2,4 +2,5 @@
     <string name="app_name">CoolFace</string>
     <string name="post">POST</string>
     <string name="post_shared">post_shared</string>
+    <string name="font">score.ttf</string>
 </resources>

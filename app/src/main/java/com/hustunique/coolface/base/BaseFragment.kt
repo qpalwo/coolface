@@ -43,9 +43,7 @@ abstract class BaseFragment(@LayoutRes val layoutId: Int, val viewModelClass: Cl
 
     }
 
-    open fun initContact() {
 
-    }
 
     open fun initContact(context: Context?) {
 

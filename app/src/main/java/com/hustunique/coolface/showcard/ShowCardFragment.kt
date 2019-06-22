@@ -24,7 +24,7 @@ import master.flame.danmaku.danmaku.model.DanmakuTimer
 import master.flame.danmaku.danmaku.model.android.DanmakuContext
 
 class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewModel::class.java) {
-    private lateinit var post: Post
+    private var post: Post? = null
 
     private lateinit var dmContext: DanmakuContext
 
@@ -42,9 +42,9 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
 
     override fun initView(view: View) {
         super.initView(view)
-        setupEnterExitAni()
+        // 先延迟进入的动画，让图片加载完再进来
         postponeEnterTransition()
-        Glide.with(this).load(post.imageUrl).addListener(object : RequestListener<Drawable> {
+        Glide.with(this).load(post?.imageUrl).addListener(object : RequestListener<Drawable> {
             override fun onLoadFailed(
                 e: GlideException?,
                 model: Any?,
@@ -62,28 +62,21 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
                 dataSource: DataSource?,
                 isFirstResource: Boolean
             ): Boolean {
-                fra_show_card_image.setImageDrawable(resource)
+                // 展示所有的视图
+                showView(resource)
+                // 进入动画开始
                 startPostponedEnterTransition()
                 return true
             }
         }).into(fra_show_card_image)
 
-        fra_show_card_score.typeface = Typeface.createFromAsset(activity?.assets, "score.ttf")
+        fra_show_card_score.typeface = Typeface.createFromAsset(activity?.assets, getString(R.string.font))
 
         dmContext = mViewModel.getDmContext()
     }
 
-    private fun setupEnterExitAni() {
-        val fade = Fade()
-        fade.duration = 500
-        activity?.window?.enterTransition = fade
-        activity?.window?.exitTransition = fade
-        activity?.window?.sharedElementExitTransition = ChangeTransform()
-
-    }
-
     override fun initContact(context: Context?) {
-        super.initContact()
+        super.initContact(context)
         dragCardView.setFinishCallback(object : DragCardView.FinishCallback {
             override fun onGoAway() {
                 Toast.makeText(context, "离开屏幕", Toast.LENGTH_SHORT).show()
@@ -108,38 +101,63 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
 
                 override fun prepared() {
                     fra_show_dm.start()
+                    showDanmas(it)
                 }
             })
             fra_show_dm.prepare(parser, dmContext)
 //            show_dm.enableDanmakuDrawingCache(true)
-            Thread {
-                while (!fra_show_dm.isPrepared) {
-                }
-                for (dm in it) {
-                    if (fra_show_dm == null)
-                        break
-                    mViewModel.showDanmu(
-                        mViewModel.createDanmu(
-                            context!!,
-                            dmContext,
-                            fra_show_dm.currentTime,
-                            dm
-                        ), fra_show_dm
-                    )
-                    Thread.sleep(3000)
-                }
-            }.start()
+
         })
 
         fra_show_card_comment_send.setOnClickListener {
-            mViewModel.addDanmu(
-                fra_show_card_comment.text.toString(),
-                context!!,
-                dmContext,
-                fra_show_dm
-            )
-            fra_show_card_comment.setText("")
+            sendDm()
         }
+    }
+
+    /**
+     * 展示所有视图
+     */
+    fun showView(image: Drawable?) {
+        fra_show_card_image.setImageDrawable(image)
+        fra_show_card_score.text = post?.likeCount?.toString()
+    }
+
+
+    /**
+     * 初始化展示弹幕
+     */
+    fun showDanmas(contents: List<String>) {
+        Thread {
+            while (!fra_show_dm.isPrepared) {
+            }
+            for (dm in contents) {
+                if (fra_show_dm == null)
+                    break
+                mViewModel.showDanmu(
+                    mViewModel.createDanmu(
+                        context!!,
+                        dmContext,
+                        fra_show_dm.currentTime,
+                        dm
+                    ), fra_show_dm
+                )
+                Thread.sleep(3000)
+            }
+        }.start()
+    }
+
+
+    /**
+     * 添加一条弹幕
+     */
+    fun sendDm() {
+        mViewModel.addDanmu(
+            fra_show_card_comment.text.toString(),
+            context!!,
+            dmContext,
+            fra_show_dm
+        )
+        fra_show_card_comment.setText("")
     }
 
 

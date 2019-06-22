@@ -4,12 +4,13 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Point
+import android.graphics.Typeface
 import android.util.AttributeSet
-import android.view.MotionEvent
+import android.view.*
 import android.view.MotionEvent.*
-import android.view.VelocityTracker
-import android.view.WindowManager
+import android.widget.TextView
 import androidx.cardview.widget.CardView
+import com.hustunique.coolface.R
 
 class DragCardView(context: Context, attrs: AttributeSet?) : CardView(context, attrs) {
     private var isMoving: Boolean = false
@@ -70,30 +71,73 @@ class DragCardView(context: Context, attrs: AttributeSet?) : CardView(context, a
     /**
      * 是否允许拖拽
      */
-    private var dragable = true
+    private var draggable = true
+
+
+    /**
+     * 是否正在加载
+     */
+    private var isLoading = false
+
+    /**
+     * 加载中的动画
+     */
+    private var loadingView: View
 
     init {
         firstPx = pivotX
         firstPy = pivotY
+        loadingView = LayoutInflater.from(context).inflate(
+            R.layout.view_girl_loading,
+            this,
+            false
+        )
+        loadingView.findViewById<TextView>(R.id.view_loading_text).typeface = Typeface.createFromAsset(
+            context.assets, context.getString(
+                R.string.font
+            )
+        )
+        addView(loadingView)
+        if (isLoading)
+            startLoading()
+        else
+            stopLoading()
     }
 
     /**
      * 启动拖拽
      */
     fun enableDrag() {
-        dragable = true
+        draggable = true
     }
 
     /**
      * 禁止拖拽
      */
     fun disableDrag() {
-        dragable = false
+        draggable = false
+    }
+
+    /**
+     * 显示加载动画，屏蔽其他动画
+     */
+    fun startLoading() {
+        isLoading = true
+        loadingView.visibility = View.VISIBLE
+    }
+
+    /**
+     * 停止加载动画
+     */
+    fun stopLoading() {
+        isLoading = false
+        loadingView.visibility = View.GONE
+
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         speedTracker.addMovement(event)
-        if (dragable) {
+        if (draggable) {
             when (event?.action) {
                 ACTION_DOWN -> {
                     startX = event.rawX

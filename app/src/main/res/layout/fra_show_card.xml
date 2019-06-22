@@ -4,26 +4,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/fra_show_card_loading"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:visibility="invisible"
-        app:lottie_fileName="girl_loading.json"
-        app:layout_constraintBottom_toBottomOf="@+id/fra_show_card_image"
-        app:layout_constraintEnd_toEndOf="@+id/fra_show_card_image"
-        app:layout_constraintStart_toStartOf="@+id/fra_show_card_image"
-        app:layout_constraintTop_toTopOf="@+id/fra_show_card_image" />
-
     <ImageView
         android:id="@+id/fra_show_card_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:src="@drawable/ic_me_circle_36dp"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -8,4 +8,8 @@
             <enum name="thumb" value="3" />
         </attr>
     </declare-styleable>
+
+    <declare-styleable name="DragCardView">
+        <attr name="draggable" format="boolean" />
+    </declare-styleable>
 </resources>

@@ -3,6 +3,9 @@ package com.hustunique.coolface.show
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.transition.ChangeTransform
+import android.transition.Fade
+import android.transition.Slide
 import com.hustunique.coolface.R
 import com.hustunique.coolface.base.BaseActivity
 import kotlinx.android.synthetic.main.base_show_card.*
@@ -41,4 +44,7 @@ class BaseShowCard : BaseActivity(R.layout.base_show_card) {
         baseShowFragment.arguments = intent.getBundleExtra(FRA_ARGS)
     }
 
+    override fun initView() {
+        super.initView()
+    }
 }
