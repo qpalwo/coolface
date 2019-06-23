@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.hustunique.coolface.bean.Post
 import com.hustunique.coolface.bean.Resource
 import com.hustunique.coolface.model.remote.bean.Face
+import com.hustunique.coolface.model.remote.bean.SimilarFaceInfo
 import com.hustunique.coolface.model.repo.PictureRepo
 import com.hustunique.coolface.model.repo.PostRepo
 
@@ -57,8 +58,10 @@ class ShowScoreViewModel : ViewModel() {
     }
 
     fun test() {
-        val livedata = MutableLiveData<Resource<List<Post>>>()
-        postRepo.getPosts(livedata)
+        val livedata = MutableLiveData<Resource<SimilarFaceInfo>>()
+        scoringData.value?.let {
+            pictureRepo.searchSameStarFace(it.data!!.face_token, livedata)
+        }
     }
 
 }

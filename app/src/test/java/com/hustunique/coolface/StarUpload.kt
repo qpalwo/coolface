@@ -1,7 +1,7 @@
 package com.hustunique.coolface
 
 import com.hustunique.coolface.model.remote.RetrofitService
-import com.hustunique.coolface.model.remote.bean.StarInfo
+import com.hustunique.coolface.model.remote.bean.SimilarFaceInfo
 import com.hustunique.coolface.model.remote.config.BmobConfig
 import com.hustunique.coolface.model.remote.config.FacePPConfig
 import com.hustunique.coolface.model.remote.service.BmobService
@@ -31,7 +31,7 @@ class StarUpload {
                     .subscribe({ face ->
                         bmobService.addData(
                             BmobConfig.TABLE_STAR,
-                            StarInfo(strings[1], face.faces[0].face_token, strings[0])
+                            SimilarFaceInfo(strings[1], face.faces[0].face_token, strings[0])
                         ).subscribe({
                             facePPService.setAddFace(FacePPConfig.STAR_FACE_SET_TOKEN, face.faces[0].face_token)
                                 .subscribe({

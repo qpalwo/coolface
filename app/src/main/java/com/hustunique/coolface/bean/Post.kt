@@ -1,6 +1,7 @@
 package com.hustunique.coolface.bean
 
-import cn.bmob.v3.BmobObject
+import com.hustunique.coolface.model.remote.bean.Face
+import com.hustunique.coolface.util.JsonUtil
 import java.io.Serializable
 
 
@@ -19,4 +20,13 @@ data class Post(
     var likeCount: Int,
     var faceBean: FaceBean,
     var comments: List<String>? = null
-) : Serializable
+) : Serializable {
+    @Transient
+    var face: Face? = null
+        get() {
+            if (field == null) {
+                field = JsonUtil.toBean(faceBean.faceInfo)
+            }
+            return field
+        }
+}

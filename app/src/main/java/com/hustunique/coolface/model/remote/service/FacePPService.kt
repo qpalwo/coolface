@@ -1,10 +1,7 @@
 package com.hustunique.coolface.model.remote.service
 
+import com.hustunique.coolface.model.remote.bean.*
 import com.hustunique.coolface.model.remote.config.NetConfig
-import com.hustunique.coolface.model.remote.bean.FacePPBeautifyReturn
-import com.hustunique.coolface.model.remote.bean.FacePPDetectReturn
-import com.hustunique.coolface.model.remote.bean.FacePPSetAddReturn
-import com.hustunique.coolface.model.remote.bean.FacePPSetDeleteReturn
 import io.reactivex.Single
 import retrofit2.http.*
 
@@ -38,4 +35,10 @@ interface FacePPService {
     @FormUrlEncoded
     fun setRemoveFace(@Field("faceset_token") facesetToken: String,
                    @Field("face_tokens") faceToken: String): Single<FacePPSetDeleteReturn>
+
+    @POST(NetConfig.FACEPP_METHOD_SEARCH)
+    @FormUrlEncoded
+    fun searchSimilarFace(@Field("face_token") faceToken: String,
+                          @Field("faceset_token") facesetToken: String,
+                          @Field("return_result_count") count: Int): Single<FacePPSearchSimilarReturn>
 }

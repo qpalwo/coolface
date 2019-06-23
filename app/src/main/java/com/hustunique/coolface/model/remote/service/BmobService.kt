@@ -3,10 +3,7 @@ package com.hustunique.coolface.model.remote.service
 import com.hustunique.coolface.model.remote.config.NetConfig
 import io.reactivex.Single
 import okhttp3.ResponseBody
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 /**
  * @author  : Xiao Yuxuan
@@ -24,5 +21,14 @@ interface BmobService {
                 @Path("objid") objId: String): Single<ResponseBody>
 
     @GET("${NetConfig.BMOB_METHOD_CLASS}{table}")
+    fun queryData(@Path("table") tableName: String,
+                @Query("where") op: String): Single<ResponseBody>
+
+    @GET("${NetConfig.BMOB_METHOD_CLASS}{table}")
     fun getData(@Path("table") tableName: String): Single<ResponseBody>
+
+    @GET("${NetConfig.BMOB_METHOD_CLASS}{table}")
+    fun getData(@Path("table") tableName: String,
+                @Query("limit") limit: Int,
+                @Query("skip") skip: Int): Single<ResponseBody>
 }

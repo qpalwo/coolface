@@ -11,7 +11,7 @@ object BmobConfig {
 
     const val SECRET_KEY = "2018d9d5fc31b8b1"
 
-    const val TABLE_STAR = "star"
+    const val TABLE_STAR = "similar_star"
 
     const val TABLE_USER = "user"
 

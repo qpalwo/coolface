@@ -17,4 +17,6 @@ interface SMMSService {
 
     @GET("${NetConfig.SMMS_METHOD_DELETE}{key}")
     fun delete(@Path("key") key: String): Single<ResponseBody>
+
+
 }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
@@ -25,9 +26,13 @@ import com.hustunique.coolface.util.FileUtil
 import com.hustunique.coolface.util.LivaDataUtil
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.java) {
 
-    val CAMERA_CODE = 666
+    private val CAMERA_CODE = 666
+    private val GALLERY_CODE = 777
+    private val CROP_CODE = 888
+
     private lateinit var mViewModel: MainViewModel
     override fun init() {
         super.init()
@@ -55,6 +60,9 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         })
         main_activity_camera_fb.setOnClickListener {
             startCamera()
+        }
+        main_activity_gallery_fb.setOnClickListener {
+            startGallery()
         }
         main_me.setOnClickListener {
             // TODO 如果已经登录 弹出抽屉 如果没有登录 跳转登录页面
@@ -87,9 +95,14 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                CAMERA_CODE -> {
+                CAMERA_CODE, CROP_CODE -> {
                     val intent = Intent(this, ShowScoreActivity::class.java)
                     startActivity(intent)
+                }
+                GALLERY_CODE -> {
+                    data?.data?.let {
+                        crop(it)
+                    }
                 }
                 else -> {
                 }
@@ -109,6 +122,29 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             intent.resolveActivity(packageManager)?.let {
                 startActivityForResult(intent, CAMERA_CODE)
             }
+        }
+    }
+
+    private fun startGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, GALLERY_CODE)
+    }
+
+    private fun crop(uri: Uri) {
+        val file = mViewModel.getPictureFile(applicationContext)
+        file?.let {
+            val saveFile = Uri.fromFile(it)
+            val intent = Intent("com.android.camera.action.CROP")
+            intent.setDataAndType(uri, "image/*")
+            intent.putExtra("aspectX", 768)
+            intent.putExtra("aspectY", 1024)
+            intent.putExtra("scale", true)
+            intent.putExtra("return-data", false)
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, saveFile)
+            intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString())
+            intent.putExtra("noFaceDetection", true)
+            startActivityForResult(intent, CROP_CODE)
         }
     }
 }

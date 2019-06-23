@@ -55,8 +55,9 @@ class ShowScoreActivity : BaseActivity(R.layout.activity_show_score, ShowScoreVi
         post.setOnClickListener {
             mViewModel.post("input message")
         }
-
-
+        test.setOnClickListener {
+            mViewModel.test()
+        }
     }
 
 }
