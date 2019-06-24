@@ -16,4 +16,6 @@ abstract class BaseShowFragment(@LayoutRes layoutRes: Int, viewModelClass: Class
     fun getOuterActivity(): BaseShowCard {
         return activity as BaseShowCard
     }
+
+    fun getAnimationBound() = getOuterActivity().getAnimationBound()
 }

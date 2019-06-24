@@ -26,7 +26,7 @@ import com.hustunique.coolface.main.navigation.NicknameCardFragment
 import com.hustunique.coolface.model.remote.config.BmobConfig
 import com.hustunique.coolface.show.BaseShowCard
 import com.hustunique.coolface.showcard.ShowCardFragment
-import com.hustunique.coolface.showscore.ShowScoreActivity
+import com.hustunique.coolface.showscore.ShowScoreFragment
 import com.hustunique.coolface.util.FileUtil
 import com.hustunique.coolface.util.LiveDataUtil
 import kotlinx.android.synthetic.main.activity_main.*
@@ -67,7 +67,8 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             val headerView = nav_main.getHeaderView(0)
 //            val avatarView = headerView.findViewById<ImageView>(R.id.iv_main_avatar)
             val nicknameView = headerView.findViewById<TextView>(R.id.tv_main_nickname)
-            nicknameView.text = it.nickname
+            // TODO: 登录
+//            nicknameView.text = it.nickname
         })
         main_activity_camera_fb.setOnClickListener {
             startCamera()
@@ -76,7 +77,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             startGallery()
         }
         main_me.setOnClickListener {
-             main_drawerlayout.openDrawer(START)
+            main_drawerlayout.openDrawer(START)
         }
         (main_list.adapter as MainAdapter).clickListener = object : ListOnClickListener {
             override fun onClick(position: Int, v: View) {
@@ -97,7 +98,6 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
 
             }
         }
-        initDrawer()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -105,8 +105,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 CAMERA_CODE, CROP_CODE -> {
-                    val intent = Intent(this, ShowScoreActivity::class.java)
-                    startActivity(intent)
+                    BaseShowCard.start(this, ShowScoreFragment())
                 }
                 GALLERY_CODE -> {
                     data?.data?.let {

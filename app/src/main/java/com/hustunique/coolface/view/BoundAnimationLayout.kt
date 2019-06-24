@@ -1,5 +1,6 @@
 package com.hustunique.coolface.view
 
+import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.content.Context
 import android.content.res.TypedArray
@@ -15,11 +16,13 @@ import com.hustunique.coolface.R
 
 
 class BoundAnimationLayout(context: Context?, attrs: AttributeSet?) : LinearLayout(context, attrs) {
+    private var boundAnimation: AnimatorSet = AnimatorSet()
+
     private var isPlayAnimation: Boolean = false
 
     private var animationProgress: Float = 0f
 
-    private var duration: Long? = 1000
+    private var duration: Long? = 2000
 
     private var rectOrCircle: Boolean = true
 
@@ -54,6 +57,8 @@ class BoundAnimationLayout(context: Context?, attrs: AttributeSet?) : LinearLayo
 
     private var path: Path = Path()
 
+    var isLoop: Boolean = false
+
     init {
         initAttr(attrs)
 
@@ -75,6 +80,9 @@ class BoundAnimationLayout(context: Context?, attrs: AttributeSet?) : LinearLayo
         initPadding(ta)
     }
 
+    /**
+     * 初始化从attr来的配置信息
+     */
     private fun initPadding(ta: TypedArray?) {
         val pLeft = ta?.getFloat(R.styleable.BoundAnimationLayout_boundPaddingLeft, -1f)
         val pRight = ta?.getFloat(R.styleable.BoundAnimationLayout_boundPaddingRight, -1f)
@@ -126,6 +134,9 @@ class BoundAnimationLayout(context: Context?, attrs: AttributeSet?) : LinearLayo
 
     }
 
+    /**
+     * 初始化绘制有关的数据结构
+     */
     private fun initDrawSetting() {
         setBackgroundColor(Color.TRANSPARENT)
         paint.strokeWidth = strokeWidth!!
@@ -151,15 +162,29 @@ class BoundAnimationLayout(context: Context?, attrs: AttributeSet?) : LinearLayo
             }
         }
         if (animationProgress >= 100) {
-            animationProgress = 0f
-            isPlayAnimation = false
-            initPath()
+            resetAnimation()
+            if (isLoop) {
+                playAnimation()
+            }
         }
+    }
+
+    private fun initAnimation() {
+        val moveAnimator = ValueAnimator.ofFloat(0f, 5000f).setDuration(duration!!).apply {
+            addUpdateListener {
+                animationProgress = it.animatedValue as Float / 50
+                postInvalidate()
+            }
+        }
+        boundAnimation.playTogether(moveAnimator)
     }
 
     private fun drawCircle() {
     }
 
+    /**
+     * 渐进绘制边框
+     */
     private fun drawRect(canvas: Canvas?) {
         var targetX = 0f
         var targetY = 0f
@@ -211,6 +236,9 @@ class BoundAnimationLayout(context: Context?, attrs: AttributeSet?) : LinearLayo
         }, paint)
     }
 
+    /**
+     * 计算宽度长度和进度
+     */
     private fun caculateProgress() {
         rectWidth = width - paddingLeft - paddingRight
         rectHeight = height - paddingTop - paddingBottom
@@ -230,21 +258,48 @@ class BoundAnimationLayout(context: Context?, attrs: AttributeSet?) : LinearLayo
             listOf(horPro, horPro + verPro, horPro + horPro + verPro, horPro + horPro + verPro + verPro) as List<Int>
     }
 
+    /**
+     * 调用这个方法开始加载
+     */
     fun playAnimation() {
         isPlayAnimation = true
-        ValueAnimator.ofFloat(0f, 5000f).setDuration(duration!!).apply {
-            addUpdateListener {
-                animationProgress = it.animatedValue as Float / 50
-                postInvalidate()
-            }
-            start()
-        }
-
-        ValueAnimator.ofArgb()
+        initAnimation()
+        boundAnimation.start()
     }
 
+    /**
+     * 停止加载
+     */
+    fun pauseAnimation() {
+        resetAnimation()
+        boundAnimation.pause()
+    }
+
+
+    /**
+     * 初始化路径
+     */
     fun initPath() {
         path.reset()
         path.setLastPoint(paddingLeft, paddingTop)
+    }
+
+
+    fun setPadding(paddingLeft: Float, paddingRight: Float, paddingTop: Float, paddingBottom: Float) {
+        this.paddingLeft = paddingLeft
+        this.paddingRight = paddingRight
+        this.paddingTop = paddingTop
+        this.paddingBottom = paddingBottom
+        isFirstDraw = true
+        initPath()
+    }
+
+    /**
+     * 初始化绘制
+     */
+    fun resetAnimation() {
+        animationProgress = 0f
+        initPath()
+        isPlayAnimation = false
     }
 }
