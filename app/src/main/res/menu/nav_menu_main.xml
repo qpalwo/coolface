@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/group_menu_mine"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_login"
+            android:icon="@drawable/ic_me_circle_36dp"
+            android:title="登录" />
+
+    </group>
+
+    <group
+        android:id="@+id/group_menu_other"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_setting"
+            android:title="设置"/>
+    </group>
+
+
+</menu>

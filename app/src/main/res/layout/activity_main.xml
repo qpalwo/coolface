@@ -92,10 +92,18 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
     <com.google.android.material.navigation.NavigationView
-        android:id="@+id/main_drawer"
-        android:layout_width="240dp"
+        android:id="@+id/nav_main"
+        android:layout_width="250dp"
         android:layout_height="match_parent"
-        android:layout_gravity="left" />
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header"
+        app:theme="@style/NavigationDrawerStyle"
+        app:menu="@menu/nav_menu_main">
+
+    </com.google.android.material.navigation.NavigationView>
+
 </androidx.drawerlayout.widget.DrawerLayout>
 

@@ -9,29 +9,39 @@
     tools:context=".login.ResetActivity">
 
 
-    <FrameLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/reset_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        >
+        android:background="@color/colorPrimary">
 
-        <TextView
-            android:id="@+id/tv_reset_cancel"
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="取消"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="15sp"
-            />
+            android:layout_margin="20dp"
+            >
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@mipmap/logo"
-            />
-    </FrameLayout>
+            <TextView
+                android:id="@+id/tv_reset_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="取消"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="15sp"
+                />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/logo"
+                />
+        </FrameLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+
 
     <TextView
         android:layout_width="wrap_content"

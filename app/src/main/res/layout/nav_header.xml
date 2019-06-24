@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/iv_main_avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="10dp"
+        android:src="@mipmap/logo"
+        />
+
+    <TextView
+        android:id="@+id/tv_main_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:singleLine="true"
+        android:textStyle="bold"
+        android:text="未登录"
+        android:textSize="20sp"
+        android:textColor="@color/colorText"
+        />
+
+    <TextView
+        android:id="@+id/tv_main_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:layout_marginStart="20dp"
+        android:text=""
+        android:layout_marginBottom="30dp"
+        />
+
+</LinearLayout>

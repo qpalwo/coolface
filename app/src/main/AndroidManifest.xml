@@ -28,7 +28,8 @@
         <activity android:name=".showscore.ShowScoreActivity"></activity>
         <activity android:name=".login.SignupActivity" />
         <activity android:name=".login.LoginActivity" />
-        <activity android:name=".main.MainActivity">
+        <activity android:name=".main.MainActivity"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

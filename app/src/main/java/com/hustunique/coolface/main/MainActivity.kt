@@ -7,26 +7,29 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.Gravity.START
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import cn.bmob.v3.Bmob
+import cn.bmob.v3.BmobUser
 import com.hustunique.coolface.R
 import com.hustunique.coolface.base.BaseActivity
 import com.hustunique.coolface.base.ListOnClickListener
-import com.hustunique.coolface.login.SignupActivity
+import com.hustunique.coolface.login.LoginActivity
+import com.hustunique.coolface.main.navigation.NicknameCardFragment
 import com.hustunique.coolface.model.remote.config.BmobConfig
 import com.hustunique.coolface.show.BaseShowCard
 import com.hustunique.coolface.showcard.ShowCardFragment
 import com.hustunique.coolface.showscore.ShowScoreActivity
-import com.hustunique.coolface.showscore.ShowScoreFragment
 import com.hustunique.coolface.util.FileUtil
 import com.hustunique.coolface.util.LivaDataUtil
 import kotlinx.android.synthetic.main.activity_main.*
-
 
 class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.java) {
 
@@ -60,17 +63,19 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             })
         })
         main_activity_camera_fb.setOnClickListener {
-            BaseShowCard.start(this, ShowScoreFragment())
-//            startCamera()
+            startCamera()
         }
         main_activity_gallery_fb.setOnClickListener {
             startGallery()
         }
+        mViewModel.user.observe(this, Observer {
+            val headerView = nav_main.getHeaderView(0)
+//            val avatarView = headerView.findViewById<ImageView>(R.id.iv_main_avatar)
+            val nicknameView = headerView.findViewById<TextView>(R.id.tv_main_nickname)
+            nicknameView.text = it.nickname
+        })
         main_me.setOnClickListener {
-            // TODO 如果已经登录 弹出抽屉 如果没有登录 跳转登录页面
-            // main_drawerlayout.openDrawer(START)
-            val intent = Intent(this, SignupActivity::class.java)
-            startActivity(intent)
+             main_drawerlayout.openDrawer(START)
         }
         (main_list.adapter as MainAdapter).clickListener = object : ListOnClickListener {
             override fun onClick(position: Int, v: View) {
@@ -126,6 +131,41 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             }
         }
     }
+
+    private fun initDrawer() {
+        val headerView = nav_main.getHeaderView(0)
+        val nicknameView = headerView.findViewById<TextView>(R.id.tv_main_nickname)
+        nicknameView.isClickable = BmobUser.isLogin()
+        nicknameView.setOnClickListener {
+            val nicknameFragment = NicknameCardFragment()
+            BaseShowCard.start(this, nicknameFragment)
+        }
+        val avatarView = headerView.findViewById<ImageView>(R.id.iv_main_avatar)
+        avatarView.isClickable = BmobUser.isLogin()
+        avatarView.setOnClickListener {
+
+        }
+        nav_main.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.nav_login -> {
+                    startActivity(Intent(this, LoginActivity::class.java))
+                    false
+                }
+                R.id.nav_setting -> {
+
+                    false
+                }
+
+                else -> false
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mViewModel.init(applicationContext)
+    }
+
 
     private fun startGallery() {
         val intent = Intent(Intent.ACTION_PICK)
