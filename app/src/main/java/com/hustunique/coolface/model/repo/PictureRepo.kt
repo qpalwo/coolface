@@ -132,16 +132,18 @@ class PictureRepo private constructor(val context: Context) {
             .subscribeOn(Schedulers.io())
             .flatMap {
                 similarInfo = it
-                val faceToken = similarInfo?.run {
+                val newFaceToken = similarInfo?.run {
                     it.results[0].face_token
                 }
                 bmobService.queryData(
                     BmobConfig.TABLE_STAR,
-                    "{\"faceToken\":\"$faceToken\"}"
+                    "{\"faceToken\":\"$newFaceToken\"}"
                 )
             }
             .subscribe({ response ->
                 if (JsonUtil.toBean<BmobSimilarFaceReturn>(response.source())?.let { faceReturn ->
+                        if (faceReturn.results.size == 0)
+                            liveData.postValue(Resource.error("no data"))
                         liveData.postValue(Resource.success(faceReturn.results[0].also { similar ->
                             similarInfo?.let {
                                 similar.trustLevel = it.thresholds.e4.toString()

@@ -32,9 +32,9 @@ class MainAdapter(val mViewModel: MainViewModel) : BaseAdapter<Post>(R.layout.po
                         visibility = VISIBLE
                         playAnimation()
                     }
-                    mViewModel
+                    mViewModel.like(position)
                 } else {
-
+                    mViewModel.unLike(position)
                 }
             }
         }
