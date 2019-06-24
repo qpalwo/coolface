@@ -14,7 +14,7 @@ class MainViewModel : ViewModel() {
     val user = MutableLiveData<User>()
     private lateinit var postRepo: PostRepo
 
-    val postsData: MutableLiveData<Resource<MutableList<Post>>> = MutableLiveData()
+    val postsData: MutableLiveData<Resource<List<Post>>> = MutableLiveData()
 
     fun init(context: Context) {
         postRepo = PostRepo.getInstance(context)
@@ -23,7 +23,7 @@ class MainViewModel : ViewModel() {
     }
 
     private fun getPosts() {
-//        postRepo.getPosts(postsData)
+        postRepo.getPosts(postsData)
     }
 
     fun like(positon: Int) {
