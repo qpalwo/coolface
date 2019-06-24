@@ -22,6 +22,7 @@ import com.hustunique.coolface.model.remote.config.BmobConfig
 import com.hustunique.coolface.show.BaseShowCard
 import com.hustunique.coolface.showcard.ShowCardFragment
 import com.hustunique.coolface.showscore.ShowScoreActivity
+import com.hustunique.coolface.showscore.ShowScoreFragment
 import com.hustunique.coolface.util.FileUtil
 import com.hustunique.coolface.util.LivaDataUtil
 import kotlinx.android.synthetic.main.activity_main.*
@@ -59,7 +60,8 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             })
         })
         main_activity_camera_fb.setOnClickListener {
-            startCamera()
+            BaseShowCard.start(this, ShowScoreFragment())
+//            startCamera()
         }
         main_activity_gallery_fb.setOnClickListener {
             startGallery()

@@ -12,4 +12,8 @@ abstract class BaseShowFragment(@LayoutRes layoutRes: Int, viewModelClass: Class
     fun setDragCard(dragCardView: DragCardView) {
         this.dragCardView = dragCardView
     }
+
+    fun getOuterActivity(): BaseShowCard {
+        return activity as BaseShowCard
+    }
 }

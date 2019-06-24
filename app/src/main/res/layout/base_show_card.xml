@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.hustunique.coolface.view.BoundAnimationLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="@mipmap/blurrybg"
-    android:backgroundTintMode="multiply"
-    android:backgroundTint="@color/colorBlurryTran"
+    android:id="@+id/card_bound"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    app:boundPaddingHor="80"
+    app:boundPaddingVer="300"
+    android:background="@mipmap/blurrybg"
+    android:backgroundTint="@color/colorBlurryTran"
+    android:backgroundTintMode="multiply">
+
+
     <com.hustunique.coolface.view.DragCardView
         android:id="@+id/card_container"
-        android:layout_gravity="center"
-        android:layout_marginHorizontal="30dp"
-        app:cardCornerRadius="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </com.hustunique.coolface.view.DragCardView>
-</FrameLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        app:cardCornerRadius="10dp"
+        android:layout_gravity="center" />
+
+
+</com.hustunique.coolface.view.BoundAnimationLayout>

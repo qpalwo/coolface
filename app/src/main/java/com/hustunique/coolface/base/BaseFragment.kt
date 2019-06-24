@@ -12,9 +12,9 @@ import androidx.lifecycle.ViewModelProviders
 
 abstract class BaseFragment(@LayoutRes val layoutId: Int, val viewModelClass: Class<out ViewModel>? = null) :
     Fragment() {
-    lateinit var viewModel: ViewModel
+    var viewModel: ViewModel? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        viewModel = viewModelClass?.let { ViewModelProviders.of(this).get(viewModelClass) }!!
+        viewModel = viewModelClass?.let { ViewModelProviders.of(this).get(viewModelClass) }
         val view = inflater.inflate(layoutId, container, false)
         init()
 

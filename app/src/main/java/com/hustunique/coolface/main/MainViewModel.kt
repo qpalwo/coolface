@@ -18,7 +18,7 @@ class MainViewModel : ViewModel() {
         getPosts()
     }
 
-    fun getPosts() {
+    private fun getPosts() {
         postRepo.getPosts(postsData)
     }
 

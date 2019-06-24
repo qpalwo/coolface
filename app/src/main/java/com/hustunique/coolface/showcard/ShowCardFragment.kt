@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.Button
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -18,6 +19,7 @@ import com.hustunique.coolface.util.AnimationUtil
 import com.hustunique.coolface.util.TextUtil
 import com.hustunique.coolface.view.DragCardView
 import com.hustunique.coolface.view.LikeButton
+import kotlinx.android.synthetic.main.base_show_card.*
 import kotlinx.android.synthetic.main.fra_show_card.*
 import master.flame.danmaku.controller.DrawHandler
 import master.flame.danmaku.danmaku.model.BaseDanmaku
@@ -38,7 +40,7 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
     override fun initData() {
         super.initData()
         post = arguments?.getSerializable(getString(R.string.post)) as Post
-        mViewModel.init(null)
+        mViewModel.init(post)
     }
 
     override fun initView(view: View) {
@@ -70,6 +72,7 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
                 return true
             }
         }).into(fra_show_card_image)
+
 
         TextUtil.setDefaultTypeface(fra_show_card_score)
 
@@ -112,7 +115,8 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
         })
 
         fra_show_card_comment_send.setOnClickListener {
-            sendDm()
+            if ((it as Button).text.toString().isNotEmpty())
+                sendDm()
         }
 
         fra_show_like.onCheckedListener = object : LikeButton.OnCheckedListener {
@@ -126,8 +130,6 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
                 collectOrNot(isChecked)
             }
         }
-
-
     }
 
     /**
@@ -193,6 +195,7 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
      * 添加一条弹幕
      */
     fun sendDm() {
+        getOuterActivity().card_bound.playAnimation()
         mViewModel.addDanmu(
             fra_show_card_comment.text.toString(),
             context!!,

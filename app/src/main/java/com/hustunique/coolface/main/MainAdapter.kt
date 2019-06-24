@@ -36,7 +36,6 @@ class MainAdapter : BaseAdapter<Post>(R.layout.post_item) {
 
                 }
             }
-
         }
         // TODO: 是否已经点赞还需要统计
 

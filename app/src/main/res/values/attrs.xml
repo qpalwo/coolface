@@ -12,4 +12,17 @@
     <declare-styleable name="DragCardView">
         <attr name="draggable" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="BoundAnimationLayout">
+        <attr name="boundColor" format="color" />
+        <attr name="boundStrokeWidth" format="float" />
+        <attr name="boundAnimationDuration" format="integer" />
+        <attr name="boundPadding" format="float" />
+        <attr name="boundPaddingLeft" format="float" />
+        <attr name="boundPaddingRight" format="float" />
+        <attr name="boundPaddingBottom" format="float" />
+        <attr name="boundPaddingTop" format="float" />
+        <attr name="boundPaddingHor" format="float" />
+        <attr name="boundPaddingVer" format="float" />
+    </declare-styleable>
 </resources>
