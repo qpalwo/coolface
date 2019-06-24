@@ -25,7 +25,9 @@ class ShowScoreViewModel : ViewModel() {
 
     val postData: MutableLiveData<Resource<Post>> = MutableLiveData()
 
-    val similarData = MutableLiveData<Resource<SimilarFaceInfo>>()
+    val similarStarData = MutableLiveData<Resource<SimilarFaceInfo>>()
+
+    val similarUserData = MutableLiveData<Resource<SimilarFaceInfo>>()
 
     lateinit var mContext: Context
 
@@ -60,8 +62,9 @@ class ShowScoreViewModel : ViewModel() {
     }
 
     fun similar() {
-        scoringData.value?.let {
-            pictureRepo.searchSameStarFace(it.data!!.face_token, similarData)
+        scoringData.value?.data?.let {
+            pictureRepo.searchSameStarFace(it.face_token, similarStarData)
+            pictureRepo.searchSameUserFace(it.face_token, similarStarData)
         }
     }
 

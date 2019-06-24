@@ -8,7 +8,7 @@ import com.hustunique.coolface.bean.Status
  * @author  : Xiao Yuxuan
  * @date    : 6/22/19
  */
-object LivaDataUtil {
+object LiveDataUtil {
     fun <T> useData(
         data: MutableLiveData<Resource<T>>,
         success: (T?) -> Unit = {},

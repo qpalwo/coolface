@@ -26,5 +26,10 @@ class MainViewModel : ViewModel() {
         postRepo.getPosts(postsData)
     }
 
+    fun like(positon: Int) {
+        postsData.value?.data?.let {
+        }
+    }
+
     fun getPictureFile(context: Context) = PictureRepo.getInstance(context).getNewFile()
 }

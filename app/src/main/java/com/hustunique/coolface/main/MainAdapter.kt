@@ -13,7 +13,7 @@ import com.hustunique.coolface.bean.Post
 import com.hustunique.coolface.util.AnimationUtil
 import com.hustunique.coolface.view.LikeButton
 
-class MainAdapter : BaseAdapter<Post>(R.layout.post_item) {
+class MainAdapter(val mViewModel: MainViewModel) : BaseAdapter<Post>(R.layout.post_item) {
     private val sharedWeights: ArrayList<ImageView> = ArrayList()
 
     override fun onBindView(holder: ViewHolder, position: Int) {
@@ -32,6 +32,7 @@ class MainAdapter : BaseAdapter<Post>(R.layout.post_item) {
                         visibility = VISIBLE
                         playAnimation()
                     }
+                    mViewModel
                 } else {
 
                 }

@@ -2,7 +2,6 @@ package com.hustunique.coolface.base
 
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
 
 /**
@@ -10,8 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
  * 泛型T写的是这个Adapter对应的Bean的类型，可以不写
  */
 abstract class BaseAdapter<Data>(
-    @LayoutRes val itemLayoutRes: Int, var data: List<Data>? = null,
-    var viewModel: ViewModel? = null
+    @LayoutRes val itemLayoutRes: Int, var data: List<Data>? = null
 ) :
     RecyclerView.Adapter<ViewHolder>() {
 

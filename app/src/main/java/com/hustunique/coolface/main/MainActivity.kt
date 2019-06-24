@@ -28,7 +28,7 @@ import com.hustunique.coolface.show.BaseShowCard
 import com.hustunique.coolface.showcard.ShowCardFragment
 import com.hustunique.coolface.showscore.ShowScoreActivity
 import com.hustunique.coolface.util.FileUtil
-import com.hustunique.coolface.util.LivaDataUtil
+import com.hustunique.coolface.util.LiveDataUtil
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -49,7 +49,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
     override fun initView() {
         super.initView()
         main_list.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
-        main_list.adapter = MainAdapter()
+        main_list.adapter = MainAdapter(mViewModel)
     }
 
 
@@ -57,7 +57,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
     override fun initContact() {
         super.initContact()
         mViewModel.postsData.observe(this, Observer {
-            LivaDataUtil.useData(it, {
+            LiveDataUtil.useData(it, {
                 (main_list.adapter as MainAdapter).data = it
                 (main_list.adapter as MainAdapter).notifyDataSetChanged()
 
@@ -80,7 +80,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         }
         (main_list.adapter as MainAdapter).clickListener = object : ListOnClickListener {
             override fun onClick(position: Int, v: View) {
-                LivaDataUtil.useData(mViewModel.postsData, {
+                LiveDataUtil.useData(mViewModel.postsData, {
                     val options =
                         ActivityOptionsCompat.makeSceneTransitionAnimation(
                             this@MainActivity,

@@ -62,6 +62,7 @@ class PostRepo private constructor(val context: Context) {
             .flatMap {
                 post = Post(
                     message,
+                    //todo change to true user
                     "testuser",
                     "test_account",
                     0,
@@ -119,14 +120,14 @@ class PostRepo private constructor(val context: Context) {
     }
 
     fun like(postObjId: String, liveData: MutableLiveData<Resource<Post>>) {
-        like(postObjId, 1, liveData)
+        like(postObjId, 1, "AddUnique", liveData)
     }
 
     fun unLike(postObjId: String, liveData: MutableLiveData<Resource<Post>>) {
-        like(postObjId, -1, liveData)
+        like(postObjId, -1, "Remove", liveData)
     }
 
-    private fun like(postObjId: String, amount: Int, liveData: MutableLiveData<Resource<Post>>) {
+    private fun like(postObjId: String, amount: Int, op: String, liveData: MutableLiveData<Resource<Post>>) {
         liveData.value = Resource.loading()
         updatePost(
             postObjId,
@@ -135,9 +136,14 @@ class PostRepo private constructor(val context: Context) {
                 BmobConfig.TABLE_POST,
                 postObjId,
                 BmobLikeCountUpdateBean(
-                    BmobUpdateAmount(amount)
+                    BmobUpdateAmount(amount),
+                    BmobUodateObject(
+                        op,
+                        listOf("testuser"))
+                    //todo change to true user
                 )
-            ).subscribeOn(Schedulers.io())
+            )
+                .subscribeOn(Schedulers.io())
         )
     }
 
@@ -148,16 +154,15 @@ class PostRepo private constructor(val context: Context) {
                 BmobConfig.TABLE_POST,
                 postObjId
             )
-        }
-            .subscribe({
-                val post = JsonUtil.toBean<Post>(it.source())
-                post?.let {
-                    liveData.postValue(Resource.success(post))
-                    return@subscribe
-                }
-                liveData.postValue(Resource.error("post error"))
-            }, {
-                liveData.postValue(Resource.error("post error"))
-            })
+        }.subscribe({
+            val post = JsonUtil.toBean<Post>(it.source())
+            post?.let {
+                liveData.postValue(Resource.success(post))
+                return@subscribe
+            }
+            liveData.postValue(Resource.error("post error"))
+        }, {
+            liveData.postValue(Resource.error("post error"))
+        })
     }
 }

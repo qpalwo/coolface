@@ -4,7 +4,7 @@ import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.hustunique.coolface.R
 import com.hustunique.coolface.base.BaseActivity
-import com.hustunique.coolface.util.LivaDataUtil
+import com.hustunique.coolface.util.LiveDataUtil
 import kotlinx.android.synthetic.main.activity_show_score.*
 
 class ShowScoreActivity : BaseActivity(R.layout.activity_show_score, ShowScoreViewModel::class.java) {
@@ -19,14 +19,14 @@ class ShowScoreActivity : BaseActivity(R.layout.activity_show_score, ShowScoreVi
     override fun initView() {
         super.initView()
         mViewModel.pictureData.observe(this, Observer {
-            LivaDataUtil.useData(it, {
+            LiveDataUtil.useData(it, {
                 Glide.with(this)
                     .load(it)
                     .into(show_score_imgview)
             })
         })
         mViewModel.scoringData.observe(this, Observer {
-            LivaDataUtil.useData(it, {
+            LiveDataUtil.useData(it, {
                 score.text = it?.attributes?.beauty?.male_score?.toString() ?: "0"
             }, {
                 score.text = "loading"
@@ -35,7 +35,7 @@ class ShowScoreActivity : BaseActivity(R.layout.activity_show_score, ShowScoreVi
             })
         })
         mViewModel.postData.observe(this, Observer {
-            LivaDataUtil.useData(it, {
+            LiveDataUtil.useData(it, {
                 message.text = it?.message ?: "0"
             }, {
                 message.text = "loading"
@@ -43,8 +43,8 @@ class ShowScoreActivity : BaseActivity(R.layout.activity_show_score, ShowScoreVi
                 message.text = s
             })
         })
-        mViewModel.similarData.observe(this, Observer {
-            LivaDataUtil.useData(it, {
+        mViewModel.similarStarData.observe(this, Observer {
+            LiveDataUtil.useData(it, {
                 similar.text = it?.faceOwnerName
             })
         })

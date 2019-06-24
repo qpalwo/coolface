@@ -93,6 +93,7 @@ class FacePPAttrUtil private constructor() {
             addBeauty()
                 .addEmotion()
                 .addGender()
+                .addAge()
                 .build()
     }
 
