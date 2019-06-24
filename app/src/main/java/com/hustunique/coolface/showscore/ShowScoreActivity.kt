@@ -43,8 +43,11 @@ class ShowScoreActivity : BaseActivity(R.layout.activity_show_score, ShowScoreVi
                 message.text = s
             })
         })
-        mViewModel.test()
-
+        mViewModel.similarData.observe(this, Observer {
+            LivaDataUtil.useData(it, {
+                similar.text = it?.faceOwnerName
+            })
+        })
     }
 
     override fun initContact() {
@@ -55,8 +58,8 @@ class ShowScoreActivity : BaseActivity(R.layout.activity_show_score, ShowScoreVi
         post.setOnClickListener {
             mViewModel.post("input message")
         }
-        test.setOnClickListener {
-            mViewModel.test()
+        search.setOnClickListener {
+            mViewModel.similar()
         }
     }
 

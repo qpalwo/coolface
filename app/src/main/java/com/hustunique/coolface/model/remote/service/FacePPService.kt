@@ -1,6 +1,6 @@
 package com.hustunique.coolface.model.remote.service
 
-import com.hustunique.coolface.model.remote.bean.*
+import com.hustunique.coolface.model.remote.bean.facepp.*
 import com.hustunique.coolface.model.remote.config.NetConfig
 import io.reactivex.Single
 import retrofit2.http.*

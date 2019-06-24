@@ -5,10 +5,10 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.hustunique.coolface.bean.Resource
 import com.hustunique.coolface.model.remote.RetrofitService
-import com.hustunique.coolface.model.remote.bean.BmobSimilarFaceReturn
-import com.hustunique.coolface.model.remote.bean.Face
-import com.hustunique.coolface.model.remote.bean.FacePPSearchSimilarReturn
-import com.hustunique.coolface.model.remote.bean.SimilarFaceInfo
+import com.hustunique.coolface.model.remote.bean.bmob.BmobSimilarFaceReturn
+import com.hustunique.coolface.model.remote.bean.facepp.Face
+import com.hustunique.coolface.model.remote.bean.facepp.FacePPSearchSimilarReturn
+import com.hustunique.coolface.model.remote.bean.facepp.SimilarFaceInfo
 import com.hustunique.coolface.model.remote.config.BeautifyLevel
 import com.hustunique.coolface.model.remote.config.BmobConfig
 import com.hustunique.coolface.model.remote.config.FacePPConfig

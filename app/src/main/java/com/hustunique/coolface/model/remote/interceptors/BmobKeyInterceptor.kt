@@ -11,13 +11,14 @@ import okhttp3.Response
 class BmobKeyInterceptor : Interceptor{
 
     override fun intercept(chain: Interceptor.Chain): Response = chain.run {
+        val r = request()
+            .newBuilder()
+            .addHeader("X-Bmob-Application-Id", BmobConfig.APPLICATION_ID)
+            .addHeader("X-Bmob-REST-API-Key", BmobConfig.REST_API_KEY)
+            .addHeader("Content-Type", "application/json")
+            .build()
         proceed(
-            request()
-                .newBuilder()
-                .addHeader("X-Bmob-Application-Id", BmobConfig.APPLICATION_ID)
-                .addHeader("X-Bmob-REST-API-Key", BmobConfig.REST_API_KEY)
-                .addHeader("Content-Type", "application/json")
-                .build()
+            r
         )
     }
 }

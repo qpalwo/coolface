@@ -1,6 +1,6 @@
 package com.hustunique.coolface.bean
 
-import com.hustunique.coolface.model.remote.bean.Face
+import com.hustunique.coolface.model.remote.bean.facepp.Face
 import com.hustunique.coolface.util.JsonUtil
 import java.io.Serializable
 
@@ -19,8 +19,9 @@ data class Post(
     var userAccount: String,
     var likeCount: Int,
     var faceBean: FaceBean,
-    var comments: List<String>? = null
+    var comments: List<String>
 ) : Serializable {
+    val objectId: String? = null
     @Transient
     var face: Face? = null
         get() {
