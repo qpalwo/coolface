@@ -31,6 +31,7 @@ import com.hustunique.coolface.util.FileUtil
 import com.hustunique.coolface.util.LivaDataUtil
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.java) {
 
     private val CAMERA_CODE = 666
@@ -62,18 +63,18 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
 
             })
         })
-        main_activity_camera_fb.setOnClickListener {
-            startCamera()
-        }
-        main_activity_gallery_fb.setOnClickListener {
-            startGallery()
-        }
         mViewModel.user.observe(this, Observer {
             val headerView = nav_main.getHeaderView(0)
 //            val avatarView = headerView.findViewById<ImageView>(R.id.iv_main_avatar)
             val nicknameView = headerView.findViewById<TextView>(R.id.tv_main_nickname)
             nicknameView.text = it.nickname
         })
+        main_activity_camera_fb.setOnClickListener {
+            startCamera()
+        }
+        main_activity_gallery_fb.setOnClickListener {
+            startGallery()
+        }
         main_me.setOnClickListener {
              main_drawerlayout.openDrawer(START)
         }
@@ -96,6 +97,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
 
             }
         }
+        initDrawer()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -165,7 +167,6 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         super.onResume()
         mViewModel.init(applicationContext)
     }
-
 
     private fun startGallery() {
         val intent = Intent(Intent.ACTION_PICK)

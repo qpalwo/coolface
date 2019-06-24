@@ -1,18 +1,13 @@
 package com.hustunique.coolface.main.navigation
 
 import android.content.Context
-import android.util.Log
-import android.view.View
 import android.widget.Toast
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProviders
 import cn.bmob.v3.BmobUser
 import cn.bmob.v3.exception.BmobException
 import cn.bmob.v3.listener.UpdateListener
 import com.hustunique.coolface.R
 import com.hustunique.coolface.bean.User
-import com.hustunique.coolface.main.MainViewModel
 import com.hustunique.coolface.show.BaseShowFragment
 import com.hustunique.coolface.view.DragCardView
 import kotlinx.android.synthetic.main.card_nickname.*
