@@ -116,6 +116,23 @@ class PostRepo private constructor() {
             })
     }
 
+    @SuppressLint("CheckResult")
+    fun getPost(postObjId: String, liveData: MutableLiveData<Resource<Post>>) {
+        liveData.value = Resource.loading()
+        bmobService.getData(BmobConfig.TABLE_POST, postObjId)
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+                val post = JsonUtil.toBean<Post>(it.source())
+                post?.let {
+                    liveData.postValue(Resource.success(post))
+                    return@subscribe
+                }
+                liveData.postValue(Resource.error("load error"))
+            }, {
+                liveData.postValue(Resource.error("load error"))
+            })
+    }
+
     fun addComment(postObjId: String, comment: String, liveData: MutableLiveData<Resource<Post>>) {
         liveData.value = Resource.loading()
         updatePost(
@@ -134,7 +151,11 @@ class PostRepo private constructor() {
         )
     }
 
-    fun like(postObjId: String, liveData: MutableLiveData<Resource<Post>>? = null, onError: ((String) -> Unit)? = null) {
+    fun like(
+        postObjId: String,
+        liveData: MutableLiveData<Resource<Post>>? = null,
+        onError: ((String) -> Unit)? = null
+    ) {
         like(postObjId, 1, "AddUnique", liveData, onError)
     }
 
@@ -142,7 +163,13 @@ class PostRepo private constructor() {
         like(postObjId, -1, "Remove", liveData, onError)
     }
 
-    private fun like(postObjId: String, amount: Int, op: String, liveData: MutableLiveData<Resource<Post>>?, onError: ((String) -> Unit)?) {
+    private fun like(
+        postObjId: String,
+        amount: Int,
+        op: String,
+        liveData: MutableLiveData<Resource<Post>>?,
+        onError: ((String) -> Unit)?
+    ) {
         liveData?.value = Resource.loading()
         updatePost(
             postObjId,
