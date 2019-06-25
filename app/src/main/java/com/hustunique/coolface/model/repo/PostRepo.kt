@@ -8,8 +8,10 @@ import com.hustunique.coolface.bean.Post
 import com.hustunique.coolface.bean.Resource
 import com.hustunique.coolface.bean.User
 import com.hustunique.coolface.model.remote.RetrofitService
+import com.hustunique.coolface.model.remote.bean.SMMSReturn
 import com.hustunique.coolface.model.remote.bean.bmob.*
 import com.hustunique.coolface.model.remote.bean.facepp.Face
+import com.hustunique.coolface.model.remote.bean.facepp.SimilarFaceInfo
 import com.hustunique.coolface.model.remote.config.BmobConfig
 import com.hustunique.coolface.model.remote.config.FacePPConfig
 import com.hustunique.coolface.model.remote.service.BmobService
@@ -47,6 +49,7 @@ class PostRepo private constructor() {
     fun post(message: String, faceData: Face, callback: MutableLiveData<Resource<Post>>) {
         val user = BmobUser.getCurrentUser(User::class.java)
         var post: Post? = null
+        var pictureInfo: SMMSReturn? = null
         if (pictureRepo.beautifiedPicture == null) {
             callback.value = Resource.error("no file to postData")
             return
@@ -59,6 +62,7 @@ class PostRepo private constructor() {
                 smmsService.upload("[upload]${pictureRepo.beautifiedPicture!!.absolutePath}")
             }
             .flatMap {
+                pictureInfo = it
                 post = Post(
                     message,
                     //todo change to true user
@@ -74,6 +78,18 @@ class PostRepo private constructor() {
                     ArrayList()
                 )
                 bmobService.addData(BmobConfig.TABLE_POST, post!!)
+            }
+            .flatMap {
+                pictureInfo?.data?.let {
+                    bmobService.addData(
+                        BmobConfig.TABLE_USER,
+                        SimilarFaceInfo(
+                            it.url,
+                            faceData.face_token,
+                            "testuser"
+                        )
+                    )
+                }
             }
             .subscribe({
                 callback.postValue(Resource.success(post))
@@ -100,6 +116,23 @@ class PostRepo private constructor() {
             })
     }
 
+    @SuppressLint("CheckResult")
+    fun getPost(postObjId: String, liveData: MutableLiveData<Resource<Post>>) {
+        liveData.value = Resource.loading()
+        bmobService.getData(BmobConfig.TABLE_POST, postObjId)
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+                val post = JsonUtil.toBean<Post>(it.source())
+                post?.let {
+                    liveData.postValue(Resource.success(post))
+                    return@subscribe
+                }
+                liveData.postValue(Resource.error("load error"))
+            }, {
+                liveData.postValue(Resource.error("load error"))
+            })
+    }
+
     fun addComment(postObjId: String, comment: String, liveData: MutableLiveData<Resource<Post>>) {
         liveData.value = Resource.loading()
         updatePost(
@@ -118,7 +151,11 @@ class PostRepo private constructor() {
         )
     }
 
-    fun like(postObjId: String, liveData: MutableLiveData<Resource<Post>>? = null, onError: ((String) -> Unit)? = null) {
+    fun like(
+        postObjId: String,
+        liveData: MutableLiveData<Resource<Post>>? = null,
+        onError: ((String) -> Unit)? = null
+    ) {
         like(postObjId, 1, "AddUnique", liveData, onError)
     }
 
@@ -126,7 +163,13 @@ class PostRepo private constructor() {
         like(postObjId, -1, "Remove", liveData, onError)
     }
 
-    private fun like(postObjId: String, amount: Int, op: String, liveData: MutableLiveData<Resource<Post>>?, onError: ((String) -> Unit)?) {
+    private fun like(
+        postObjId: String,
+        amount: Int,
+        op: String,
+        liveData: MutableLiveData<Resource<Post>>?,
+        onError: ((String) -> Unit)?
+    ) {
         liveData?.value = Resource.loading()
         updatePost(
             postObjId,
