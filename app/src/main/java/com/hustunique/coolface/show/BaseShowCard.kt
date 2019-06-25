@@ -1,6 +1,5 @@
 package com.hustunique.coolface.show
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.hustunique.coolface.R
@@ -12,27 +11,17 @@ class BaseShowCard : BaseActivity(R.layout.base_show_card) {
     companion object {
         private val FRA_ARGS: String = "fragment_args"
         private lateinit var baseShowFragment: BaseShowFragment
-        fun start(context: Context, baseShowFragment: BaseShowFragment) {
-            start(context, baseShowFragment, null, null)
-        }
-
-        fun start(context: Context, baseShowFragment: BaseShowFragment, fragmentArgs: Bundle?) {
-            start(context, baseShowFragment, fragmentArgs, null)
-        }
-
         fun start(
-            context: Context,
+            activity: BaseActivity,
             baseShowFragment: BaseShowFragment,
-            fragmentArgs: Bundle?,
-            activityBundle: Bundle?
+            fragmentArgs: Bundle? = null,
+            activityBundle: Bundle? = null,
+            requestCode: Int = -1
         ) {
             this.baseShowFragment = baseShowFragment
-            val intent = Intent(context, BaseShowCard::class.java)
+            val intent = Intent(activity, BaseShowCard::class.java)
             intent.putExtra(FRA_ARGS, fragmentArgs)
-            if (activityBundle != null)
-                context.startActivity(intent, activityBundle)
-            else
-                context.startActivity(intent)
+            activity.startActivityForResult(intent, requestCode, activityBundle)
         }
     }
 

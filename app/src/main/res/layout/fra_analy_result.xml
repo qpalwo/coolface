@@ -35,6 +35,7 @@
         android:layout_height="0dp"
         android:layout_margin="4dp"
         android:layout_marginTop="8dp"
+
         android:src="@color/colorAccent2"
         app:layout_constraintBottom_toTopOf="@+id/analy_similar_user_image"
         app:layout_constraintEnd_toEndOf="parent"
@@ -69,6 +70,7 @@
         android:layout_height="100dp"
         android:rotation="-15"
         android:src="@mipmap/cover_similar_star"
+        android:tint="@color/colorTran"
         app:layout_constraintStart_toStartOf="@+id/analy_similar_star_image"
         app:layout_constraintTop_toTopOf="@+id/analy_similar_star_image" />
 

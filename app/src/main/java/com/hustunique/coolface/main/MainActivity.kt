@@ -29,6 +29,7 @@ import com.hustunique.coolface.showcard.ShowCardFragment
 import com.hustunique.coolface.showscore.ShowScoreFragment
 import com.hustunique.coolface.util.FileUtil
 import com.hustunique.coolface.util.LiveDataUtil
+import com.hustunique.coolface.util.TextUtil
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -48,8 +49,11 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
 
     override fun initView() {
         super.initView()
-        main_list.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
+
         main_list.adapter = MainAdapter(mViewModel)
+        main_list.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
+
+        TextUtil.setDefaultTypeface(main_title)
     }
 
 
@@ -60,7 +64,6 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             LiveDataUtil.useData(it, {
                 (main_list.adapter as MainAdapter).data = it
                 (main_list.adapter as MainAdapter).notifyDataSetChanged()
-
             })
         })
         mViewModel.user.observe(this, Observer {
@@ -71,9 +74,11 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
 //            nicknameView.text = it.nickname
         })
         main_activity_camera_fb.setOnClickListener {
+            floatingActionsMenu.collapse()
             startCamera()
         }
         main_activity_gallery_fb.setOnClickListener {
+            floatingActionsMenu.collapse()
             startGallery()
         }
         main_me.setOnClickListener {
@@ -153,18 +158,11 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                     false
                 }
                 R.id.nav_setting -> {
-
                     false
                 }
-
                 else -> false
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mViewModel.init(applicationContext)
     }
 
     private fun startGallery() {

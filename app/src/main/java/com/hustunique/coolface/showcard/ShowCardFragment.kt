@@ -65,16 +65,25 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
                 dataSource: DataSource?,
                 isFirstResource: Boolean
             ): Boolean {
-                // 展示所有的视图
-                initShowView(resource)
                 // 进入动画开始
                 startPostponedEnterTransition()
-                return true
+                return false
             }
         }).into(fra_show_card_image)
 
+        fra_show_card_score.text = post?.face?.attributes?.beauty?.let {
+            if (it.female_score > it.male_score)
+                it.female_score.toString()
+            else
+                it.male_score.toString()
+        }
+        fra_show_likecount.text = post?.likeCount.toString()
 
-        TextUtil.setDefaultTypeface(fra_show_card_score)
+        fra_age.text = post?.face?.attributes?.age?.value?.toString()
+
+        fra_sex.text = post?.face?.attributes?.gender?.value.toString()
+
+        TextUtil.setDefaultTypeface(fra_show_card_score, fra_age_tip, fra_age, fra_sex, fra_sex_tip, fra_show_likecount)
 
         dmContext = mViewModel.getDmContext()
 
@@ -158,14 +167,6 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
         // TODO 修改数据结构的 collect
     }
 
-    /**
-     * 展示所有视图
-     */
-    fun initShowView(image: Drawable?) {
-        fra_show_card_image.setImageDrawable(image)
-        fra_show_likecount.text = post?.likeCount?.toString()
-    }
-
 
     /**
      * 初始化展示弹幕
@@ -198,7 +199,6 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
         getOuterActivity().card_bound.playAnimation()
         mViewModel.addDanmu(
             fra_show_card_comment.text.toString(),
-            context!!,
             dmContext,
             fra_show_dm
         )

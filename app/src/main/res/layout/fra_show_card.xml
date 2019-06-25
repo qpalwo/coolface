@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
     <ImageView
         android:id="@+id/fra_show_card_image"
         android:layout_width="match_parent"
-        android:layout_height="600dp"
-        android:scaleType="centerCrop"
+        android:layout_height="400dp"
         android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -36,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="88"
+        android:text="0"
         android:textColor="@color/colorAccentLight"
         android:textSize="50dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView"
@@ -53,6 +54,65 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fra_show_back" />
+
+    <TextView
+        android:id="@+id/fra_sex_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="性别:"
+        android:textColor="@color/colorPrimary"
+        android:textSize="30dp"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintEnd_toStartOf="@+id/fra_sex"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/fra_show_card_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fra_show_card_score" />
+
+    <TextView
+        android:id="@+id/fra_sex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Loading"
+        android:textColor="@color/colorPrimary"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/fra_sex_tip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/fra_sex_tip"
+        app:layout_constraintTop_toTopOf="@+id/fra_sex_tip" />
+
+    <TextView
+        android:id="@+id/fra_age_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:text="年龄:"
+        android:textColor="@color/colorPrimary"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/analy_post_message"
+        app:layout_constraintEnd_toStartOf="@+id/fra_age"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fra_sex_tip" />
+
+    <TextView
+        android:id="@+id/fra_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Loading"
+        android:textColor="@color/colorPrimary"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/fra_age_tip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/fra_age_tip"
+        app:layout_constraintTop_toTopOf="@+id/fra_age_tip" />
+
 
     <EditText
         android:id="@+id/fra_show_card_comment"
@@ -77,7 +137,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/fra_show_like"
         app:layout_constraintTop_toTopOf="@+id/fra_show_like"
-        tools:text="2300" />
+        android:text="0"/>
 
     <com.hustunique.coolface.view.LikeButton
         android:id="@+id/fra_show_like"
@@ -89,7 +149,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fra_show_card_image"
+        app:layout_constraintTop_toBottomOf="@+id/fra_age_tip"
         app:ltheme="heart" />
 
     <com.hustunique.coolface.view.LikeButton

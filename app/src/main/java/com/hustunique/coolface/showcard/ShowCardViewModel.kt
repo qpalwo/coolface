@@ -36,7 +36,11 @@ class ShowCardViewModel : ViewModel() {
     }
 
 
-    fun addDanmu(content: String, context: Context, dmContext: DanmakuContext, dmView: DanmakuView) {
+    fun addDanmu(
+        content: String,
+        dmContext: DanmakuContext,
+        dmView: DanmakuView
+    ) {
         // TODO: 将弹幕的内容添加到数据结构中
 
         if (dmView.isPaused)

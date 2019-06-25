@@ -1,11 +1,16 @@
 package com.hustunique.coolface.main
 
+import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.hustunique.coolface.R
 import com.hustunique.coolface.base.BaseAdapter
 import com.hustunique.coolface.base.ViewHolder
@@ -20,7 +25,27 @@ class MainAdapter(val mViewModel: MainViewModel) : BaseAdapter<Post>(R.layout.po
         super.onBindView(holder, position)
         val post = data!![position]
         Glide.with(holder.itemView.context).load(post.faceBean.faceUrl)
-            .into(holder.getView(R.id.post_image))
+            .addListener(object : RequestListener<Drawable?> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable?>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    return true
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable?>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    notifyDataSetChanged()
+                    return false
+                }
+            }).into(holder.getView(R.id.post_image))
         holder.getView<TextView>(R.id.post_message).text = post.message
         holder.getView<TextView>(R.id.post_username).text = post.username
         holder.getView<TextView>(R.id.post_like_count).text = post.likeCount.toString()

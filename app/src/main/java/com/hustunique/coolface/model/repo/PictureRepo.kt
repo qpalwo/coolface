@@ -142,8 +142,10 @@ class PictureRepo private constructor(val context: Context) {
             }
             .subscribe({ response ->
                 if (JsonUtil.toBean<BmobSimilarFaceReturn>(response.source())?.let { faceReturn ->
-                        if (faceReturn.results.size == 0)
+                        if (faceReturn.results.size == 0) {
                             liveData.postValue(Resource.error("no data"))
+                            return@subscribe
+                        }
                         liveData.postValue(Resource.success(faceReturn.results[0].also { similar ->
                             similarInfo?.let {
                                 similar.trustLevel = it.thresholds.e4.toString()

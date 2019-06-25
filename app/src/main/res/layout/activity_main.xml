@@ -23,7 +23,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="48dp"
                 android:layout_marginBottom="8dp">
 
                 <ImageView
@@ -41,7 +41,7 @@
                     android:layout_marginEnd="16dp"
                     android:gravity="center"
                     android:text="@string/app_name"
-                    android:textColor="@color/colorText"
+                    android:textColor="#ffffff"
                     android:textSize="@dimen/titleText" />
             </FrameLayout>
         </androidx.appcompat.widget.Toolbar>
@@ -76,8 +76,8 @@
                 android:layout_height="wrap_content"
                 app:fab_colorNormal="@color/colorPrimary"
                 app:fab_colorPressed="@color/colorPrimaryDark"
-                fab:fab_title="@string/get_from_gallery"
-                fab:fab_size="mini" />
+                app:fab_icon="@drawable/ic_photo_library_white_24dp"
+                app:fab_size="normal" />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/main_activity_camera_fb"
@@ -85,8 +85,8 @@
                 android:layout_height="wrap_content"
                 app:fab_colorNormal="@color/colorPrimary"
                 app:fab_colorPressed="@color/colorPrimaryDark"
-                fab:fab_title="@string/get_from_camera"
-                fab:fab_size="mini" />
+                app:fab_icon="@drawable/ic_camera_white_24dp"
+                fab:fab_size="normal" />
 
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
@@ -100,8 +100,8 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
-        app:theme="@style/NavigationDrawerStyle"
-        app:menu="@menu/nav_menu_main">
+        app:menu="@menu/nav_menu_main"
+        app:theme="@style/NavigationDrawerStyle">
 
     </com.google.android.material.navigation.NavigationView>
 

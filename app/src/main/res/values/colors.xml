@@ -10,4 +10,6 @@
     <color name="colorBlurryTran">#995E5E5E</color>
     <color name="colorHelperText">#FFA5C4</color>
     <color name="colorTranGray">#80626262</color>
+
+    <color name="colorTran">#00FFFFFF</color>
 </resources>
