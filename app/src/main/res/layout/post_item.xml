@@ -17,6 +17,7 @@
             android:id="@+id/post_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="300dp"
             android:adjustViewBounds="true"
             android:src="@drawable/ic_me_circle_36dp"
             app:layout_constraintEnd_toEndOf="parent"
