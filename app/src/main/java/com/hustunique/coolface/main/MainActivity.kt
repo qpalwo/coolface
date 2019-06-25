@@ -42,9 +42,10 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
     private val GALLERY_CODE = 777
     private val CROP_CODE = 888
 
+    private var scoreWillShow = true
+
     // 点击查看详情的位置
     private var clickPosition: Int = -1
-    private var scoreWillShow = true
 
     private lateinit var mViewModel: MainViewModel
     override fun init() {
@@ -206,6 +207,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             nav_main.inflateMenu(R.menu.nav_menu_main_login)
             nav_main.setNavigationItemSelectedListener {
                 when (it.itemId) {
+                    // TODO: 导航
                     R.id.nav_all -> {
                         true
                     }
