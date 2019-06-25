@@ -27,7 +27,7 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
 
     override fun initData() {
         super.initData()
-        mViewModel.init(context!!)
+        mViewModel.init()
     }
 
     override fun initView(view: View) {

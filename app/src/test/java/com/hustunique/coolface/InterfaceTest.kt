@@ -31,22 +31,22 @@ class InterfaceTest {
 //            }, {
 //                val b = 1
 //            })
-        bmobService.updateData(
-            BmobConfig.TABLE_POST,
-            "1f9e9c50ea",
-            BmobLikeCountUpdateBean(
-                BmobUpdateAmount(-1)
-            )
-        )
-            .subscribe({
-                val a = 0
-            }, {
-                val a = it as HttpException
-                a.response().errorBody()?.let {
-                    val s = it.string()
-                }
-                val b = 1
-            })
+//        bmobService.updateData(
+//            BmobConfig.TABLE_POST,
+//            "1f9e9c50ea",
+//            BmobLikeCountUpdateBean(
+//                BmobUpdateAmount(-1)
+//            )
+//        )
+//            .subscribe({
+//                val a = 0
+//            }, {
+//                val a = it as HttpException
+//                a.response().errorBody()?.let {
+//                    val s = it.string()
+//                }
+//                val b = 1
+//            })
     }
 
     @Test

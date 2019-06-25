@@ -22,6 +22,11 @@ data class Post(
     var comments: List<String>
 ) : Serializable {
     val objectId: String? = null
+
+    val likeUser: List<String>? = null
+
+    val favouriteUser: List<String>? = null
+
     @Transient
     var face: Face? = null
         get() {

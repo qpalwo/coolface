@@ -1,6 +1,8 @@
 package com.hustunique.coolface.base
 
+import android.content.Context
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 
@@ -16,10 +18,10 @@ abstract class BaseAdapter<Data>(
     var clickListener: ListOnClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+
         init()
 
         initData()
-
         return ViewHolder.get(itemLayoutRes, parent)
     }
 

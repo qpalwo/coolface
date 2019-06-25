@@ -1,7 +1,6 @@
 package com.hustunique.coolface.model.repo
 
 import android.annotation.SuppressLint
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import cn.bmob.v3.BmobUser
 import com.hustunique.coolface.bean.FaceBean
@@ -25,12 +24,12 @@ import okhttp3.ResponseBody
  * @author  : Xiao Yuxuan
  * @date    : 6/21/19
  */
-class PostRepo private constructor(val context: Context) {
+class PostRepo private constructor() {
     companion object {
         private lateinit var Instance: PostRepo
-        fun getInstance(context: Context): PostRepo {
+        fun getInstance(): PostRepo {
             if (!::Instance.isInitialized) {
-                Instance = PostRepo(context)
+                Instance = PostRepo()
             }
             return Instance
         }
@@ -42,14 +41,14 @@ class PostRepo private constructor(val context: Context) {
 
     private val bmobService = RetrofitService.Instance.bombRetrofit.create(BmobService::class.java)
 
-    private val pictureRepo = PictureRepo.getInstance(context)
+    private val pictureRepo = PictureRepo.getInstance()
 
     @SuppressLint("CheckResult")
     fun post(message: String, faceData: Face, callback: MutableLiveData<Resource<Post>>) {
         val user = BmobUser.getCurrentUser(User::class.java)
         var post: Post? = null
         if (pictureRepo.beautifiedPicture == null) {
-            callback.value = Resource.error("no file to post")
+            callback.value = Resource.error("no file to postData")
             return
         } else {
             callback.value = Resource.loading()
@@ -79,7 +78,7 @@ class PostRepo private constructor(val context: Context) {
             .subscribe({
                 callback.postValue(Resource.success(post))
             }, {
-                callback.postValue(Resource.error("post error"))
+                callback.postValue(Resource.error("postData error"))
             })
 
     }
@@ -119,16 +118,16 @@ class PostRepo private constructor(val context: Context) {
         )
     }
 
-    fun like(postObjId: String, liveData: MutableLiveData<Resource<Post>>) {
-        like(postObjId, 1, "AddUnique", liveData)
+    fun like(postObjId: String, liveData: MutableLiveData<Resource<Post>>? = null, onError: ((String) -> Unit)? = null) {
+        like(postObjId, 1, "AddUnique", liveData, onError)
     }
 
-    fun unLike(postObjId: String, liveData: MutableLiveData<Resource<Post>>) {
-        like(postObjId, -1, "Remove", liveData)
+    fun unLike(postObjId: String, liveData: MutableLiveData<Resource<Post>>?, onError: ((String) -> Unit)? = null) {
+        like(postObjId, -1, "Remove", liveData, onError)
     }
 
-    private fun like(postObjId: String, amount: Int, op: String, liveData: MutableLiveData<Resource<Post>>) {
-        liveData.value = Resource.loading()
+    private fun like(postObjId: String, amount: Int, op: String, liveData: MutableLiveData<Resource<Post>>?, onError: ((String) -> Unit)?) {
+        liveData?.value = Resource.loading()
         updatePost(
             postObjId,
             liveData,
@@ -139,16 +138,23 @@ class PostRepo private constructor(val context: Context) {
                     BmobUpdateAmount(amount),
                     BmobUodateObject(
                         op,
-                        listOf("testuser"))
+                        listOf("testuser")
+                    )
                     //todo change to true user
                 )
             )
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io()),
+            onError
         )
     }
 
     @SuppressLint("CheckResult")
-    private fun updatePost(postObjId: String, liveData: MutableLiveData<Resource<Post>>, single: Single<ResponseBody>) {
+    private fun updatePost(
+        postObjId: String,
+        liveData: MutableLiveData<Resource<Post>>?,
+        single: Single<ResponseBody>,
+        onError: ((String) -> Unit)? = null
+    ) {
         single.flatMap {
             bmobService.getData(
                 BmobConfig.TABLE_POST,
@@ -157,12 +163,18 @@ class PostRepo private constructor(val context: Context) {
         }.subscribe({
             val post = JsonUtil.toBean<Post>(it.source())
             post?.let {
-                liveData.postValue(Resource.success(post))
+                liveData?.postValue(Resource.success(post))
                 return@subscribe
             }
-            liveData.postValue(Resource.error("post error"))
+            onError?.run {
+                this("postData error")
+            }
+            liveData?.postValue(Resource.error("postData error"))
         }, {
-            liveData.postValue(Resource.error("post error"))
+            onError?.run {
+                this("postData error")
+            }
+            liveData?.postValue(Resource.error("postData error"))
         })
     }
 }

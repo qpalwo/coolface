@@ -16,6 +16,7 @@ import com.hustunique.coolface.R
 import com.hustunique.coolface.bean.Post
 import com.hustunique.coolface.show.BaseShowFragment
 import com.hustunique.coolface.util.AnimationUtil
+import com.hustunique.coolface.util.LiveDataUtil
 import com.hustunique.coolface.util.TextUtil
 import com.hustunique.coolface.view.DragCardView
 import com.hustunique.coolface.view.LikeButton
@@ -27,11 +28,12 @@ import master.flame.danmaku.danmaku.model.DanmakuTimer
 import master.flame.danmaku.danmaku.model.android.DanmakuContext
 
 class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewModel::class.java) {
-    private var post: Post? = null
-
     private lateinit var dmContext: DanmakuContext
 
     private lateinit var mViewModel: ShowCardViewModel
+
+    private var like = false
+
     override fun init() {
         super.init()
         mViewModel = viewModel as ShowCardViewModel
@@ -39,49 +41,61 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
 
     override fun initData() {
         super.initData()
-        post = arguments?.getSerializable(getString(R.string.post)) as Post
-        mViewModel.init(post)
+        mViewModel.init(arguments?.getSerializable(getString(R.string.post)) as Post)
     }
 
     override fun initView(view: View) {
         super.initView(view)
         // 先延迟进入的动画，让图片加载完再进来
         postponeEnterTransition()
-        Glide.with(this).load(post?.faceBean?.faceUrl).addListener(object : RequestListener<Drawable> {
-            override fun onLoadFailed(
-                e: GlideException?,
-                model: Any?,
-                target: Target<Drawable>?,
-                isFirstResource: Boolean
-            ): Boolean {
-                startPostponedEnterTransition()
-                return true
-            }
+        mViewModel.postData.observe(this, Observer {
+            LiveDataUtil.useData(it, { post ->
+                like = post?.likeUser?.contains("testuser") ?: false
+                // todo change to true user data
+//                like = post?.likeUser?.contains(BmobUser.getCurrentUser(User::class.java).username) ?: false
+                fra_show_likecount.text = post?.likeCount?.toString()
 
-            override fun onResourceReady(
-                resource: Drawable?,
-                model: Any?,
-                target: Target<Drawable>?,
-                dataSource: DataSource?,
-                isFirstResource: Boolean
-            ): Boolean {
-                // 进入动画开始
-                startPostponedEnterTransition()
-                return false
-            }
-        }).into(fra_show_card_image)
+                fra_show_like.setChecked(like)
 
-        fra_show_card_score.text = post?.face?.attributes?.beauty?.let {
-            if (it.female_score > it.male_score)
-                it.female_score.toString()
-            else
-                it.male_score.toString()
-        }
-        fra_show_likecount.text = post?.likeCount.toString()
+                Glide.with(this).load(post?.faceBean?.faceUrl).addListener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        startPostponedEnterTransition()
+                        return true
+                    }
 
-        fra_age.text = post?.face?.attributes?.age?.value?.toString()
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        // 进入动画开始
+                        startPostponedEnterTransition()
+                        return false
+                    }
+                }).into(fra_show_card_image)
 
-        fra_sex.text = post?.face?.attributes?.gender?.value.toString()
+                fra_show_card_score.text = post?.face?.attributes?.beauty?.let {
+                    if (it.female_score > it.male_score)
+                        it.female_score.toString()
+                    else
+                        it.male_score.toString()
+                }
+                fra_show_likecount.text = post?.likeCount.toString()
+
+                fra_age.text = post?.face?.attributes?.age?.value?.toString()
+
+                fra_sex.text = post?.face?.attributes?.gender?.value.toString()
+            })
+        })
+
+
 
         TextUtil.setDefaultTypeface(fra_show_card_score, fra_age_tip, fra_age, fra_sex, fra_sex_tip, fra_show_likecount)
 
@@ -145,14 +159,17 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
      * 是否点赞
      */
     private fun likeOrNot(isLiked: Boolean) {
+        if (isLiked && !like) {
+            mViewModel.like()
+            fra_show_likecount.text = (fra_show_likecount.text.toString().toInt() + 1).toString()
+        } else if (!isLiked && like) {
+            mViewModel.unLike()
+            fra_show_likecount.text = (fra_show_likecount.text.toString().toInt() - 1).toString()
+        }
         fra_show_like_ani.visibility = if (isLiked) {
             fra_show_like_ani.playAnimation()
             VISIBLE
         } else GONE
-
-        fra_show_likecount.text = (fra_show_likecount.text.toString().toInt() + if (isLiked) 1 else -1).toString()
-        // TODO 修改数据结构的likecount
-        post?.likeCount?.plus(1)
     }
 
     /**
@@ -165,6 +182,13 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
         } else GONE
 
         // TODO 修改数据结构的 collect
+    }
+
+    /**
+     * 展示所有视图
+     */
+    fun initShowView(image: Drawable?) {
+        fra_show_card_image.setImageDrawable(image)
     }
 
 
