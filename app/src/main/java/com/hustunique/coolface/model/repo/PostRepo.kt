@@ -133,8 +133,8 @@ class PostRepo private constructor() {
             })
     }
 
-    fun addComment(postObjId: String, comment: String, liveData: MutableLiveData<Resource<Post>>) {
-        liveData.value = Resource.loading()
+    fun addComment(postObjId: String, comment: String, liveData: MutableLiveData<Resource<Post>>? = null, onError: ((String) -> Unit)? = null) {
+        liveData?.value = Resource.loading()
         updatePost(
             postObjId,
             liveData,
@@ -147,7 +147,8 @@ class PostRepo private constructor() {
                         listOf(comment)
                     )
                 )
-            ).subscribeOn(Schedulers.io())
+            ).subscribeOn(Schedulers.io()),
+            onError
         )
     }
 
