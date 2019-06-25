@@ -48,6 +48,7 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
         super.initView(view)
         // 先延迟进入的动画，让图片加载完再进来
         postponeEnterTransition()
+        dmContext = mViewModel.getDmContext()
         mViewModel.postData.observe(this, Observer {
             LiveDataUtil.useData(it, { post ->
                 like = post?.likeUser?.contains("testuser") ?: false
@@ -92,14 +93,31 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
                 fra_age.text = post?.face?.attributes?.age?.value?.toString()
 
                 fra_sex.text = post?.face?.attributes?.gender?.value.toString()
+
+                val parser = mViewModel.getParser()
+                fra_show_dm.setCallback(object : DrawHandler.Callback {
+                    override fun drawingFinished() {
+                        if (!fra_show_dm.isPaused)
+                            fra_show_dm.pause()
+                    }
+
+                    override fun danmakuShown(danmaku: BaseDanmaku?) {}
+
+                    override fun updateTimer(timer: DanmakuTimer?) {}
+
+                    override fun prepared() {
+                        post?.comments?.let {
+                            fra_show_dm.start()
+                            showDanmas(it)
+                        }
+                    }
+                })
+                fra_show_dm.prepare(parser, dmContext)
+                fra_show_dm.enableDanmakuDrawingCache(true)
             })
         })
 
-
-
         TextUtil.setDefaultTypeface(fra_show_card_score, fra_age_tip, fra_age, fra_sex, fra_sex_tip, fra_show_likecount)
-
-        dmContext = mViewModel.getDmContext()
 
         // 让动画只播放一次
         AnimationUtil.lottiePlayOnce(fra_show_like_ani, fra_show_colle_ani)
@@ -117,25 +135,6 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
             activity?.supportFinishAfterTransition()
         }
 
-        mViewModel.comments.observe(this, Observer {
-            val parser = mViewModel.getParser()
-            fra_show_dm.setCallback(object : DrawHandler.Callback {
-                override fun drawingFinished() {
-                    fra_show_dm.pause()
-                }
-
-                override fun danmakuShown(danmaku: BaseDanmaku?) {}
-
-                override fun updateTimer(timer: DanmakuTimer?) {}
-
-                override fun prepared() {
-                    fra_show_dm.start()
-                    showDanmas(it)
-                }
-            })
-            fra_show_dm.prepare(parser, dmContext)
-            fra_show_dm.enableDanmakuDrawingCache(true)
-        })
 
         fra_show_card_comment_send.setOnClickListener {
             if ((it as Button).text.toString().isNotEmpty())
@@ -182,13 +181,6 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
         } else GONE
 
         // TODO 修改数据结构的 collect
-    }
-
-    /**
-     * 展示所有视图
-     */
-    fun initShowView(image: Drawable?) {
-        fra_show_card_image.setImageDrawable(image)
     }
 
 

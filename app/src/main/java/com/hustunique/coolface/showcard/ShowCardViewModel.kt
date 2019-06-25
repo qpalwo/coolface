@@ -19,19 +19,9 @@ import master.flame.danmaku.ui.widget.DanmakuView
 class ShowCardViewModel : ViewModel() {
     private val postRepo = PostRepo.getInstance()
     val postData: MutableLiveData<Resource<Post>> = MutableLiveData()
-    val comments = MutableLiveData<List<String>>()
 
     fun init(post: Post?) {
         postData.value = Resource.success(post)
-        // TODO: 根据post查询到其对应的评论
-        comments.postValue(
-            listOf(
-                "可以啊",
-                "郭老师牛逼",
-                "小岳岳我爱你",
-                "我家胡歌最帅了"
-            )
-        )
     }
 
     fun showDanmu(danmaku: BaseDanmaku?, dmView: DanmakuView) {
@@ -44,7 +34,22 @@ class ShowCardViewModel : ViewModel() {
         dmContext: DanmakuContext,
         dmView: DanmakuView
     ) {
-        // TODO: 将弹幕的内容添加到数据结构中
+        postData.value?.data?.let { post ->
+            {
+                if (post.comments == null)
+                    post.comments = ArrayList()
+                (post.comments as MutableList).add(content)
+                postRepo.addComment(post.objectId!!, content) {
+                    (post.comments as MutableList).removeAt(post.comments.indexOf(content))
+                }
+            }
+
+        }
+        postRepo.addComment(postData.value?.data?.objectId!!, content) {
+            (postData.value?.data?.comments as MutableList).apply {
+                removeAt(indexOf(content))
+            }
+        }
 
         if (dmView.isPaused)
             dmView.resume()

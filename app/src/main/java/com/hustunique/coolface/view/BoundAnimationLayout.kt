@@ -176,12 +176,13 @@ class BoundAnimationLayout(context: Context?, attrs: AttributeSet?) : LinearLayo
                 postInvalidate()
             }
         }
-//        val paintColorAnimator = ValueAnimator.ofArgb(0xEC3C7A, 0x589E63).setDuration(duration!!).apply {
-//            addUpdateListener {
-//                paint.color = it.animatedValue as Int
-//            }
-//        }
-        boundAnimation.playTogether(moveAnimator)
+        val paintColorAnimator = ValueAnimator.ofArgb(0xFFEC3C7A.toInt(), 0xFF34C648.toInt(), 0xFFFFA5C4.toInt()).setDuration(duration!!).apply {
+            addUpdateListener {
+                paint.color = it.animatedValue as Int
+            }
+        }
+
+        boundAnimation.playTogether(moveAnimator, paintColorAnimator)
     }
 
     private fun drawCircle() {
