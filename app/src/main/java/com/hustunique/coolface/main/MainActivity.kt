@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Gravity.START
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
@@ -17,13 +18,16 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import cn.bmob.v3.BmobUser
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.hustunique.coolface.R
 import com.hustunique.coolface.base.BaseActivity
 import com.hustunique.coolface.base.ListOnClickListener
+import com.hustunique.coolface.bean.User
 import com.hustunique.coolface.login.LoginActivity
 import com.hustunique.coolface.main.navigation.NicknameCardFragment
 import com.hustunique.coolface.show.BaseShowCard
 import com.hustunique.coolface.showcard.ShowCardFragment
+import com.hustunique.coolface.showscore.ShowScoreActivity
 import com.hustunique.coolface.showscore.ShowScoreFragment
 import com.hustunique.coolface.util.FileUtil
 import com.hustunique.coolface.util.LiveDataUtil
@@ -33,9 +37,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.java) {
 
+    private val NICKNAME_CODE = 555
     private val CAMERA_CODE = 666
     private val GALLERY_CODE = 777
     private val CROP_CODE = 888
+
+    private var scoreWillShow = true
 
     // 点击查看详情的位置
     private var clickPosition: Int = -1
@@ -53,6 +60,16 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
 
         main_list.adapter = MainAdapter(mViewModel)
         main_list.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
+        val headerView = nav_main.getHeaderView(0)
+        val avatarView = headerView.findViewById<ImageView>(R.id.iv_main_avatar)
+        val nicknameView = headerView.findViewById<TextView>(R.id.tv_main_nickname)
+        mViewModel.user.observe(this, Observer {
+            nicknameView.text = if (BmobUser.isLogin()) it.nickname else "未登录"
+//            Glide.with(this)
+//                .load(it.avatar)
+//                .into(avatarView)
+        })
+        initDrawer()
 
         TextUtil.setDefaultTypeface(main_title)
     }
@@ -68,23 +85,6 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                     notifyDataSetChanged()
                 }
             })
-        })
-
-        mViewModel.postData.observe(this, Observer {
-            LiveDataUtil.useData(it, {
-                (main_list.adapter as MainAdapter).apply {
-                    (data as MutableList)[clickPosition] = it!!
-                    notifyItemChanged(clickPosition)
-                }
-            })
-        })
-
-        mViewModel.user.observe(this, Observer {
-            val headerView = nav_main.getHeaderView(0)
-//            val avatarView = headerView.findViewById<ImageView>(R.id.iv_main_avatar)
-            val nicknameView = headerView.findViewById<TextView>(R.id.tv_main_nickname)
-            // TODO: 登录
-//            nicknameView.text = it.nickname
         })
         main_activity_camera_fb.setOnClickListener {
             floatingActionsMenu.collapse()
@@ -137,6 +137,18 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                         crop(it)
                     }
                 }
+                CROP_CODE -> {
+                    if (scoreWillShow) {
+                        val intent = Intent(this, ShowScoreActivity::class.java)
+                        startActivity(intent)
+                    } else {
+
+                        scoreWillShow = false
+                    }
+                }
+                NICKNAME_CODE -> {
+                    mViewModel.user.postValue(BmobUser.getCurrentUser(User::class.java))
+                }
                 else -> {
                 }
             }
@@ -163,13 +175,27 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         val nicknameView = headerView.findViewById<TextView>(R.id.tv_main_nickname)
         nicknameView.isClickable = BmobUser.isLogin()
         nicknameView.setOnClickListener {
-            val nicknameFragment = NicknameCardFragment()
-            BaseShowCard.start(this, nicknameFragment)
+            BaseShowCard.start(this, NicknameCardFragment())
+//            val intent = Intent(this, BaseShowCard::class.java)
+//            startActivityForResult(intent, NICKNAME_CODE)
         }
         val avatarView = headerView.findViewById<ImageView>(R.id.iv_main_avatar)
         avatarView.isClickable = BmobUser.isLogin()
         avatarView.setOnClickListener {
-
+            val bottomDialog = BottomSheetDialog(this)
+            val bottomDialogView = layoutInflater.inflate(R.layout.bottom_sheet_dialog, null)
+            bottomDialogView.findViewById<Button>(R.id.bottom_sheet_camera).setOnClickListener {
+                scoreWillShow = false
+                startCamera()
+                bottomDialog.dismiss()
+            }
+            bottomDialogView.findViewById<Button>(R.id.bottom_sheet_gallery).setOnClickListener {
+                scoreWillShow = false
+                startGallery()
+                bottomDialog.dismiss()
+            }
+            bottomDialog.setContentView(bottomDialogView)
+            bottomDialog.show()
         }
         nav_main.setNavigationItemSelectedListener {
             when (it.itemId) {
