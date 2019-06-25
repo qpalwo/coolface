@@ -69,13 +69,13 @@ class LikeButton(context: Context?, attrs: AttributeSet?) : ImageView(context, a
         animator.start()
     }
 
-    private fun check() {
+    fun check() {
         isChecked = true
         setImageDrawable(drawables[1])
         onCheckedListener?.onChanged(true)
     }
 
-    private fun unCheck() {
+    fun unCheck() {
         isChecked = false
         setImageDrawable(drawables[0])
         onCheckedListener?.onChanged(false)

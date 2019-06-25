@@ -53,3 +53,15 @@ object LiveDataUtil {
         }
     }
 }
+
+fun <T> MutableLiveData<List<T>>.add(item: T) {
+    val updatedItems = this.value as MutableList
+    updatedItems.add(item)
+    this.value = updatedItems
+}
+
+fun <T> MutableLiveData<List<T>>.add(position: Int, item: T) {
+    val updatedItems = this.value as MutableList
+    updatedItems[position] = item
+    this.value = updatedItems
+}

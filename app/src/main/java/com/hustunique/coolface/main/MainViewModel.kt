@@ -1,6 +1,5 @@
 package com.hustunique.coolface.main
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import cn.bmob.v3.BmobUser
@@ -16,8 +15,8 @@ class MainViewModel : ViewModel() {
 
     val postsData: MutableLiveData<Resource<List<Post>>> = MutableLiveData()
 
-    fun init(context: Context) {
-        postRepo = PostRepo.getInstance(context)
+    fun init() {
+        postRepo = PostRepo.getInstance()
         user.postValue(BmobUser.getCurrentUser(User::class.java))
         getPosts()
     }
@@ -26,16 +25,17 @@ class MainViewModel : ViewModel() {
         postRepo.getPosts(postsData)
     }
 
-    fun like(positon: Int) {
+    fun like(positon: Int, onError: ((String) -> Unit)) {
         postsData.value?.data?.let {
-//            postRepo.like(positon, postsData)
+            postRepo.like(it[positon].objectId!!, null, onError)
         }
     }
 
-    fun unLike(positon: Int) {
+    fun unLike(positon: Int, onError: ((String) -> Unit)) {
         postsData.value?.data?.let {
+            postRepo.unLike(it[positon].objectId!!, null, onError)
         }
     }
 
-    fun getPictureFile(context: Context) = PictureRepo.getInstance(context).getNewFile()
+    fun getPictureFile() = PictureRepo.getInstance().getNewFile()
 }

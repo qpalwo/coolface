@@ -1,8 +1,8 @@
 package com.hustunique.coolface.model.repo
 
 import android.annotation.SuppressLint
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
+import com.hustunique.coolface.base.CoolFaceApplication
 import com.hustunique.coolface.bean.Resource
 import com.hustunique.coolface.model.remote.RetrofitService
 import com.hustunique.coolface.model.remote.bean.bmob.BmobSimilarFaceReturn
@@ -29,18 +29,18 @@ import java.util.*
  * @author  : Xiao Yuxuan
  * @date    : 6/19/19
  */
-class PictureRepo private constructor(val context: Context) {
+class PictureRepo private constructor() {
     companion object {
         private lateinit var Instance: PictureRepo
-        fun getInstance(context: Context): PictureRepo {
+        fun getInstance(): PictureRepo {
             if (!::Instance.isInitialized) {
-                Instance = PictureRepo(context)
+                Instance = PictureRepo()
             }
             return Instance
         }
     }
 
-    private var imageFile: File? = FileUtil.createImageFile(context)
+    private var imageFile: File? = FileUtil.createImageFile(CoolFaceApplication.mApplicationContext)
 
     var beautifiedPicture: File? = null
 
@@ -51,7 +51,7 @@ class PictureRepo private constructor(val context: Context) {
     fun getFile() = imageFile
 
     fun getNewFile(): File? {
-        imageFile = FileUtil.createImageFile(context)
+        imageFile = FileUtil.createImageFile(CoolFaceApplication.mApplicationContext)
         return imageFile
     }
 
@@ -60,7 +60,7 @@ class PictureRepo private constructor(val context: Context) {
         Single.just(picture)
             .subscribeOn(Schedulers.io())
             .flatMap {
-                val compressedFile = Luban.with(context)
+                val compressedFile = Luban.with(CoolFaceApplication.mApplicationContext)
                     .load(it)
                     .get()
                 facePPService.beautify(
@@ -70,7 +70,7 @@ class PictureRepo private constructor(val context: Context) {
                 )
             }
             .map { data ->
-                beautifiedPicture = FileUtil.createImageFile(context)
+                beautifiedPicture = FileUtil.createImageFile(CoolFaceApplication.mApplicationContext)
                 beautifiedPicture?.let {
                     val sink = it.sink().buffer()
                     sink.write(Base64.getDecoder().decode(data.result))
@@ -94,7 +94,7 @@ class PictureRepo private constructor(val context: Context) {
         Single.just(picture)
             .subscribeOn(Schedulers.io())
             .flatMap {
-                val compressedFile = Luban.with(context)
+                val compressedFile = Luban.with(CoolFaceApplication.mApplicationContext)
                     .load(it)
                     .get()
                 facePPService.detect("[upload]${compressedFile[0].absolutePath}", FacePPAttrUtil.Builder().default())

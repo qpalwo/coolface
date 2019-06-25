@@ -24,6 +24,9 @@ class MainAdapter(val mViewModel: MainViewModel) : BaseAdapter<Post>(R.layout.po
     override fun onBindView(holder: ViewHolder, position: Int) {
         super.onBindView(holder, position)
         val post = data!![position]
+        var like = post.likeUser?.contains("testuser") ?: false
+        //todo change to true user data
+//        var like = post.likeUser?.contains(BmobUser.getCurrentUser(User::class.java).username) ?: false
         Glide.with(holder.itemView.context).load(post.faceBean.faceUrl)
             .addListener(object : RequestListener<Drawable?> {
                 override fun onLoadFailed(
@@ -49,27 +52,39 @@ class MainAdapter(val mViewModel: MainViewModel) : BaseAdapter<Post>(R.layout.po
         holder.getView<TextView>(R.id.post_message).text = post.message
         holder.getView<TextView>(R.id.post_username).text = post.username
         holder.getView<TextView>(R.id.post_like_count).text = post.likeCount.toString()
+        if (like) {
+            holder.getView<LikeButton>(R.id.post_like_button).check()
+        } else {
+            holder.getView<LikeButton>(R.id.post_like_button).unCheck()
+        }
         holder.getView<LikeButton>(R.id.post_like_button).onCheckedListener = object : LikeButton.OnCheckedListener {
             override fun onChanged(isChecked: Boolean) {
-                if (isChecked) {
+                if (isChecked && !like) {
                     holder.getView<LottieAnimationView>(R.id.post_like_ani).apply {
                         AnimationUtil.lottiePlayOnce(this)
                         visibility = VISIBLE
                         playAnimation()
                     }
-                    mViewModel.like(position)
-                } else {
-                    mViewModel.unLike(position)
+                    holder.getView<TextView>(R.id.post_like_count).text = "${++post.likeCount}"
+                    like = true
+                    mViewModel.like(position) {
+                        holder.getView<LikeButton>(R.id.post_like_button).unCheck()
+                        holder.getView<TextView>(R.id.post_like_count).text = "${--post.likeCount}"
+                        like = false
+                    }
+                } else if (!isChecked && like) {
+                    mViewModel.unLike(position) {
+                        holder.getView<LikeButton>(R.id.post_like_button).check()
+                        holder.getView<TextView>(R.id.post_like_count).text = "${--post.likeCount}"
+                        like = true
+                    }
                 }
             }
         }
-        // TODO: 是否已经点赞还需要统计
-
         sharedWeights.add(position, holder.getView(R.id.post_card))
     }
 
     fun getSharedWeight(position: Int): View {
         return sharedWeights[position]
     }
-
 }

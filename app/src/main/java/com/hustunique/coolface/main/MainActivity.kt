@@ -16,14 +16,12 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import cn.bmob.v3.Bmob
 import cn.bmob.v3.BmobUser
 import com.hustunique.coolface.R
 import com.hustunique.coolface.base.BaseActivity
 import com.hustunique.coolface.base.ListOnClickListener
 import com.hustunique.coolface.login.LoginActivity
 import com.hustunique.coolface.main.navigation.NicknameCardFragment
-import com.hustunique.coolface.model.remote.config.BmobConfig
 import com.hustunique.coolface.show.BaseShowCard
 import com.hustunique.coolface.showcard.ShowCardFragment
 import com.hustunique.coolface.showscore.ShowScoreFragment
@@ -43,8 +41,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
     override fun init() {
         super.init()
         mViewModel = viewModel as MainViewModel
-        Bmob.initialize(this, BmobConfig.APPLICATION_ID)
-        mViewModel.init(applicationContext)
+        mViewModel.init()
     }
 
     override fun initView() {
@@ -124,7 +121,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
     }
 
     private fun startCamera() {
-        val file = mViewModel.getPictureFile(applicationContext)
+        val file = mViewModel.getPictureFile()
         file?.let {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION +
@@ -172,7 +169,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
     }
 
     private fun crop(uri: Uri) {
-        val file = mViewModel.getPictureFile(applicationContext)
+        val file = mViewModel.getPictureFile()
         file?.let {
             val saveFile = Uri.fromFile(it)
             val intent = Intent("com.android.camera.action.CROP")

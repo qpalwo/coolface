@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hustunique.coolface.R
 import com.hustunique.coolface.bean.Post
+import com.hustunique.coolface.bean.Resource
+import com.hustunique.coolface.model.repo.PostRepo
 import master.flame.danmaku.danmaku.model.BaseDanmaku
 import master.flame.danmaku.danmaku.model.IDanmakus
 import master.flame.danmaku.danmaku.model.IDisplayer
@@ -15,11 +17,12 @@ import master.flame.danmaku.danmaku.parser.BaseDanmakuParser
 import master.flame.danmaku.ui.widget.DanmakuView
 
 class ShowCardViewModel : ViewModel() {
-    private var post: Post? = null
+    private val postRepo = PostRepo.getInstance()
+    val postData: MutableLiveData<Resource<Post>> = MutableLiveData()
     val comments = MutableLiveData<List<String>>()
 
     fun init(post: Post?) {
-        this.post = post
+        postData.value = Resource.success(post)
         // TODO: 根据post查询到其对应的评论
         comments.postValue(
             listOf(
@@ -101,6 +104,18 @@ class ShowCardViewModel : ViewModel() {
         danmaku.borderColor = borderColor
 
         return danmaku
+    }
+
+    fun like() {
+        postData.value?.data?.let {
+            postRepo.like(it.objectId!!, postData)
+        }
+    }
+
+    fun unLike() {
+        postData.value?.data?.let {
+            postRepo.unLike(it.objectId!!, postData)
+        }
     }
 
 }

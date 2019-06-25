@@ -13,7 +13,7 @@ class ShowScoreActivity : BaseActivity(R.layout.activity_show_score, ShowScoreVi
     override fun init() {
         super.init()
         mViewModel = viewModel as ShowScoreViewModel
-        mViewModel.init(applicationContext)
+        mViewModel.init()
     }
 
     override fun initView() {
