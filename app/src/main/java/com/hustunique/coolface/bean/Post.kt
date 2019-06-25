@@ -23,7 +23,7 @@ data class Post(
 ) : Serializable {
     val objectId: String? = null
 
-    val likeUser: List<String>? = null
+    var likeUser: List<String>? = null
 
     val favouriteUser: List<String>? = null
 

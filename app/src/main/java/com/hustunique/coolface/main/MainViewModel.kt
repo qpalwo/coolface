@@ -39,6 +39,9 @@ class MainViewModel : ViewModel() {
 
     fun like(positon: Int, onError: ((String) -> Unit)) {
         postsData.value?.data?.let {
+            if (it[positon].likeUser == null) {
+                it[positon].likeUser = ArrayList()
+            }
             (it[positon].likeUser as MutableList).add("testuser")
             postRepo.like(it[positon].objectId!!, null, onError)
         }
