@@ -49,7 +49,9 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
     override fun initContact(context: Context?) {
         super.initContact(context)
         analy_submit.setOnClickListener {
+            mViewModel.post(analy_post_message.text.toString())
             getAnimationBound().pauseAnimation()
+            this@ShowScoreFragment.getOuterActivity().finish()
         }
 
         mViewModel.pictureData.observe(this,
@@ -108,6 +110,7 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
             LiveDataUtil.useData(it, {
                 Glide.with(this).load(it?.faceUrl).into(analy_similar_user_image)
                 analy_similar_user_name.text = it?.faceOwnerName
+                getAnimationBound().pauseAnimation()
             }, error = { s, d ->
                 Toast.makeText(context, s, Toast.LENGTH_SHORT).show()
                 getAnimationBound().pauseAnimation()

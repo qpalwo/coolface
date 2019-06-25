@@ -57,7 +57,7 @@ class ShowScoreViewModel : ViewModel() {
     fun similar() {
         scoringData.value?.data?.let {
             pictureRepo.searchSameStarFace(it.face_token, similarStarData)
-            pictureRepo.searchSameUserFace(it.face_token, similarStarData)
+            pictureRepo.searchSameUserFace(it.face_token, similarUserData)
         }
     }
 

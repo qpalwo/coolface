@@ -13,7 +13,7 @@ object BmobConfig {
 
     const val TABLE_STAR = "similar_star"
 
-    const val TABLE_USER = "user"
+    const val TABLE_USER = "similar_user"
 
     const val TABLE_POST = "Post"
 }

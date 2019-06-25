@@ -13,7 +13,15 @@ class MainViewModel : ViewModel() {
     val user = MutableLiveData<User>()
     private lateinit var postRepo: PostRepo
 
+    /**
+     * 整个列表更新
+     */
     val postsData: MutableLiveData<Resource<List<Post>>> = MutableLiveData()
+
+    /**
+     * 单个更新的Livedata
+     */
+    val postData: MutableLiveData<Resource<Post>> = MutableLiveData()
 
     fun init() {
         postRepo = PostRepo.getInstance()
@@ -25,14 +33,22 @@ class MainViewModel : ViewModel() {
         postRepo.getPosts(postsData)
     }
 
+    fun updatePostAt(positon: Int) {
+        postRepo.getPost(postsData.value?.data?.get(positon)?.objectId!!, postData)
+    }
+
     fun like(positon: Int, onError: ((String) -> Unit)) {
         postsData.value?.data?.let {
+            (it[positon].likeUser as MutableList).add("testuser")
             postRepo.like(it[positon].objectId!!, null, onError)
         }
     }
 
     fun unLike(positon: Int, onError: ((String) -> Unit)) {
         postsData.value?.data?.let {
+            (it[positon].likeUser as MutableList).apply {
+                removeAt(indexOf("testuser"))
+            }
             postRepo.unLike(it[positon].objectId!!, null, onError)
         }
     }

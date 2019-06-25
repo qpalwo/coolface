@@ -45,6 +45,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         super.init()
         mViewModel = viewModel as MainViewModel
         mViewModel.init()
+        initDrawer()
     }
 
     override fun initView() {
@@ -62,8 +63,19 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         super.initContact()
         mViewModel.postsData.observe(this, Observer {
             LiveDataUtil.useData(it, {
-                (main_list.adapter as MainAdapter).data = it
-                (main_list.adapter as MainAdapter).notifyDataSetChanged()
+                (main_list.adapter as MainAdapter).apply {
+                    data = it
+                    notifyDataSetChanged()
+                }
+            })
+        })
+
+        mViewModel.postData.observe(this, Observer {
+            LiveDataUtil.useData(it, {
+                (main_list.adapter as MainAdapter).apply {
+                    (data as MutableList)[clickPosition] = it!!
+                    notifyItemChanged(clickPosition)
+                }
             })
         })
 
@@ -110,7 +122,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
     override fun onResume() {
         super.onResume()
         if (clickPosition != -1)
-            mViewModel.getPosts()
+            mViewModel.updatePostAt(clickPosition)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

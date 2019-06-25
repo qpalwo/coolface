@@ -113,17 +113,18 @@ class PictureRepo private constructor() {
     }
 
     fun searchSameStarFace(faceToken: String, liveData: MutableLiveData<Resource<SimilarFaceInfo>>) {
-        searchFace(faceToken, FacePPConfig.STAR_FACE_SET_TOKEN, liveData)
+        searchFace(faceToken, FacePPConfig.STAR_FACE_SET_TOKEN, BmobConfig.TABLE_STAR, liveData)
     }
 
     fun searchSameUserFace(faceToken: String, liveData: MutableLiveData<Resource<SimilarFaceInfo>>) {
-        searchFace(faceToken, FacePPConfig.USER_FACE_SET_TOKEN, liveData)
+        searchFace(faceToken, FacePPConfig.USER_FACE_SET_TOKEN, BmobConfig.TABLE_USER, liveData)
     }
 
     @SuppressLint("CheckResult")
     private fun searchFace(
         faceToken: String,
         facesetToken: String,
+        tableName: String,
         liveData: MutableLiveData<Resource<SimilarFaceInfo>>
     ) {
         liveData.value = Resource.loading()
@@ -136,7 +137,7 @@ class PictureRepo private constructor() {
                     it.results[0].face_token
                 }
                 bmobService.queryData(
-                    BmobConfig.TABLE_STAR,
+                    tableName,
                     "{\"faceToken\":\"$newFaceToken\"}"
                 )
             }
