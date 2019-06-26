@@ -20,3 +20,5 @@ data class BmobLikeCountUpdateBean(
     val likeCount: BmobUpdateAmount,
     val likeUser: BmobUodateObject)
 
+data class BmobFavouriteUpdateBean(val favouriteUser: BmobUodateObject)
+

@@ -8,6 +8,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
+import cn.bmob.v3.BmobUser
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -15,6 +16,8 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.hustunique.coolface.R
 import com.hustunique.coolface.bean.Post
+import com.hustunique.coolface.bean.User
+import com.hustunique.coolface.login.LoginActivity
 import com.hustunique.coolface.picture.PictureActivity
 import com.hustunique.coolface.show.BaseShowFragment
 import com.hustunique.coolface.util.AnimationUtil
@@ -64,10 +67,12 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
         mViewModel.postData.observe(this, Observer {
             LiveDataUtil.useData(it, { post ->
                 this.post = post!!
+                if (!BmobUser.isLogin()) {
+                    startActivity(LoginActivity::class.java)
+                }
 
-                like = post?.likeUser?.contains("testuser") ?: false
-                // todo change to true user data
-//                like = post?.likeUser?.contains(BmobUser.getCurrentUser(User::class.java).username) ?: false
+                like = post.likeUser?.contains(BmobUser.getCurrentUser(User::class.java).username) ?: false
+
                 fra_show_likecount.text = post?.likeCount?.toString()
 
                 fra_show_like.setChecked(like)

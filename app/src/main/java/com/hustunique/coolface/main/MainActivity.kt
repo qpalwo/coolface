@@ -30,6 +30,7 @@ import com.hustunique.coolface.util.FileUtil
 import com.hustunique.coolface.util.LiveDataUtil
 import com.hustunique.coolface.util.TextUtil
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.post_item.*
 
 
 class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.java) {

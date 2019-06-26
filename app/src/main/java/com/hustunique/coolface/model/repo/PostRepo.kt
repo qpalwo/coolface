@@ -47,6 +47,10 @@ class PostRepo private constructor() {
 
     @SuppressLint("CheckResult")
     fun post(message: String, faceData: Face, callback: MutableLiveData<Resource<Post>>) {
+        if (!BmobUser.isLogin()) {
+            callback.value = Resource.error("please login")
+            return
+        }
         val user = BmobUser.getCurrentUser(User::class.java)
         var post: Post? = null
         var pictureInfo: SMMSReturn? = null
@@ -65,9 +69,8 @@ class PostRepo private constructor() {
                 pictureInfo = it
                 post = Post(
                     message,
-                    //todo change to true user
-                    "testuser",
-                    "test_account",
+                    user.nickname,
+                    user.username,
                     0,
                     FaceBean(
                         faceData.face_token,
@@ -86,7 +89,7 @@ class PostRepo private constructor() {
                         SimilarFaceInfo(
                             it.url,
                             faceData.face_token,
-                            "testuser"
+                            user.nickname
                         )
                     )
                 }
@@ -164,6 +167,22 @@ class PostRepo private constructor() {
         like(postObjId, -1, "Remove", liveData, onError)
     }
 
+    fun favourite(
+        postObjId: String,
+        liveData: MutableLiveData<Resource<Post>>? = null,
+        onError: ((String) -> Unit)? = null
+    ) {
+        favourite(postObjId, "AddUnique", liveData, onError)
+    }
+
+    fun unFavourite(
+        postObjId: String,
+        liveData: MutableLiveData<Resource<Post>>? = null,
+        onError: ((String) -> Unit)? = null
+    ) {
+        favourite(postObjId, "Remove", liveData, onError)
+    }
+
     private fun like(
         postObjId: String,
         amount: Int,
@@ -171,6 +190,11 @@ class PostRepo private constructor() {
         liveData: MutableLiveData<Resource<Post>>?,
         onError: ((String) -> Unit)?
     ) {
+        if (!BmobUser.isLogin()) {
+            liveData?.value = Resource.error("please login")
+            return
+        }
+        val user = BmobUser.getCurrentUser(User::class.java)
         liveData?.value = Resource.loading()
         updatePost(
             postObjId,
@@ -182,9 +206,38 @@ class PostRepo private constructor() {
                     BmobUpdateAmount(amount),
                     BmobUodateObject(
                         op,
-                        listOf("testuser")
+                        listOf(user.username)
                     )
-                    //todo change to true user
+                )
+            )
+                .subscribeOn(Schedulers.io()),
+            onError
+        )
+    }
+
+    private fun favourite(
+        postObjId: String,
+        op: String,
+        liveData: MutableLiveData<Resource<Post>>?,
+        onError: ((String) -> Unit)?
+    ) {
+        if (!BmobUser.isLogin()) {
+            liveData?.value = Resource.error("please login")
+            return
+        }
+        val user = BmobUser.getCurrentUser(User::class.java)
+        liveData?.value = Resource.loading()
+        updatePost(
+            postObjId,
+            liveData,
+            bmobService.updateData(
+                BmobConfig.TABLE_POST,
+                postObjId,
+                BmobFavouriteUpdateBean(
+                    BmobUodateObject(
+                        op,
+                        listOf(user.username)
+                    )
                 )
             )
                 .subscribeOn(Schedulers.io()),
