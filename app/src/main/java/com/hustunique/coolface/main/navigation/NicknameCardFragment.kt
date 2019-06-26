@@ -5,12 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.text.Editable
 import android.text.TextWatcher
-import android.content.Intent
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.View
 import android.widget.Toast
-import androidx.lifecycle.ViewModel
 import cn.bmob.v3.BmobUser
 import cn.bmob.v3.exception.BmobException
 import cn.bmob.v3.listener.UpdateListener
@@ -46,6 +41,9 @@ class NicknameCardFragment: BaseShowFragment(R.layout.card_nickname) {
                 override fun done(p0: BmobException?) {
                     val toastText = if (p0 == null)  "修改昵称成功" else "修改昵称失败"
                     Toast.makeText(activity?.applicationContext, toastText, Toast.LENGTH_SHORT).show()
+                    val intent = Intent()
+                    intent.putExtra("nickname", newName)
+                    activity?.setResult(Activity.RESULT_OK, intent)
                     activity?.supportFinishAfterTransition()
                 }
             })
