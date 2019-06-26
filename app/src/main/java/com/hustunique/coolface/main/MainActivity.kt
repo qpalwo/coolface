@@ -15,6 +15,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import cn.bmob.v3.BmobUser
 import com.hustunique.coolface.R
@@ -105,7 +106,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                         ActivityOptionsCompat.makeSceneTransitionAnimation(
                             this@MainActivity,
                             (main_list.adapter as MainAdapter).getSharedWeight(position),
-                            getString(R.string.post_shared)
+                            getString(R.string.image_shared)
                         )
                     BaseShowCard.start(this@MainActivity, ShowCardFragment(), Bundle().apply {
                         putSerializable(
@@ -121,8 +122,11 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
 
     override fun onResume() {
         super.onResume()
-        if (clickPosition != -1)
+        if (clickPosition != -1) {
+            // 屏蔽局部刷新动画
+            (main_list.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
             mViewModel.updatePostAt(clickPosition)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

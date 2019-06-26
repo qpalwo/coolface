@@ -1,7 +1,7 @@
 package com.hustunique.coolface.base
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.Window
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModelProviders
 abstract class BaseActivity(@LayoutRes val layoutId: Int, private val viewModelClass: Class<out ViewModel>? = null) :
     AppCompatActivity() {
     var viewModel: ViewModel? = null
+
+    val DATA = "data"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +26,16 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int, private val viewModelC
         initView()
 
         initContact()
+    }
+
+    fun startActivity(targetClass: Class<BaseActivity>, data: Bundle? = null, options: Bundle? = null) {
+        val intent = Intent(this, targetClass)
+        intent.putExtra(DATA, data)
+        startActivity(intent, options)
+    }
+
+    fun getDataBundle(): Bundle {
+        return intent.getBundleExtra(DATA)
     }
 
     /**

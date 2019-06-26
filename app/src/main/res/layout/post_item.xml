@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
     android:orientation="vertical"
-    android:transitionName="@string/post_shared"
+
     app:cardCornerRadius="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:minHeight="300dp"
             android:adjustViewBounds="true"
+            android:transitionName="@string/image_shared"
             android:src="@drawable/ic_me_circle_36dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

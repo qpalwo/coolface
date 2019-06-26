@@ -4,7 +4,6 @@ import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
@@ -16,7 +15,7 @@ import com.hustunique.coolface.util.AnimationUtil
 import com.hustunique.coolface.view.LikeButton
 
 class MainAdapter(val mViewModel: MainViewModel) : BaseAdapter<Post>(R.layout.post_item) {
-    private val sharedWeights: ArrayList<ImageView> = ArrayList()
+    private val sharedWeights: ArrayList<View> = ArrayList()
     private val TAG = "MainAdapter"
 
     override fun onBindView(holder: ViewHolder, position: Int) {
@@ -66,7 +65,10 @@ class MainAdapter(val mViewModel: MainViewModel) : BaseAdapter<Post>(R.layout.po
                 }
             }
         }
-        sharedWeights.add(position, holder.getView(R.id.post_card))
+        if (sharedWeights.size > position)
+            sharedWeights[position] = holder.itemView
+        else
+            sharedWeights.add(holder.itemView)
     }
 
     override fun onViewDetachedFromWindow(holder: ViewHolder) {

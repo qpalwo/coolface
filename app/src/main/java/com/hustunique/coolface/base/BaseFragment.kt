@@ -1,6 +1,7 @@
 package com.hustunique.coolface.base
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders
 abstract class BaseFragment(@LayoutRes val layoutId: Int, val viewModelClass: Class<out ViewModel>? = null) :
     Fragment() {
     var viewModel: ViewModel? = null
+    val DATA = "data"
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewModel = viewModelClass?.let { ViewModelProviders.of(this).get(viewModelClass) }
         val view = inflater.inflate(layoutId, container, false)
@@ -31,6 +33,12 @@ abstract class BaseFragment(@LayoutRes val layoutId: Int, val viewModelClass: Cl
         initContact(view.context)
     }
 
+    fun startActivity(targetClass: Class<out BaseActivity>, data: Bundle? = null, options: Bundle? = null) {
+        val intent = Intent(activity, targetClass)
+        intent.putExtra(DATA, data)
+        startActivity(intent, options)
+    }
+
     open fun init() {
 
     }
@@ -42,8 +50,6 @@ abstract class BaseFragment(@LayoutRes val layoutId: Int, val viewModelClass: Cl
     open fun initView(view: View) {
 
     }
-
-
 
     open fun initContact(context: Context?) {
 
