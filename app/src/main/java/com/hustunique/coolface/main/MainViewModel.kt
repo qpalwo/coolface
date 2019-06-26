@@ -29,7 +29,7 @@ class MainViewModel : ViewModel() {
         postRepo = PostRepo.getInstance()
         user.postValue(BmobUser.getCurrentUser(User::class.java))
         getPosts()
-        pictureRepo = PictureRepo.getInstance(context)
+        pictureRepo = PictureRepo.getInstance()
         pictureData.value = Resource.loading()
     }
 
