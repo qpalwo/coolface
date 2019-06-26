@@ -42,7 +42,7 @@ class MainViewModel : ViewModel() {
             if (it[positon].likeUser == null) {
                 it[positon].likeUser = ArrayList()
             }
-            (it[positon].likeUser as MutableList).add("testuser")
+            (it[positon].likeUser as MutableList).add(user.value?.username!!)
             postRepo.like(it[positon].objectId!!, null, onError)
         }
     }
@@ -50,7 +50,7 @@ class MainViewModel : ViewModel() {
     fun unLike(positon: Int, onError: ((String) -> Unit)) {
         postsData.value?.data?.let {
             (it[positon].likeUser as MutableList).apply {
-                removeAt(indexOf("testuser"))
+                removeAt(indexOf(user.value?.username))
             }
             postRepo.unLike(it[positon].objectId!!, null, onError)
         }

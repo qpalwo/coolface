@@ -6,6 +6,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.TextView
+import cn.bmob.v3.BmobUser
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.hustunique.coolface.R
@@ -14,6 +15,7 @@ import com.hustunique.coolface.base.ViewHolder
 import com.hustunique.coolface.bean.Post
 import com.hustunique.coolface.util.AnimationUtil
 import com.hustunique.coolface.view.LikeButton
+import java.lang.Error
 
 class MainAdapter(val mViewModel: MainViewModel) : BaseAdapter<Post>(R.layout.post_item) {
     private val sharedWeights: ArrayList<ImageView> = ArrayList()
@@ -32,11 +34,14 @@ class MainAdapter(val mViewModel: MainViewModel) : BaseAdapter<Post>(R.layout.po
         likeCount.text = post.likeCount.toString()
 
         // 是否在点赞的列表里
-        var like = post.likeUser?.contains("testuser") ?: false
+        var like = post.likeUser?.contains(mViewModel.user.value?.username) ?: false
         likeButton.setChecked(like)
 
         likeButton.onCheckedListener = object : LikeButton.OnCheckedListener {
             override fun onChanged(isChecked: Boolean) {
+                if (!BmobUser.isLogin()) {
+                    throw Error("fourfire fix me!! let user login")
+                }
                 Log.i(TAG, "isChecked: $isChecked | like：$like")
                 if (isChecked && !like) {
                     likeAnimation.apply {
