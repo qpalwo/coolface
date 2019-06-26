@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.hustunique.coolface.R
 import com.hustunique.coolface.base.BaseActivity
+import com.hustunique.coolface.util.DisplayUtil
 import com.hustunique.coolface.view.DragCardView
 import kotlinx.android.synthetic.main.base_show_card.*
 

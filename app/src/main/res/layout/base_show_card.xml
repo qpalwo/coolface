@@ -4,8 +4,6 @@
     android:id="@+id/card_bound"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:boundPaddingHor="80"
-    app:boundPaddingVer="500"
     android:background="@mipmap/blurrybg"
     android:backgroundTint="@color/colorBlurryTran"
     android:backgroundTintMode="multiply">

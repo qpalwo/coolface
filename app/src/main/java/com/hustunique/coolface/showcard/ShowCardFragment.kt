@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.Button
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -16,6 +15,7 @@ import com.hustunique.coolface.R
 import com.hustunique.coolface.bean.Post
 import com.hustunique.coolface.show.BaseShowFragment
 import com.hustunique.coolface.util.AnimationUtil
+import com.hustunique.coolface.util.DisplayUtil
 import com.hustunique.coolface.util.LiveDataUtil
 import com.hustunique.coolface.util.TextUtil
 import com.hustunique.coolface.view.DragCardView
@@ -37,6 +37,11 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
     override fun init() {
         super.init()
         mViewModel = viewModel as ShowCardViewModel
+        val height = DisplayUtil.getHeight(getOuterActivity())
+        getAnimationBound().setPadding(80f,
+            80f,
+            height / 2 - 1050f,
+            height / 2 - 1050f)
     }
 
     override fun initData() {
@@ -137,8 +142,8 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
 
 
         fra_show_card_comment_send.setOnClickListener {
-            if ((it as Button).text.toString().isNotEmpty())
-                sendDm()
+            if (fra_show_card_comment.text.toString().isNotEmpty())
+                sendDm(fra_show_card_comment.text.toString())
         }
 
         fra_show_like.onCheckedListener = object : LikeButton.OnCheckedListener {
@@ -211,10 +216,10 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
     /**
      * 添加一条弹幕
      */
-    fun sendDm() {
+    fun sendDm(content: String) {
         getOuterActivity().card_bound.playAnimation()
         mViewModel.addDanmu(
-            fra_show_card_comment.text.toString(),
+            content,
             dmContext,
             fra_show_dm
         )

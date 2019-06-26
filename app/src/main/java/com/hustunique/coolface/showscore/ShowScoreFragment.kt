@@ -11,6 +11,7 @@ import com.bumptech.glide.load.model.LazyHeaders
 import com.hustunique.coolface.R
 import com.hustunique.coolface.bean.Resource
 import com.hustunique.coolface.show.BaseShowFragment
+import com.hustunique.coolface.util.DisplayUtil
 import com.hustunique.coolface.util.LiveDataUtil
 import com.hustunique.coolface.util.TextUtil
 import kotlinx.android.synthetic.main.fra_analy_result.*
@@ -85,7 +86,6 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
         mViewModel.similarStarData.observe(this, Observer {
             LiveDataUtil.useData(it, {
                 Log.i("明星", it?.faceUrl)
-                // TODO: 这个URL有问题
                 val glideUrl = GlideUrl(
                     it?.faceUrl, LazyHeaders.Builder().addHeader(
                         "User-Agent",
@@ -119,7 +119,13 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
     }
 
     private fun showProgress() {
-        getAnimationBound().setPadding(80f, 80f, 540f, 540f)
+        val height = DisplayUtil.getHeight(getOuterActivity())
+        getAnimationBound().setPadding(
+            80f,
+            80f,
+            height / 2 - 1080f,
+            height / 2 - 1080f
+        )
         getAnimationBound().isLoop = true
         getAnimationBound().playAnimation()
     }
