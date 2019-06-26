@@ -29,6 +29,8 @@ class MainAdapter(val mViewModel: MainViewModel) : BaseAdapter<Post>(R.layout.po
         val likeAnimation = holder.getView<LottieAnimationView>(R.id.post_like_ani)
 
         Glide.with(holder.itemView.context).load(post.faceBean.faceUrl).into(holder.getView(R.id.post_image))
+        Glide.with(holder.itemView.context).load(post.faceBean.faceUrl)
+            .into(holder.getView(R.id.post_image))
         holder.getView<TextView>(R.id.post_message).text = post.message
         holder.getView<TextView>(R.id.post_username).text = post.username
         likeCount.text = post.likeCount.toString()

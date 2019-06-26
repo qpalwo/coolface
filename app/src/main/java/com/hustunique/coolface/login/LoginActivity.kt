@@ -1,5 +1,6 @@
 package com.hustunique.coolface.login
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.text.Editable
@@ -43,6 +44,7 @@ class LoginActivity : BaseActivity(R.layout.activity_login) {
                 when (p1?.errorCode) {
                     null -> {
                         Toast.makeText(context, "登录成功", Toast.LENGTH_SHORT).show()
+                        this@LoginActivity.setResult(Activity.RESULT_OK)
                         this@LoginActivity.finish()
                     }
                     304 -> {

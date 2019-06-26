@@ -1,6 +1,11 @@
 package com.hustunique.coolface.main.navigation
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import cn.bmob.v3.BmobUser
@@ -16,14 +21,30 @@ class NicknameCardFragment: BaseShowFragment(R.layout.card_nickname) {
 
     override fun initContact(context: Context?) {
         super.initContact(context)
+        val user = BmobUser.getCurrentUser(User::class.java)
+        et_main_nickname.setText(user.nickname)
+        et_main_nickname.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                btn_main_nickname.isEnabled = et_main_nickname.text.toString().isNotBlank()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+        })
         btn_main_nickname.setOnClickListener {
-            val user = BmobUser.getCurrentUser(User::class.java)
             val newName = et_main_nickname.text.toString()
             user.nickname = newName
             user.update(object : UpdateListener() {
                 override fun done(p0: BmobException?) {
                     val toastText = if (p0 == null)  "修改昵称成功" else "修改昵称失败"
                     Toast.makeText(activity?.applicationContext, toastText, Toast.LENGTH_SHORT).show()
+                    val intent = Intent()
+                    intent.putExtra("nickname", newName)
+                    activity?.setResult(Activity.RESULT_OK, intent)
                     activity?.supportFinishAfterTransition()
                 }
             })
