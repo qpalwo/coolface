@@ -5,6 +5,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.TextView
+import android.widget.Toast
 import cn.bmob.v3.BmobUser
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
@@ -34,6 +35,8 @@ class MainAdapter(val mViewModel: MainViewModel) : BaseAdapter<Post>(R.layout.po
         )
 
         Glide.with(holder.itemView.context).load(post.faceBean.faceUrl).into(holder.getView(R.id.post_image))
+        Glide.with(holder.itemView.context).load(post.faceBean.faceUrl)
+            .into(holder.getView(R.id.post_image))
         holder.getView<TextView>(R.id.post_message).text = post.message
         holder.getView<TextView>(R.id.post_username).text = post.username
         likeCount.text = post.likeCount.toString()
@@ -46,7 +49,7 @@ class MainAdapter(val mViewModel: MainViewModel) : BaseAdapter<Post>(R.layout.po
             override fun onChanged(isChecked: Boolean) {
                 // TODO: 登录逻辑有问题
                 if (!BmobUser.isLogin()) {
-                    throw Error("fourfire fix me!! let user login")
+                    Toast.makeText(holder.itemView.context, "请登录", Toast.LENGTH_SHORT).show()
                 }
 
                 Log.i(TAG, "isChecked: $isChecked | like：$like")

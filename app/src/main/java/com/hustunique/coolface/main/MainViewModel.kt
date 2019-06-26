@@ -12,11 +12,13 @@ import com.hustunique.coolface.model.repo.PostRepo
 class MainViewModel : ViewModel() {
     val user = MutableLiveData<User>()
     private lateinit var postRepo: PostRepo
+    private lateinit var pictureRepo: PictureRepo
 
     /**
      * 整个列表更新
      */
     val postsData: MutableLiveData<Resource<List<Post>>> = MutableLiveData()
+    val pictureData: MutableLiveData<Resource<String>> = MutableLiveData()
 
     /**
      * 单个更新的Livedata
@@ -27,6 +29,8 @@ class MainViewModel : ViewModel() {
         postRepo = PostRepo.getInstance()
         user.postValue(BmobUser.getCurrentUser(User::class.java))
         getPosts()
+        pictureRepo = PictureRepo.getInstance()
+        pictureData.value = Resource.loading()
     }
 
     fun getPosts() {

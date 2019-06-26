@@ -1,5 +1,6 @@
 package com.hustunique.coolface.login
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.text.Editable
@@ -91,7 +92,8 @@ class SignupActivity : BaseActivity(R.layout.activity_signup) {
                 Log.d("bmob", p1?.errorCode.toString() + p1?.message)
                 when (p1?.errorCode) {
                     null -> {
-                        Toast.makeText(context, "注册成功", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "注册成功，已自动登录", Toast.LENGTH_SHORT).show()
+                        this@SignupActivity.setResult(Activity.RESULT_OK)
                         this@SignupActivity.finish()
                     }
                     202 -> Toast.makeText(context, "该邮箱已被占用", Toast.LENGTH_SHORT).show()

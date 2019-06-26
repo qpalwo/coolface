@@ -3,7 +3,7 @@
 
     <group
         android:id="@+id/group_menu_mine"
-        android:checkableBehavior="single">
+        android:checkableBehavior="none">
 
         <item
             android:id="@+id/nav_login"
@@ -11,15 +11,5 @@
             android:title="登录" />
 
     </group>
-
-    <group
-        android:id="@+id/group_menu_other"
-        android:checkableBehavior="single">
-
-        <item
-            android:id="@+id/nav_setting"
-            android:title="设置"/>
-    </group>
-
 
 </menu>

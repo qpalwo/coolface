@@ -100,7 +100,6 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/nav_menu_main"
         app:theme="@style/NavigationDrawerStyle">
 
     </com.google.android.material.navigation.NavigationView>
