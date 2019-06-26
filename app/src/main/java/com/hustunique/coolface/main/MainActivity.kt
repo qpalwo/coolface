@@ -7,8 +7,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
-import android.view.Gravity
 import android.view.Gravity.START
 import android.view.View
 import android.widget.Button
@@ -25,13 +23,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.hustunique.coolface.R
 import com.hustunique.coolface.base.BaseActivity
 import com.hustunique.coolface.base.ListOnClickListener
-import com.hustunique.coolface.bean.Resource
 import com.hustunique.coolface.bean.User
 import com.hustunique.coolface.login.LoginActivity
 import com.hustunique.coolface.main.navigation.NicknameCardFragment
 import com.hustunique.coolface.show.BaseShowCard
 import com.hustunique.coolface.showcard.ShowCardFragment
-import com.hustunique.coolface.showscore.ShowScoreActivity
 import com.hustunique.coolface.showscore.ShowScoreFragment
 import com.hustunique.coolface.util.FileUtil
 import com.hustunique.coolface.util.LiveDataUtil
@@ -46,10 +42,9 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
     private val GALLERY_CODE = 777
     private val CROP_CODE = 888
 
-    private var scoreWillShow = true
-
     // 点击查看详情的位置
     private var clickPosition: Int = -1
+    private var scoreWillShow = true
 
     private lateinit var mViewModel: MainViewModel
     override fun init() {
