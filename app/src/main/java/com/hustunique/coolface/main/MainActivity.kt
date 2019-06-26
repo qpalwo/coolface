@@ -145,7 +145,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             (main_list.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
             mViewModel.updatePostAt(clickPosition)
         }
-        mViewModel.user.postValue(BmobUser.getCurrentUser(User::class.java))
+        mViewModel.user.value = BmobUser.getCurrentUser(User::class.java)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -156,8 +156,10 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                     if (scoreWillShow)
                         BaseShowCard.start(this, ShowScoreFragment())
                     else {
-                        // TODO: 剪裁拍照头像
-
+                        mViewModel.getPictureFile()?.let {
+                            val imgUri = FileProvider.getUriForFile(this, FileUtil.FILE_PROVIDER_AUTHORITY, it)
+                            crop(imgUri)
+                        }
                     }
                 }
                 GALLERY_CODE -> {
@@ -169,8 +171,9 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                     if (scoreWillShow) {
                         BaseShowCard.start(this, ShowScoreFragment())
                     } else {
-                        // TODO: 更新头像
-
+                        mViewModel.upLoadAvatar {
+                            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+                        }
                         scoreWillShow = true
                     }
                 }
@@ -186,7 +189,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
     }
 
     private fun startCamera() {
-        val file = mViewModel.getPictureFile()
+        val file = mViewModel.getNewPictureFile()
         file?.let {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION +
@@ -248,7 +251,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                     R.id.nav_logout -> {
                         BmobUser.logOut()
                         Toast.makeText(applicationContext, "已退出", Toast.LENGTH_SHORT).show()
-                        mViewModel.user.postValue(BmobUser.getCurrentUser(User::class.java))
+                        mViewModel.user.value = BmobUser.getCurrentUser(User::class.java)
                         false
                     }
                     else -> false
@@ -277,27 +280,25 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
     }
 
     private fun crop(uri: Uri) {
-        val file = mViewModel.getPictureFile()
+        val file = mViewModel.getNewPictureFile()
         file?.let {
             val saveFile = Uri.fromFile(it)
             val intent = Intent("com.android.camera.action.CROP")
+            intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION +
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             intent.setDataAndType(uri, "image/*")
             if (scoreWillShow) {
                 intent.putExtra("aspectX", 768)
                 intent.putExtra("aspectY", 1024)
-                intent.putExtra("scale", true)
-                intent.putExtra("return-data", false)
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, saveFile)
-                intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString())
-                intent.putExtra("noFaceDetection", true)
             } else {
                 intent.putExtra("aspectX", 1)
                 intent.putExtra("aspectY", 1)
-                intent.putExtra("scale", true)
-                intent.putExtra("return-data", false)
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, saveFile)
-                intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString())
             }
+            intent.putExtra("scale", true)
+            intent.putExtra("return-data", false)
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, saveFile)
+            intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString())
+            intent.putExtra("noFaceDetection", true)
             startActivityForResult(intent, CROP_CODE)
         }
     }
