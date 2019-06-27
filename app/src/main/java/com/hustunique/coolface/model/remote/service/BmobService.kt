@@ -1,6 +1,5 @@
 package com.hustunique.coolface.model.remote.service
 
-import com.hustunique.coolface.model.remote.bean.bmob.BmobCommonUpdateBean
 import com.hustunique.coolface.model.remote.config.NetConfig
 import io.reactivex.Single
 import okhttp3.ResponseBody
@@ -13,28 +12,43 @@ import retrofit2.http.*
 interface BmobService {
 
     @POST("${NetConfig.BMOB_METHOD_CLASS}{table}")
-    fun addData(@Path("table") tableName: String,
-                @Body info: Any): Single<ResponseBody>
+    fun addData(
+        @Path("table") tableName: String,
+        @Body info: Any
+    ): Single<ResponseBody>
 
     @PUT("${NetConfig.BMOB_METHOD_CLASS}{table}/{objid}")
-    fun updateData(@Path("table") tableName: String,
-                @Path("objid") objId: String,
-                @Body op: Any
+    fun updateData(
+        @Path("table") tableName: String,
+        @Path("objid") objId: String,
+        @Body op: Any
     ): Single<ResponseBody>
 
     @GET("${NetConfig.BMOB_METHOD_CLASS}{table}/{objid}")
-    fun getData(@Path("table") tableName: String,
-                @Path("objid") objId: String): Single<ResponseBody>
+    fun getData(
+        @Path("table") tableName: String,
+        @Path("objid") objId: String
+    ): Single<ResponseBody>
 
     @GET("${NetConfig.BMOB_METHOD_CLASS}{table}")
-    fun queryData(@Path("table") tableName: String,
-                @Query("where") op: String): Single<ResponseBody>
+    fun queryData(
+        @Path("table") tableName: String,
+        @Query("where") op: String
+    ): Single<ResponseBody>
 
     @GET("${NetConfig.BMOB_METHOD_CLASS}{table}")
     fun getData(@Path("table") tableName: String): Single<ResponseBody>
 
+    @DELETE("${NetConfig.BMOB_METHOD_CLASS}{table}/{objid}")
+    fun deleteData(
+        @Path("table") tableName: String,
+        @Path("objid") objId: String
+    ): Single<ResponseBody>
+
     @GET("${NetConfig.BMOB_METHOD_CLASS}{table}")
-    fun getData(@Path("table") tableName: String,
-                @Query("limit") limit: Int,
-                @Query("skip") skip: Int): Single<ResponseBody>
+    fun getData(
+        @Path("table") tableName: String,
+        @Query("limit") limit: Int,
+        @Query("skip") skip: Int
+    ): Single<ResponseBody>
 }

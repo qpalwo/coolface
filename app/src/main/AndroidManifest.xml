@@ -42,6 +42,7 @@
         <activity android:name=".show.BaseShowCard"
             android:theme="@style/Transparent"/>
         <activity android:name=".picture.PictureActivity" />
+        <activity android:name=".Main2Activity"/>
 
         <provider
             android:name="cn.bmob.v3.util.BmobContentProvider"
