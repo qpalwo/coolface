@@ -104,6 +104,16 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                 }
             })
         })
+
+
+
+        mViewModel.user.observe(this, Observer {
+            val headerView = nav_main.getHeaderView(0)
+//            val avatarView = headerView.findViewById<ImageView>(R.id.iv_main_avatar)
+            val nicknameView = headerView.findViewById<TextView>(R.id.tv_main_nickname)
+            // TODO: 登录
+//            nicknameView.text = it.nickname
+        })
         main_activity_camera_fb.setOnClickListener {
             floatingActionsMenu.collapse()
             startCamera()
@@ -239,9 +249,11 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                 when (it.itemId) {
                     // TODO: 导航
                     R.id.nav_all -> {
+                        mViewModel.getPosts()
                         true
                     }
                     R.id.nav_mine -> {
+                        mViewModel.updateMyPosts()
                         true
                     }
                     R.id.nav_star -> {
@@ -292,7 +304,6 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             } else {
                 intent.putExtra("aspectX", 1)
                 intent.putExtra("aspectY", 1)
-                intent.putExtra("circleCrop", true)
             }
             intent.putExtra("scale", true)
             intent.putExtra("return-data", false)
