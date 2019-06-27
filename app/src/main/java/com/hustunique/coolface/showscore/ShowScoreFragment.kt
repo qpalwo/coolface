@@ -159,8 +159,8 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
         getAnimationBound().setPadding(
             80f,
             80f,
-            height / 2 - 1080f,
-            height / 2 - 1080f
+            height / 2 - 1040f,
+            height / 2 - 1040f
         )
         getAnimationBound().isLoop = true
         getAnimationBound().playAnimation()

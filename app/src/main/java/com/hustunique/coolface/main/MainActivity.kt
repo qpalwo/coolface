@@ -98,6 +98,8 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             })
         })
 
+
+
         mViewModel.user.observe(this, Observer {
             val headerView = nav_main.getHeaderView(0)
 //            val avatarView = headerView.findViewById<ImageView>(R.id.iv_main_avatar)
@@ -237,9 +239,11 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                 when (it.itemId) {
                     // TODO: 导航
                     R.id.nav_all -> {
+                        mViewModel.getPosts()
                         true
                     }
                     R.id.nav_mine -> {
+                        mViewModel.updateMyPosts()
                         true
                     }
                     R.id.nav_star -> {

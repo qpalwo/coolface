@@ -25,6 +25,16 @@ class MainViewModel : ViewModel() {
      */
     val postData: MutableLiveData<Resource<Post>> = MutableLiveData()
 
+    /**
+     * 我的列表
+     */
+    val myPostsData: MutableLiveData<List<Post>> = MutableLiveData()
+
+    /**
+     * 我的收藏
+     */
+    val collectPostsData: MutableLiveData<List<Post>> = MutableLiveData()
+
     fun init() {
         postRepo = PostRepo.getInstance()
         user.postValue(BmobUser.getCurrentUser(User::class.java))
@@ -39,6 +49,24 @@ class MainViewModel : ViewModel() {
 
     fun updatePostAt(positon: Int) {
         postRepo.getPost(postsData.value?.data?.get(positon)?.objectId!!, postData)
+    }
+
+    /**
+     * 显示收藏的动态
+     */
+    fun updateCollectPosts() {
+
+    }
+
+    /**
+     * 显示我的动态
+     */
+    fun updateMyPosts() {
+        myPostsData.postValue(postsData.value?.data?.let {
+            it.filter {
+                it.username == BmobUser.getCurrentUser(User::class.java).nickname
+            }
+        })
     }
 
     fun like(positon: Int, onError: ((String) -> Unit)) {
