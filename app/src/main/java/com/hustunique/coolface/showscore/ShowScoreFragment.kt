@@ -1,6 +1,8 @@
 package com.hustunique.coolface.showscore
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -12,6 +14,7 @@ import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
 import com.hustunique.coolface.R
 import com.hustunique.coolface.bean.Resource
+import com.hustunique.coolface.main.MainActivity
 import com.hustunique.coolface.picture.PictureActivity
 import com.hustunique.coolface.show.BaseShowFragment
 import com.hustunique.coolface.util.DisplayUtil
@@ -59,6 +62,9 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
         analy_submit.setOnClickListener {
             mViewModel.post(analy_post_message.text.toString())
             getAnimationBound().pauseAnimation()
+            getOuterActivity().setResult(Activity.RESULT_OK, Intent().apply {
+                putExtra(MainActivity.IS_SUBMITTED, true)
+            })
             this@ShowScoreFragment.getOuterActivity().finish()
         }
 

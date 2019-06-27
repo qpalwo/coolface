@@ -57,7 +57,11 @@ class MainViewModel : ViewModel() {
      * 显示收藏的动态
      */
     fun updateCollectPosts() {
-
+        collectPostsData.postValue(postsData.value?.data?.let {
+            it.filter {
+                it.favouriteUser?.contains(BmobUser.getCurrentUser(User::class.java).username) ?: false
+            }
+        })
     }
 
     /**
@@ -91,7 +95,7 @@ class MainViewModel : ViewModel() {
     }
 
     fun upLoadAvatar(onError: (String) -> Unit) {
-        pictureRepo.uploadUserAvatar({url ->
+        pictureRepo.uploadUserAvatar({ url ->
             user.value?.let {
                 it.avatar = url
                 it.update(object : UpdateListener() {

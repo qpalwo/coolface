@@ -79,6 +79,9 @@ class LikeButton(context: Context?, attrs: AttributeSet?) : ImageView(context, a
         onCheckedListener?.onChanged(false)
     }
 
+    /**
+     * 调用这个方法可以修改状态，但是没有触动监听器
+     */
     fun setChecked(isChecked: Boolean) {
         this.isChecked = isChecked
         setImageDrawable(drawables[if (isChecked) 1 else 0])

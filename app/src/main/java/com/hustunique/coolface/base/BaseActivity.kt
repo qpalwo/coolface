@@ -2,6 +2,7 @@ package com.hustunique.coolface.base
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
@@ -36,6 +37,10 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int, private val viewModelC
 
     fun getDataBundle(): Bundle {
         return intent.getBundleExtra(DATA)
+    }
+
+    fun toast(content: String) {
+        Toast.makeText(this, content, Toast.LENGTH_SHORT).show()
     }
 
     /**

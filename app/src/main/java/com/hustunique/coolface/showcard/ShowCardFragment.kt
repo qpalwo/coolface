@@ -69,6 +69,7 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
                 this.post = post!!
                 if (!BmobUser.isLogin()) {
                     startActivity(LoginActivity::class.java)
+                    return@useData
                 }
 
                 like = post.likeUser?.contains(BmobUser.getCurrentUser(User::class.java).username) ?: false
@@ -76,6 +77,10 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
                 fra_show_likecount.text = post?.likeCount?.toString()
 
                 fra_show_like.setChecked(like)
+
+                fra_show_collect.setChecked(
+                    post.favouriteUser?.contains(BmobUser.getCurrentUser(User::class.java).username) ?: false
+                )
 
                 Glide.with(this).load(post?.faceBean?.faceUrl).addListener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(
@@ -136,6 +141,7 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
             })
         })
 
+
         TextUtil.setDefaultTypeface(fra_show_card_score, fra_age_tip, fra_age, fra_sex, fra_sex_tip, fra_show_likecount)
 
         // 让动画只播放一次
@@ -190,10 +196,19 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
      */
     private fun likeOrNot(isLiked: Boolean) {
         if (isLiked && !like) {
-            mViewModel.like()
+            mViewModel.like {
+                // onError
+                toast("操作失败：$it")
+                fra_show_likecount.text = (fra_show_likecount.text.toString().toInt() - 1).toString()
+                fra_show_like_ani.visibility = GONE
+            }
             fra_show_likecount.text = (fra_show_likecount.text.toString().toInt() + 1).toString()
         } else if (!isLiked && like) {
-            mViewModel.unLike()
+            mViewModel.unLike {
+                toast("操作失败：$it")
+                fra_show_likecount.text = (fra_show_likecount.text.toString().toInt() + 1).toString()
+                fra_show_like_ani.visibility = VISIBLE
+            }
             fra_show_likecount.text = (fra_show_likecount.text.toString().toInt() - 1).toString()
         }
         fra_show_like_ani.visibility = if (isLiked) {
@@ -206,12 +221,21 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
      * 是否收藏
      */
     private fun collectOrNot(isCollected: Boolean) {
+        if (isCollected) {
+            mViewModel.collect {
+                toast("操作失败：$it")
+                fra_show_colle_ani.visibility = GONE
+            }
+        } else {
+            mViewModel.unCollect {
+                toast("操作失败：$it")
+                fra_show_colle_ani.visibility = VISIBLE
+            }
+        }
         fra_show_colle_ani.visibility = if (isCollected) {
             fra_show_colle_ani.playAnimation()
             VISIBLE
         } else GONE
-
-        // TODO 修改数据结构的 collect
     }
 
 

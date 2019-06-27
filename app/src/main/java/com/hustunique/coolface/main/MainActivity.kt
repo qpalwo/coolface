@@ -42,6 +42,11 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
     private val CAMERA_CODE = 666
     private val GALLERY_CODE = 777
     private val CROP_CODE = 888
+    private val SUBMIT_CODE = 999
+
+    companion object {
+        val IS_SUBMITTED = "is_submitted"
+    }
 
     private var scoreWillShow = true
 
@@ -98,7 +103,15 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             })
         })
 
+        mViewModel.myPostsData.observe(this, Observer {
+            (main_list.adapter as MainAdapter).data = it
+            (main_list.adapter as MainAdapter).notifyDataSetChanged()
+        })
 
+        mViewModel.collectPostsData.observe(this, Observer {
+            (main_list.adapter as MainAdapter).data = it
+            (main_list.adapter as MainAdapter).notifyDataSetChanged()
+        })
 
         mViewModel.user.observe(this, Observer {
             val headerView = nav_main.getHeaderView(0)
@@ -156,7 +169,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             when (requestCode) {
                 CAMERA_CODE -> {
                     if (scoreWillShow)
-                        BaseShowCard.start(this, ShowScoreFragment())
+                        BaseShowCard.start(this, ShowScoreFragment(), requestCode = SUBMIT_CODE)
                     else {
                         mViewModel.getPictureFile()?.let {
                             val imgUri = FileProvider.getUriForFile(this, FileUtil.FILE_PROVIDER_AUTHORITY, it)
@@ -171,7 +184,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                 }
                 CROP_CODE -> {
                     if (scoreWillShow) {
-                        BaseShowCard.start(this, ShowScoreFragment())
+                        BaseShowCard.start(this, ShowScoreFragment(), requestCode = SUBMIT_CODE)
                     } else {
                         mViewModel.upLoadAvatar {
                             Toast.makeText(this, it, Toast.LENGTH_LONG).show()
@@ -183,6 +196,10 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                     nav_main.getHeaderView(0)
                         .findViewById<TextView>(R.id.tv_main_nickname)
                         .text = data?.getStringExtra("nickname")
+                }
+                SUBMIT_CODE -> {
+                    if (data?.getBooleanExtra(IS_SUBMITTED, false)!!)
+                        mViewModel.getPosts()
                 }
                 else -> {
                 }
@@ -250,6 +267,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                         true
                     }
                     R.id.nav_star -> {
+                        mViewModel.updateCollectPosts()
                         true
                     }
                     R.id.nav_logout -> {

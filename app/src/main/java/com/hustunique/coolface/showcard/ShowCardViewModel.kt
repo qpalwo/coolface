@@ -19,9 +19,12 @@ import master.flame.danmaku.ui.widget.DanmakuView
 class ShowCardViewModel : ViewModel() {
     private val postRepo = PostRepo.getInstance()
     val postData: MutableLiveData<Resource<Post>> = MutableLiveData()
+    val collectPostData: MutableLiveData<Resource<Post>> = MutableLiveData()
+
 
     fun init(post: Post?) {
         postData.value = Resource.success(post)
+        collectPostData.value = Resource.success(post)
     }
 
     fun showDanmu(danmaku: BaseDanmaku?, dmView: DanmakuView) {
@@ -111,16 +114,24 @@ class ShowCardViewModel : ViewModel() {
         return danmaku
     }
 
-    fun like() {
+    fun like(onError: ((String) -> Unit)?) {
         postData.value?.data?.let {
-            postRepo.like(it.objectId!!, postData)
+            postRepo.like(it.objectId!!, postData, onError)
         }
     }
 
-    fun unLike() {
+    fun unLike(onError: ((String) -> Unit)?) {
         postData.value?.data?.let {
-            postRepo.unLike(it.objectId!!, postData)
+            postRepo.unLike(it.objectId!!, postData, onError)
         }
+    }
+
+    fun collect(onError: ((String) -> Unit)? = null) {
+        postRepo.favourite(collectPostData.value?.data?.objectId!!, collectPostData, onError)
+    }
+
+    fun unCollect(onError: ((String) -> Unit)?) {
+        postRepo.unFavourite(collectPostData.value?.data?.objectId!!, collectPostData, onError)
     }
 
 }

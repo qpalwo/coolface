@@ -84,6 +84,7 @@ class DragCardView(context: Context, attrs: AttributeSet?) : CardView(context, a
      */
     private var loadingView: View
 
+
     init {
         firstPx = pivotX
         firstPy = pivotY
@@ -150,6 +151,7 @@ class DragCardView(context: Context, attrs: AttributeSet?) : CardView(context, a
 
                     rotationR = dis(left.toFloat() + 30, top.toFloat() + 30, startX, startY)
                     Log.i("DragCardR", rotationR.toString())
+                    return true
                 }
                 ACTION_MOVE -> {
                     val cX = event.rawX - lastX
@@ -243,7 +245,6 @@ class DragCardView(context: Context, attrs: AttributeSet?) : CardView(context, a
                     isMoving = false
                 }
             }
-            return true
         }
         return super.onTouchEvent(event)
     }
@@ -251,57 +252,42 @@ class DragCardView(context: Context, attrs: AttributeSet?) : CardView(context, a
     /**
      * 处理滑动冲突！！
      * 这是防止子view设置了clickListener后，无法接收这个滑动
+     *
+     * 解决方法：
+     * 1. DOWN事件的处理放在onInterceptTouchEvent中，并返回false
+     *         事件正常传递到子View，会被子View消耗掉！！！此时父View的onTouchEvent不会拦截
+     * 2. MOVE事件判断是否要拦截，如果滑动距离大于滑动的判断，返回true拦截，在onTouchEvent中处理；否则返回false
+     * 3. UP事件返回false，直接传递给子view，但在滑动的时候，子view并不会消耗UP事件，所以还可以返回到
      */
+    var interX = 0f
+    var interY = 0f
+
     override fun onInterceptTouchEvent(event: MotionEvent?): Boolean {
-        if (event?.action == ACTION_DOWN) {
-            startX = event.rawX
-            lastX = startX
-            startY = event.rawY
-            lastY = startY
-            startTime = System.currentTimeMillis()
+        var mScrolling = false
+        when (event?.action) {
+            ACTION_DOWN -> {
+                mScrolling = false
+                interX = event.rawX
+                interY = event.rawY
+                lastX = event.rawX
+                lastY = event.rawY
+                startX = event.rawX
+                startY = event.rawY
+                startTime = System.currentTimeMillis()
 
-            pivotY = top.toFloat() + 100
-            pivotX = left.toFloat() + 100
+                pivotY = top.toFloat() + 100
+                pivotX = left.toFloat() + 100
 
-            rotationR = dis(left.toFloat() + 30, top.toFloat() + 30, startX, startY)
-
-            return false
-
-        } else if (event?.action == ACTION_MOVE) {
-
-            val cX = event.rawX - lastX
-            val cY = event.rawY - lastY
-            lastX = event.rawX
-            lastY = event.rawY
-
-            // 透明度
-            if (isFinish(event.rawX, event.rawY)) {
-                alpha = 0.6f
-            } else {
-                alpha = 1f
+                rotationR = dis(left.toFloat() + 30, top.toFloat() + 30, startX, startY)
             }
-
-            // 旋转
-            pivotY = top.toFloat() + 100
-            pivotX = left.toFloat() + 100
-
-            isVer = Math.abs(cX) < Math.abs(cY)
-
-            val smallB = if (isVer) cX else cY
-            val arc = dis(0f, smallB, smallB, 0f)
-
-            // 这里的1000是固定的旋转半径 经测试1000是比较合适的值，但可以使用上面的rotationR，是真正的半径
-            val degree = Math.toDegrees(arc * 180 / (1000 * Math.PI)).toFloat()
-            rotation += (if (cX > 0) -degree else degree) / 20
-
-            // 平移
-            translationX += cX
-            translationY += cY
-
-            isMoving = true
-            return true
+            ACTION_MOVE -> {
+                mScrolling = dis(interX, interY, event.rawX, event.rawY) >= ViewConfiguration.get(context).scaledTouchSlop
+            }
+            ACTION_UP -> {
+                mScrolling = false
+            }
         }
-        return false
+        return mScrolling
     }
 
     private fun dis(x1: Float, y1: Float, x2: Float, y2: Float): Float =
