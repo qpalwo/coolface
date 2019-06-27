@@ -248,6 +248,62 @@ class DragCardView(context: Context, attrs: AttributeSet?) : CardView(context, a
         return super.onTouchEvent(event)
     }
 
+    /**
+     * 处理滑动冲突！！
+     * 这是防止子view设置了clickListener后，无法接收这个滑动
+     */
+    override fun onInterceptTouchEvent(event: MotionEvent?): Boolean {
+        if (event?.action == ACTION_DOWN) {
+            startX = event.rawX
+            lastX = startX
+            startY = event.rawY
+            lastY = startY
+            startTime = System.currentTimeMillis()
+
+            pivotY = top.toFloat() + 100
+            pivotX = left.toFloat() + 100
+
+            rotationR = dis(left.toFloat() + 30, top.toFloat() + 30, startX, startY)
+
+            return false
+
+        } else if (event?.action == ACTION_MOVE) {
+
+            val cX = event.rawX - lastX
+            val cY = event.rawY - lastY
+            lastX = event.rawX
+            lastY = event.rawY
+
+            // 透明度
+            if (isFinish(event.rawX, event.rawY)) {
+                alpha = 0.6f
+            } else {
+                alpha = 1f
+            }
+
+            // 旋转
+            pivotY = top.toFloat() + 100
+            pivotX = left.toFloat() + 100
+
+            isVer = Math.abs(cX) < Math.abs(cY)
+
+            val smallB = if (isVer) cX else cY
+            val arc = dis(0f, smallB, smallB, 0f)
+
+            // 这里的1000是固定的旋转半径 经测试1000是比较合适的值，但可以使用上面的rotationR，是真正的半径
+            val degree = Math.toDegrees(arc * 180 / (1000 * Math.PI)).toFloat()
+            rotation += (if (cX > 0) -degree else degree) / 20
+
+            // 平移
+            translationX += cX
+            translationY += cY
+
+            isMoving = true
+            return true
+        }
+        return false
+    }
+
     private fun dis(x1: Float, y1: Float, x2: Float, y2: Float): Float =
         Math.sqrt((y1 - y2) * (y1 - y2) + (x1 - x2) * (x1 - x2).toDouble())
             .toFloat()

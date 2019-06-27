@@ -2,9 +2,11 @@ package com.hustunique.coolface.showcard
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
 import cn.bmob.v3.BmobUser
 import com.bumptech.glide.Glide
@@ -15,6 +17,8 @@ import com.bumptech.glide.request.target.Target
 import com.hustunique.coolface.R
 import com.hustunique.coolface.bean.Post
 import com.hustunique.coolface.bean.User
+import com.hustunique.coolface.login.LoginActivity
+import com.hustunique.coolface.picture.PictureActivity
 import com.hustunique.coolface.show.BaseShowFragment
 import com.hustunique.coolface.util.AnimationUtil
 import com.hustunique.coolface.util.DisplayUtil
@@ -36,14 +40,18 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
 
     private var like = false
 
+    private lateinit var post: Post
+
     override fun init() {
         super.init()
         mViewModel = viewModel as ShowCardViewModel
         val height = DisplayUtil.getHeight(getOuterActivity())
-        getAnimationBound().setPadding(80f,
+        getAnimationBound().setPadding(
+            80f,
             80f,
             height / 2 - 1050f,
-            height / 2 - 1050f)
+            height / 2 - 1050f
+        )
     }
 
     override fun initData() {
@@ -54,14 +62,17 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
     override fun initView(view: View) {
         super.initView(view)
         // 先延迟进入的动画，让图片加载完再进来
-        postponeEnterTransition()
+        getOuterActivity().supportPostponeEnterTransition()
         dmContext = mViewModel.getDmContext()
         mViewModel.postData.observe(this, Observer {
             LiveDataUtil.useData(it, { post ->
+                this.post = post!!
                 if (!BmobUser.isLogin()) {
-                    throw Error("fourfire fix me!! let user login")
+                    startActivity(LoginActivity::class.java)
                 }
-                like = post?.likeUser?.contains(BmobUser.getCurrentUser(User::class.java).username) ?: false
+
+                like = post.likeUser?.contains(BmobUser.getCurrentUser(User::class.java).username) ?: false
+
                 fra_show_likecount.text = post?.likeCount?.toString()
 
                 fra_show_like.setChecked(like)
@@ -73,7 +84,7 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
                         target: Target<Drawable>?,
                         isFirstResource: Boolean
                     ): Boolean {
-                        startPostponedEnterTransition()
+                        getOuterActivity().supportStartPostponedEnterTransition()
                         return true
                     }
 
@@ -85,7 +96,7 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
                         isFirstResource: Boolean
                     ): Boolean {
                         // 进入动画开始
-                        startPostponedEnterTransition()
+                        getOuterActivity().supportStartPostponedEnterTransition()
                         return false
                     }
                 }).into(fra_show_card_image)
@@ -159,6 +170,18 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
             override fun onChanged(isChecked: Boolean) {
                 collectOrNot(isChecked)
             }
+        }
+
+        fra_show_card_image.setOnClickListener {
+            val options =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    getOuterActivity(),
+                    it,
+                    getString(R.string.image_shared)
+                )
+            startActivity(PictureActivity::class.java, Bundle().apply {
+                putString(PictureActivity.PICTURE, post.faceBean.faceUrl)
+            }, options.toBundle())
         }
     }
 

@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
     android:orientation="vertical"
-    android:transitionName="@string/post_shared"
+
     app:cardCornerRadius="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:minHeight="300dp"
             android:adjustViewBounds="true"
+            android:transitionName="@string/image_shared"
             android:src="@drawable/ic_me_circle_36dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -53,43 +54,42 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/post_image" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/post_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:maxWidth="200dp"
+            android:text="肖宇轩"
+            android:textSize="@dimen/postUsername"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/post_image"
+            app:layout_constraintTop_toBottomOf="@id/post_message" />
+
+        <com.hustunique.coolface.view.LikeButton
+            android:id="@+id/post_like_button"
+            android:layout_width="30dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/ic_me_circle_36dp"
+            app:accentColor="@color/colorPrimaryDark"
+            app:layout_constraintBottom_toBottomOf="@+id/post_username"
+            app:layout_constraintEnd_toStartOf="@+id/post_like_count"
+            app:layout_constraintTop_toTopOf="@+id/post_username"
+            app:ltheme="heart" />
+
+        <TextView
+            android:id="@+id/post_like_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:gravity="center"
-            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/post_like_button"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/post_message">
-
-            <TextView
-                android:id="@+id/post_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="50dp"
-                android:maxWidth="200dp"
-                android:text="肖宇轩"
-                android:textSize="@dimen/postUsername" />
-
-            <com.hustunique.coolface.view.LikeButton
-                android:id="@+id/post_like_button"
-                android:layout_width="30dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_me_circle_36dp"
-                app:accentColor="@color/colorPrimaryDark"
-                app:ltheme="heart" />
-
-            <TextView
-                android:id="@+id/post_like_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="200" />
-
-
-        </LinearLayout>
+            app:layout_constraintTop_toTopOf="@+id/post_like_button"
+            tools:text="200" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

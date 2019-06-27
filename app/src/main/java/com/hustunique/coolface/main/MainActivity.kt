@@ -17,6 +17,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import cn.bmob.v3.BmobUser
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -87,6 +88,23 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                 }
             })
         })
+
+        mViewModel.postData.observe(this, Observer {
+            LiveDataUtil.useData(it, {
+                (main_list.adapter as MainAdapter).apply {
+                    (data as MutableList)[clickPosition] = it!!
+                    notifyItemChanged(clickPosition)
+                }
+            })
+        })
+
+        mViewModel.user.observe(this, Observer {
+            val headerView = nav_main.getHeaderView(0)
+//            val avatarView = headerView.findViewById<ImageView>(R.id.iv_main_avatar)
+            val nicknameView = headerView.findViewById<TextView>(R.id.tv_main_nickname)
+            // TODO: 登录
+//            nicknameView.text = it.nickname
+        })
         main_activity_camera_fb.setOnClickListener {
             floatingActionsMenu.collapse()
             startCamera()
@@ -106,7 +124,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                         ActivityOptionsCompat.makeSceneTransitionAnimation(
                             this@MainActivity,
                             (main_list.adapter as MainAdapter).getSharedWeight(position),
-                            getString(R.string.post_shared)
+                            getString(R.string.image_shared)
                         )
                     BaseShowCard.start(this@MainActivity, ShowCardFragment(), Bundle().apply {
                         putSerializable(
@@ -120,6 +138,16 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (clickPosition != -1) {
+            // 屏蔽局部刷新动画
+            (main_list.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+            mViewModel.updatePostAt(clickPosition)
+        }
+        mViewModel.user.value = BmobUser.getCurrentUser(User::class.java)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
@@ -128,8 +156,10 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                     if (scoreWillShow)
                         BaseShowCard.start(this, ShowScoreFragment())
                     else {
-                        // TODO: 剪裁拍照头像
-
+                        mViewModel.getPictureFile()?.let {
+                            val imgUri = FileProvider.getUriForFile(this, FileUtil.FILE_PROVIDER_AUTHORITY, it)
+                            crop(imgUri)
+                        }
                     }
                 }
                 GALLERY_CODE -> {
@@ -141,8 +171,9 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                     if (scoreWillShow) {
                         BaseShowCard.start(this, ShowScoreFragment())
                     } else {
-                        // TODO: 更新头像
-
+                        mViewModel.upLoadAvatar {
+                            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+                        }
                         scoreWillShow = true
                     }
                 }
@@ -158,7 +189,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
     }
 
     private fun startCamera() {
-        val file = mViewModel.getPictureFile()
+        val file = mViewModel.getNewPictureFile()
         file?.let {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION +
@@ -220,7 +251,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                     R.id.nav_logout -> {
                         BmobUser.logOut()
                         Toast.makeText(applicationContext, "已退出", Toast.LENGTH_SHORT).show()
-                        mViewModel.user.postValue(BmobUser.getCurrentUser(User::class.java))
+                        mViewModel.user.value = BmobUser.getCurrentUser(User::class.java)
                         false
                     }
                     else -> false
@@ -249,35 +280,27 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
     }
 
     private fun crop(uri: Uri) {
-        val file = mViewModel.getPictureFile()
+        val file = mViewModel.getNewPictureFile()
         file?.let {
             val saveFile = Uri.fromFile(it)
             val intent = Intent("com.android.camera.action.CROP")
+            intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION +
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             intent.setDataAndType(uri, "image/*")
             if (scoreWillShow) {
                 intent.putExtra("aspectX", 768)
                 intent.putExtra("aspectY", 1024)
-                intent.putExtra("scale", true)
-                intent.putExtra("return-data", false)
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, saveFile)
-                intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString())
-                intent.putExtra("noFaceDetection", true)
             } else {
                 intent.putExtra("aspectX", 1)
                 intent.putExtra("aspectY", 1)
-                intent.putExtra("scale", true)
-                intent.putExtra("return-data", false)
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, saveFile)
-                intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString())
             }
+            intent.putExtra("scale", true)
+            intent.putExtra("return-data", false)
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, saveFile)
+            intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString())
+            intent.putExtra("noFaceDetection", true)
             startActivityForResult(intent, CROP_CODE)
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (clickPosition != -1)
-            mViewModel.updatePostAt(clickPosition)
-        mViewModel.user.postValue(BmobUser.getCurrentUser(User::class.java))
-    }
 }

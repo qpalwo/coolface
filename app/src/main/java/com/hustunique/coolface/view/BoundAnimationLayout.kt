@@ -176,11 +176,15 @@ class BoundAnimationLayout(context: Context?, attrs: AttributeSet?) : LinearLayo
                 postInvalidate()
             }
         }
-        val paintColorAnimator = ValueAnimator.ofArgb(0xFFEC3C7A.toInt(), 0xFF34C648.toInt(), 0xFFFFA5C4.toInt()).setDuration(duration!!).apply {
-            addUpdateListener {
-                paint.color = it.animatedValue as Int
-            }
-        }
+        val paintColorAnimator =
+            ValueAnimator.ofArgb(0xFFEC3C7A.toInt(), 0xFF34C648.toInt(), 0xFFFFA5C4.toInt()).setDuration(duration!!)
+                .apply {
+                    addUpdateListener {
+                        paint.color = it.animatedValue as Int
+                    }
+                }
+
+
 
         boundAnimation.playTogether(moveAnimator, paintColorAnimator)
     }
