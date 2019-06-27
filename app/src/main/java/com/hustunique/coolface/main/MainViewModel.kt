@@ -3,6 +3,8 @@ package com.hustunique.coolface.main
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import cn.bmob.v3.BmobUser
+import cn.bmob.v3.exception.BmobException
+import cn.bmob.v3.listener.UpdateListener
 import com.hustunique.coolface.bean.Post
 import com.hustunique.coolface.bean.Resource
 import com.hustunique.coolface.bean.User
@@ -37,7 +39,7 @@ class MainViewModel : ViewModel() {
 
     fun init() {
         postRepo = PostRepo.getInstance()
-        user.postValue(BmobUser.getCurrentUser(User::class.java))
+        user.value = BmobUser.getCurrentUser(User::class.java)
         getPosts()
         pictureRepo = PictureRepo.getInstance()
         pictureData.value = Resource.loading()
@@ -88,5 +90,22 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun getPictureFile() = PictureRepo.getInstance().getNewFile()
+    fun upLoadAvatar(onError: (String) -> Unit) {
+        pictureRepo.uploadUserAvatar({url ->
+            user.value?.let {
+                it.avatar = url
+                it.update(object : UpdateListener() {
+                    override fun done(p0: BmobException?) {
+                        if (p0 != null) {
+                            onError(p0.errorCode.toString())
+                        }
+                    }
+                })
+            }
+        }, onError)
+    }
+
+    fun getNewPictureFile() = PictureRepo.getInstance().getNewFile()
+
+    fun getPictureFile() = pictureRepo.getFile()
 }

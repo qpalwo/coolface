@@ -14,10 +14,12 @@ import com.hustunique.coolface.model.remote.config.BmobConfig
 import com.hustunique.coolface.model.remote.config.FacePPConfig
 import com.hustunique.coolface.model.remote.service.BmobService
 import com.hustunique.coolface.model.remote.service.FacePPService
+import com.hustunique.coolface.model.remote.service.SMMSService
 import com.hustunique.coolface.util.FacePPAttrUtil
 import com.hustunique.coolface.util.FileUtil
 import com.hustunique.coolface.util.JsonUtil
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import okio.buffer
 import okio.sink
@@ -47,6 +49,8 @@ class PictureRepo private constructor() {
     private val facePPService = RetrofitService.Instance.facePPRetrofit.create(FacePPService::class.java)
 
     private val bmobService = RetrofitService.Instance.bombRetrofit.create(BmobService::class.java)
+
+    private val smmsService = RetrofitService.Instance.smmsRetrofit.create(SMMSService::class.java)
 
     fun getFile() = imageFile
 
@@ -110,6 +114,26 @@ class PictureRepo private constructor() {
             }, {
                 liveData.postValue(Resource.error(it.message ?: ""))
             })
+    }
+
+    fun uploadUserAvatar(onSuccess: (String) -> Unit, onError: (String) -> Unit) {
+        imageFile?.absolutePath?.let {
+            Single.just(it)
+                .subscribeOn(Schedulers.io())
+                .flatMap {
+                    val compressedFile = Luban.with(CoolFaceApplication.mApplicationContext)
+                        .load(it)
+                        .get()
+                    smmsService.upload("[upload]${compressedFile[0].absolutePath}")
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    onSuccess(it.data.url)
+                }, {
+                    onError("upload error")
+                })
+
+        }
     }
 
     fun searchSameStarFace(faceToken: String, liveData: MutableLiveData<Resource<SimilarFaceInfo>>) {
