@@ -17,9 +17,11 @@ import com.hustunique.coolface.bean.Resource
 import com.hustunique.coolface.main.MainActivity
 import com.hustunique.coolface.picture.PictureActivity
 import com.hustunique.coolface.show.BaseShowFragment
+import com.hustunique.coolface.util.DialogUtils
 import com.hustunique.coolface.util.DisplayUtil
 import com.hustunique.coolface.util.LiveDataUtil
 import com.hustunique.coolface.util.TextUtil
+import com.kongzue.dialog.v2.CustomDialog
 import kotlinx.android.synthetic.main.fra_analy_result.*
 
 class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreViewModel::class.java) {
@@ -61,11 +63,6 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
         super.initContact(context)
         analy_submit.setOnClickListener {
             mViewModel.post(analy_post_message.text.toString())
-            getAnimationBound().pauseAnimation()
-            getOuterActivity().setResult(Activity.RESULT_OK, Intent().apply {
-                putExtra(MainActivity.IS_SUBMITTED, true)
-            })
-            this@ShowScoreFragment.getOuterActivity().finish()
         }
 
         analy_myimage.setOnClickListener {
@@ -80,7 +77,6 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
             startPictureActivity(it, mSimilarUser)
         }
 
-
         mViewModel.pictureData.observe(this,
             Observer<Resource<String>> {
                 LiveDataUtil.useData(it, {
@@ -92,6 +88,14 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
                 }, {
                     showProgress()
                 }, { s, d ->
+                    val tip: String = when (s) {
+                        "more than one face" -> "图片中超过一张脸"
+                        "no face detected" -> "图片中没有脸"
+                        else -> "网络开小差了：$s"
+                    }
+                    DialogUtils.showTipDialog(context!!, tip, "确认") {
+                        this@ShowScoreFragment.getOuterActivity().finish()
+                    }
                     getAnimationBound().pauseAnimation()
                     Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show()
                 })
@@ -104,6 +108,14 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
                 analy_age.text = it?.attributes?.age?.value.toString()
                 mViewModel.similar()
             }, error = { s, face ->
+                val tip: String = when (s) {
+                    "more than one face" -> "图片中超过一张脸"
+                    "no face detected" -> "图片中没有脸"
+                    else -> "网络开小差了：$s"
+                }
+                DialogUtils.showTipDialog(context!!, tip, "确认") {
+                    this@ShowScoreFragment.getOuterActivity().finish()
+                }
                 getAnimationBound().pauseAnimation()
                 Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show()
             })
@@ -142,10 +154,32 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
                 analy_similar_user_name.text = it?.faceOwnerName
                 getAnimationBound().pauseAnimation()
             }, error = { s, d ->
+                DialogUtils.showTipDialog(context!!, "网络开小差了", "确认") {
+                    this@ShowScoreFragment.getOuterActivity().finish()
+                }
                 Toast.makeText(context, s, Toast.LENGTH_SHORT).show()
                 getAnimationBound().pauseAnimation()
             })
         })
+
+        var progressDialog: CustomDialog? = null
+        mViewModel.submitCallback.observe(this, Observer {
+            LiveDataUtil.useData(it, {
+                getAnimationBound().pauseAnimation()
+                getOuterActivity().setResult(Activity.RESULT_OK, Intent().apply {
+                    putExtra(MainActivity.IS_SUBMITTED, true)
+                })
+                progressDialog?.doDismiss()
+                this@ShowScoreFragment.getOuterActivity().finish()
+            }, {
+                progressDialog = DialogUtils.showProgressDialog(context!!)
+            }, { s, p ->
+                DialogUtils.showTipDialog(context!!, "网络开小差了", "确认") {
+                    this@ShowScoreFragment.getOuterActivity().finish()
+                }
+            })
+        }
+        )
     }
 
     private fun startPictureActivity(shareView: View, url: String) {

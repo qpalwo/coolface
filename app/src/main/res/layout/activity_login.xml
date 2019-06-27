@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,119 +10,139 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/login_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
+        android:layout_height="300dp"
+        android:layout_marginBottom="16dp"
+        android:background="@mipmap/background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <FrameLayout
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            >
+            android:layout_height="match_parent"
+            android:layout_marginTop="48dp"
+            android:layout_marginEnd="16dp">
 
             <TextView
                 android:id="@+id/tv_login_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_marginTop="8dp"
                 android:text="取消"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="15sp"
-                />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center_horizontal"
-                android:src="@mipmap/logo"
-                />
             <TextView
                 android:id="@+id/tv_login_signup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 android:text="尚未注册？"
-                android:textSize="15sp"
-                android:layout_marginStart="30dp"
                 android:textColor="@color/colorPrimaryDark"
-                />
-        </FrameLayout>
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.appcompat.widget.Toolbar>
 
-
-    <TextView
-        android:layout_width="wrap_content"
+    <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="30sp"
-        android:textColor="@color/colorText"
-        android:text="登录CoolFace"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
-        />
+        android:layout_marginHorizontal="48dp"
+        android:layout_marginVertical="120dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/et_login_username"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:hint="邮箱"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:inputType="textEmailAddress"
-        app:met_floatingLabelText="邮箱"
-        app:met_floatingLabel="highlight"
-        app:met_helperTextAlwaysShown="true"
-        app:met_floatingLabelTextSize="15sp"
-        app:met_helperTextColor="@color/colorHelperText"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:orientation="vertical">
+            <com.airbnb.lottie.LottieAnimationView
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_margin="16dp"
+                android:layout_gravity="center|bottom"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="girl_loading.json"
+                app:lottie_loop="true" />
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="登录CoolFace"
+                android:textColor="@color/colorText"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/et_login_username"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        />
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/et_login_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:hint="邮箱"
+                android:inputType="textEmailAddress"
+                android:singleLine="true"
+                app:met_floatingLabel="highlight"
+                app:met_floatingLabelText="邮箱"
+                app:met_floatingLabelTextSize="15sp"
+                app:met_helperTextAlwaysShown="true"
+                app:met_helperTextColor="@color/colorHelperText" />
 
-    <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/et_login_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:inputType="textPassword"
-        android:hint="密码"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="20dp"
-        app:met_floatingLabelText="密码"
-        app:met_floatingLabel="highlight"
-        app:met_floatingLabelTextSize="15sp"
-        app:met_helperTextColor="@color/colorPrimary"
-        />
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/et_login_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:hint="密码"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                app:met_floatingLabel="highlight"
+                app:met_floatingLabelText="密码"
+                app:met_floatingLabelTextSize="15sp"
+                app:met_helperTextColor="@color/colorPrimary" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="20dp"
-        >
 
-        <TextView
-            android:id="@+id/tv_login_forget"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:textSize="15sp"
-            android:text="忘记密码？"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_marginStart="30dp"
-            />
-
-        <Button
-            android:id="@+id/btn_login_login"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:background="@color/colorPrimary"
-            android:textColor="#ffffff"
-            android:text="登录"
-            android:layout_marginEnd="20dp"
-            />
-
-    </LinearLayout>
-
-</LinearLayout>
+            <TextView
+                android:id="@+id/tv_login_forget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="忘记密码？"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="15sp" />
+            <Button
+                android:id="@+id/btn_login_login"
+                android:layout_marginTop="16dp"
+                android:text="登录"
+                android:textSize="20dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_width="match_parent"
+                android:layout_height="60dp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

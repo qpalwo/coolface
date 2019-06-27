@@ -17,6 +17,14 @@ class MainViewModel : ViewModel() {
     private lateinit var pictureRepo: PictureRepo
 
     /**
+     * 表示现在在哪个状态下
+     * 0：所有动态
+     * 1：我的
+     * 2：收藏
+     */
+    var status = 0
+
+    /**
      * 整个列表更新
      */
     val postsData: MutableLiveData<Resource<List<Post>>> = MutableLiveData()
@@ -46,11 +54,27 @@ class MainViewModel : ViewModel() {
     }
 
     fun getPosts() {
+        status = 0
         postRepo.getPosts(postsData)
     }
 
     fun updatePostAt(positon: Int) {
-        postRepo.getPost(postsData.value?.data?.get(positon)?.objectId!!, postData)
+        val targetPostId: String =
+            when (status) {
+                0 -> {
+                    postsData.value?.data?.get(positon)?.objectId!!
+                }
+                1 -> {
+                    myPostsData.value?.get(positon)?.objectId!!
+                }
+                2 -> {
+                    collectPostsData.value?.get(positon)?.objectId!!
+                }
+                else -> {
+                    ""
+                }
+            }
+        postRepo.getPost(targetPostId, postData)
     }
 
     /**
@@ -58,10 +82,15 @@ class MainViewModel : ViewModel() {
      */
     fun updateCollectPosts() {
         collectPostsData.postValue(postsData.value?.data?.let {
+            status = 2
             it.filter {
                 it.favouriteUser?.contains(BmobUser.getCurrentUser(User::class.java).username) ?: false
             }
         })
+    }
+
+    fun deleteAt(post: Post) {
+
     }
 
     /**
@@ -69,6 +98,7 @@ class MainViewModel : ViewModel() {
      */
     fun updateMyPosts() {
         myPostsData.postValue(postsData.value?.data?.let {
+            status = 1
             it.filter {
                 it.username == BmobUser.getCurrentUser(User::class.java).nickname
             }

@@ -26,6 +26,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.hustunique.coolface.R
 import com.hustunique.coolface.base.BaseActivity
 import com.hustunique.coolface.base.ListOnClickListener
+import com.hustunique.coolface.bean.Post
 import com.hustunique.coolface.bean.User
 import com.hustunique.coolface.login.LoginActivity
 import com.hustunique.coolface.main.navigation.NicknameCardFragment
@@ -65,7 +66,6 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
 
     override fun initView() {
         super.initView()
-
         main_list.adapter = MainAdapter(mViewModel)
         main_list.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
         val headerView = nav_main.getHeaderView(0)
@@ -99,6 +99,9 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                     notifyDataSetChanged()
                 }
             })
+            it?.data?.let {
+                setUpItemClickListener(it)
+            }
         })
 
         mViewModel.postData.observe(this, Observer {
@@ -113,11 +116,13 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         mViewModel.myPostsData.observe(this, Observer {
             (main_list.adapter as MainAdapter).data = it
             (main_list.adapter as MainAdapter).notifyDataSetChanged()
+            setUpItemClickListener(it)
         })
 
         mViewModel.collectPostsData.observe(this, Observer {
             (main_list.adapter as MainAdapter).data = it
             (main_list.adapter as MainAdapter).notifyDataSetChanged()
+            setUpItemClickListener(it)
         })
 
         mViewModel.user.observe(this, Observer {
@@ -138,33 +143,11 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         main_me.setOnClickListener {
             main_drawerlayout.openDrawer(START)
         }
-        (main_list.adapter as MainAdapter).clickListener = object : ListOnClickListener {
-            override fun onClick(position: Int, v: View) {
-                LiveDataUtil.useData(mViewModel.postsData, {
-                    clickPosition = position
-                    val options =
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(
-                            this@MainActivity,
-                            (main_list.adapter as MainAdapter).getSharedWeight(position),
-                            getString(R.string.image_shared)
-                        )
-                    BaseShowCard.start(this@MainActivity, ShowCardFragment(), Bundle().apply {
-                        putSerializable(
-                            getString(R.string.post),
-                            it?.get(position)
-                        )
-                    }, options.toBundle())
-                })
-
-            }
-        }
     }
 
     override fun onResume() {
         super.onResume()
         if (clickPosition != -1) {
-            // 屏蔽局部刷新动画
-            (main_list.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
             mViewModel.updatePostAt(clickPosition)
         }
         mViewModel.user.value = BmobUser.getCurrentUser(User::class.java)
@@ -331,5 +314,27 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             startActivityForResult(intent, CROP_CODE)
         }
     }
+
+    private fun setUpItemClickListener(posts: List<Post>) {
+        (main_list.adapter as MainAdapter).clickListener = object : ListOnClickListener {
+            override fun onClick(position: Int, v: View) {
+                clickPosition = position
+                val options =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        this@MainActivity,
+                        (main_list.adapter as MainAdapter).getSharedWeight(position),
+                        getString(R.string.image_shared)
+                    )
+                BaseShowCard.start(this@MainActivity, ShowCardFragment(), Bundle().apply {
+                    putSerializable(
+                        getString(R.string.post),
+                        posts[position]
+                    )
+                }, options.toBundle())
+
+            }
+        }
+    }
+
 
 }

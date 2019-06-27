@@ -28,6 +28,8 @@ class ShowScoreViewModel : ViewModel() {
 
     val similarUserData = MutableLiveData<Resource<SimilarFaceInfo>>()
 
+    val submitCallback = MutableLiveData<Resource<Post>>()
+
     fun init() {
         pictureData.value = Resource.loading()
         if (getPictureFile()?.let {
@@ -50,7 +52,7 @@ class ShowScoreViewModel : ViewModel() {
 
     fun post(message: String) {
         scoringData.value?.data?.let {
-            postRepo.post(message, it, postData)
+            postRepo.post(message, it, submitCallback)
         }
     }
 
