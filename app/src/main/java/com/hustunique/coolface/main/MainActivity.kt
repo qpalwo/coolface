@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import cn.bmob.v3.BmobUser
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.hustunique.coolface.R
 import com.hustunique.coolface.base.BaseActivity
@@ -70,11 +72,16 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         val avatarView = headerView.findViewById<ImageView>(R.id.iv_main_avatar)
         val nicknameView = headerView.findViewById<TextView>(R.id.tv_main_nickname)
         mViewModel.user.observe(this, Observer {
+            initDrawer()
             nicknameView.text = if (BmobUser.isLogin()) it.nickname else "未登录"
-            initNavigationMenu()
-//            Glide.with(this)
-//                .load(it.avatar)
-//                .into(avatarView)
+            if (BmobUser.isLogin()) {
+                Glide.with(this)
+                    .load(it.avatar)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(avatarView)
+            } else {
+                avatarView.setImageResource(R.mipmap.logo)
+            }
         })
         initDrawer()
 

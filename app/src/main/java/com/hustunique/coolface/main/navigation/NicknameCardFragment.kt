@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.Toast
 import cn.bmob.v3.BmobUser
 import cn.bmob.v3.exception.BmobException
@@ -39,7 +40,8 @@ class NicknameCardFragment: BaseShowFragment(R.layout.card_nickname) {
             user.nickname = newName
             user.update(object : UpdateListener() {
                 override fun done(p0: BmobException?) {
-                    val toastText = if (p0 == null)  "修改昵称成功" else "修改昵称失败"
+                    Log.d("bmob", p0?.errorCode.toString() + p0?.message)
+                    val toastText = if (p0 == null)  "修改昵称成功" else p0.message
                     Toast.makeText(activity?.applicationContext, toastText, Toast.LENGTH_SHORT).show()
                     val intent = Intent()
                     intent.putExtra("nickname", newName)

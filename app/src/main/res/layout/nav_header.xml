@@ -7,11 +7,10 @@
 
     <ImageView
         android:id="@+id/iv_main_avatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minWidth="50dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="10dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="20dp"
         android:src="@mipmap/logo"
         />
 
@@ -20,8 +19,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minWidth="50dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="25dp"
         android:singleLine="true"
         android:textStyle="bold"
         android:text="未登录"
