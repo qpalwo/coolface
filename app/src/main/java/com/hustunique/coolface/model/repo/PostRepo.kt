@@ -89,7 +89,8 @@ class PostRepo private constructor() {
                         SimilarFaceInfo(
                             it.url,
                             faceData.face_token,
-                            user.nickname
+                            user.nickname,
+                            objectId = null
                         )
                     )
                 }
@@ -100,6 +101,51 @@ class PostRepo private constructor() {
                 callback.postValue(Resource.error("postData error"))
             })
 
+    }
+
+    @SuppressLint("CheckResult")
+    fun deletePost(objId: String, onSuccess: ((String) -> Unit)? = null, onError: ((String) -> Unit)? = null) {
+        if (!BmobUser.isLogin()) {
+            onError?.run {
+                this("do not login")
+            }
+            return
+        }
+        var post: Post? = null
+        bmobService.getData(BmobConfig.TABLE_POST, objId)
+            .subscribeOn(Schedulers.io())
+            .flatMap {
+                post = JsonUtil.toBean<Post>(it.source())
+                post?.let {
+                    bmobService.deleteData(BmobConfig.TABLE_POST, objId)
+                }
+            }
+            .flatMap {
+                post?.let {
+                    bmobService.queryData(
+                        BmobConfig.TABLE_USER,
+                        "{\"faceToken\":\"${it.faceBean.faceToken}\"}")
+                }
+            }
+            .flatMap {
+                JsonUtil.toBean<BmobSimilarFaceReturn>(it.source())?.let {
+                    bmobService.deleteData(BmobConfig.TABLE_USER, it.results[0].objectId!!)
+                }
+            }
+            .flatMap {
+                post?.let {
+                    smmsService.delete(it.faceBean.faceDeleteKey)
+                }
+            }
+            .subscribe({
+                onSuccess?.run {
+                    this("delete ok")
+                }
+            }, {
+                onError?.run {
+                    this("delete error")
+                }
+            })
     }
 
     @SuppressLint("CheckResult")
@@ -136,7 +182,12 @@ class PostRepo private constructor() {
             })
     }
 
-    fun addComment(postObjId: String, comment: String, liveData: MutableLiveData<Resource<Post>>? = null, onError: ((String) -> Unit)? = null) {
+    fun addComment(
+        postObjId: String,
+        comment: String,
+        liveData: MutableLiveData<Resource<Post>>? = null,
+        onError: ((String) -> Unit)? = null
+    ) {
         liveData?.value = Resource.loading()
         updatePost(
             postObjId,

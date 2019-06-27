@@ -12,5 +12,6 @@ data class SimilarFaceInfo(
     val faceToken: String,
     val faceOwnerName: String,
     @Transient
-    var trustLevel: String = ""
+    var trustLevel: String = "",
+    val objectId: String?
 )
