@@ -46,6 +46,8 @@ class PictureRepo private constructor() {
 
     var beautifiedPicture: File? = null
 
+    var mergedPicture: File? = null
+
     private val facePPService = RetrofitService.Instance.facePPRetrofit.create(FacePPService::class.java)
 
     private val bmobService = RetrofitService.Instance.bombRetrofit.create(BmobService::class.java)
@@ -91,6 +93,39 @@ class PictureRepo private constructor() {
                 pictureData.postValue(Resource.error(it.message ?: ""))
             })
 
+    }
+
+    @SuppressLint("CheckResult")
+    fun mergeFace(templateUrl: String, mergePicture: String, pictureData: MutableLiveData<Resource<String>>) {
+        Single.just(mergePicture)
+            .subscribeOn(Schedulers.io())
+            .flatMap {
+                val compressedFile = Luban.with(CoolFaceApplication.mApplicationContext)
+                    .load(it)
+                    .get()
+                facePPService.mergeFace(
+                    templateUrl,
+                    "[upload]${compressedFile[0].absolutePath}",
+                    BeautifyLevel.mergeRate
+                )
+            }
+            .map { data ->
+                mergedPicture = FileUtil.createImageFile(CoolFaceApplication.mApplicationContext)
+                mergedPicture?.let {
+                    val sink = it.sink().buffer()
+                    sink.write(Base64.getDecoder().decode(data.result))
+                    it.absolutePath
+                }
+            }
+            .subscribe({
+                if (it?.let {
+                        pictureData.postValue(Resource.success(it))
+                    } == null) {
+                    pictureData.postValue(Resource.error("merge error"))
+                }
+            }, {
+                pictureData.postValue(Resource.error("merge error"))
+            })
     }
 
     @SuppressLint("CheckResult")

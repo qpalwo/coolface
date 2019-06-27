@@ -7,4 +7,5 @@ package com.hustunique.coolface.model.remote.config
 object BeautifyLevel {
     var whitening = 100
     var smoothing = 100
+    var mergeRate = 80
 }

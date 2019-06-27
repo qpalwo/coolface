@@ -29,7 +29,7 @@ abstract class BaseActivity(@LayoutRes val layoutId: Int, private val viewModelC
         initContact()
     }
 
-    fun startActivity(targetClass: Class<BaseActivity>, data: Bundle? = null, options: Bundle? = null) {
+    fun startActivity(targetClass: Class<out BaseActivity>, data: Bundle? = null, options: Bundle? = null) {
         val intent = Intent(this, targetClass)
         intent.putExtra(DATA, data)
         startActivity(intent, options)
