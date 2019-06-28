@@ -1,6 +1,7 @@
 package com.hustunique.coolface.main
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import cn.bmob.v3.BmobUser
 import cn.bmob.v3.exception.BmobException
@@ -10,6 +11,7 @@ import com.hustunique.coolface.bean.Resource
 import com.hustunique.coolface.bean.User
 import com.hustunique.coolface.model.repo.PictureRepo
 import com.hustunique.coolface.model.repo.PostRepo
+import com.hustunique.coolface.util.LiveDataUtil
 
 class MainViewModel : ViewModel() {
     val user = MutableLiveData<User>()
@@ -24,6 +26,8 @@ class MainViewModel : ViewModel() {
      */
     var status = 0
 
+    val posts: MutableList<Post> = ArrayList()
+
     /**
      * 整个列表更新
      */
@@ -35,45 +39,29 @@ class MainViewModel : ViewModel() {
      */
     val postData: MutableLiveData<Resource<Post>> = MutableLiveData()
 
-    /**
-     * 我的列表
-     */
-    val myPostsData: MutableLiveData<List<Post>> = MutableLiveData()
-
-    /**
-     * 我的收藏
-     */
-    val collectPostsData: MutableLiveData<List<Post>> = MutableLiveData()
-
-    fun init() {
+    fun init(activity: MainActivity) {
         postRepo = PostRepo.getInstance()
         user.value = BmobUser.getCurrentUser(User::class.java)
-        getPosts()
+        getPosts(activity)
         pictureRepo = PictureRepo.getInstance()
         pictureData.value = Resource.loading()
     }
 
-    fun getPosts() {
+    fun getPosts(activity: MainActivity) {
         status = 0
-        postRepo.getPosts(postsData)
+        postRepo.getPosts(MutableLiveData<Resource<List<Post>>>().apply {
+            observe(activity, Observer {
+                LiveDataUtil.useData(it, { postsList ->
+                    posts.removeAll(posts)
+                    posts.addAll(postsList!!)
+                    postsData.postValue(Resource.success(posts))
+                })
+            })
+        })
     }
 
-    fun updatePostAt(positon: Int) {
-        val targetPostId: String =
-            when (status) {
-                0 -> {
-                    postsData.value?.data?.get(positon)?.objectId!!
-                }
-                1 -> {
-                    myPostsData.value?.get(positon)?.objectId!!
-                }
-                2 -> {
-                    collectPostsData.value?.get(positon)?.objectId!!
-                }
-                else -> {
-                    ""
-                }
-            }
+    fun updatePostAt(position: Int) {
+        val targetPostId: String = postsData.value?.data?.get(position)?.objectId!!
         postRepo.getPost(targetPostId, postData)
     }
 
@@ -81,28 +69,37 @@ class MainViewModel : ViewModel() {
      * 显示收藏的动态
      */
     fun updateCollectPosts() {
-        collectPostsData.postValue(postsData.value?.data?.let {
-            status = 2
-            it.filter {
+        status = 2
+        postsData.postValue(Resource.success(
+            posts.filter {
                 it.favouriteUser?.contains(BmobUser.getCurrentUser(User::class.java).username) ?: false
             }
-        })
+        ))
     }
 
-    fun deleteAt(post: Post) {
-
+    fun deleteAt(position: Int, onSuccess:() -> (Unit),onLoading: () -> (Unit), onError: (String) -> (Unit)) {
+        if (status == 1) {
+            onLoading.invoke()
+            postRepo.deletePost(postsData.value?.data?.get(position)?.objectId!!, {
+                posts.remove(postsData.value?.data?.get(position)!!)
+                when (status) {
+                    0 -> postsData.postValue(Resource.success(posts))
+                    1 -> updateMyPosts()
+                    2 -> updateCollectPosts()
+                }
+                onSuccess.invoke()
+            }, onError)
+        }
     }
 
     /**
      * 显示我的动态
      */
     fun updateMyPosts() {
-        myPostsData.postValue(postsData.value?.data?.let {
-            status = 1
-            it.filter {
-                it.username == BmobUser.getCurrentUser(User::class.java).nickname
-            }
-        })
+        status = 1
+        postsData.postValue(Resource.success(posts.filter {
+            it.username == BmobUser.getCurrentUser(User::class.java).nickname
+        }))
     }
 
     fun like(positon: Int, onError: ((String) -> Unit)) {

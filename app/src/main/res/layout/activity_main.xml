@@ -15,6 +15,7 @@
             android:id="@+id/main_toolbar"
             android:layout_width="0dp"
             android:layout_height="100dp"
+            android:elevation="16dp"
             android:background="@mipmap/background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -55,6 +56,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/main_toolbar"
             tools:listitem="@layout/post_item" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/main_loading"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/main_toolbar"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="plane_loading.json"
+            app:lottie_loop="true" />
 
         <com.getbase.floatingactionbutton.FloatingActionsMenu
             android:id="@+id/floatingActionsMenu"

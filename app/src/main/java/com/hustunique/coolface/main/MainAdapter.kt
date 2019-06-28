@@ -20,8 +20,10 @@ import com.hustunique.coolface.base.BaseAdapter
 import com.hustunique.coolface.base.ViewHolder
 import com.hustunique.coolface.bean.Post
 import com.hustunique.coolface.util.AnimationUtil
+import com.hustunique.coolface.util.DialogUtils
 import com.hustunique.coolface.util.TextUtil
 import com.hustunique.coolface.view.LikeButton
+import com.kongzue.dialog.v2.CustomDialog
 
 class MainAdapter(val mViewModel: MainViewModel) : BaseAdapter<Post>(R.layout.post_item) {
     private val sharedWeights: ArrayList<View> = ArrayList()
@@ -121,13 +123,23 @@ class MainAdapter(val mViewModel: MainViewModel) : BaseAdapter<Post>(R.layout.po
                     val popMenu = PopupMenu(holder.itemView.context, holder.itemView)
                     popMenu.menuInflater.inflate(R.menu.pop_delete, popMenu.menu)
                     popMenu.show()
+                    var dialog: CustomDialog? = null
                     popMenu.setOnMenuItemClickListener {
-                        if (it.title == "删除") {
-                            
-                            return@setOnMenuItemClickListener true
+                        return@setOnMenuItemClickListener if (it.title == "删除") {
+                            mViewModel.deleteAt(position, {
+                                dialog?.doDismiss()
+                            }, {
+                                dialog = DialogUtils.showProgressDialog(holder.itemView.context, "删除中。。。")
+                            }, {
+                                dialog = DialogUtils.showTipDialog(holder.itemView.context, "网络开小差了", "确认") {
+                                    dialog?.doDismiss()
+                                }
+                            })
+                            true
                         } else {
-                            return@setOnMenuItemClickListener false
+                            false
                         }
+
                     }
                     return@setOnLongClickListener true
                 }

@@ -9,8 +9,16 @@ import com.kongzue.dialog.v2.CustomDialog
 
 object DialogUtils {
 
-    fun showProgressDialog(context: Context): CustomDialog {
+    fun showProgressDialog(context: Context, message: String = ""): CustomDialog {
         return CustomDialog.show(context, R.layout.dialog_progress) { c, v ->
+            if (!message.isEmpty()) {
+                v.findViewById<TextView>(R.id.dialog_progress_message).apply {
+                    visibility = View.VISIBLE
+                    text = message
+                }
+            } else {
+                v.findViewById<TextView>(R.id.dialog_progress_message).visibility = View.GONE
+            }
         }
     }
 

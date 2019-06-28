@@ -1,14 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="16dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:backgroundTint="@color/colorTran"
     android:layout_width="250dp"
-    android:layout_height="250dp">
-
-    <com.airbnb.lottie.LottieAnimationView
+    android:layout_height="wrap_content">
+    <androidx.cardview.widget.CardView
+        app:cardCornerRadius="16dp"
+        android:layout_gravity="center"
         android:layout_width="250dp"
-        android:layout_height="250dp"
-        app:lottie_autoPlay="true"
-        app:lottie_fileName="cubos_loading.json"
-        app:lottie_loop="true" />
-</androidx.cardview.widget.CardView>
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content">
+            <com.airbnb.lottie.LottieAnimationView
+                android:layout_gravity="center"
+                app:lottie_fileName="cubos_loading.json"
+                app:lottie_loop="true"
+                app:lottie_autoPlay="true"
+                android:layout_width="250dp"
+                android:layout_height="250dp" />
+            <TextView
+                android:id="@+id/dialog_progress_message"
+                android:layout_margin="8dp"
+                android:visibility="gone"
+                android:textColor="#000000"
+                android:textSize="25dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

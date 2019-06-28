@@ -17,7 +17,6 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import cn.bmob.v3.BmobUser
 import com.bumptech.glide.Glide
@@ -60,7 +59,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
     override fun init() {
         super.init()
         mViewModel = viewModel as MainViewModel
-        mViewModel.init()
+        mViewModel.init(this)
         initDrawer()
     }
 
@@ -96,6 +95,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             LiveDataUtil.useData(it, {
                 (main_list.adapter as MainAdapter).apply {
                     data = it
+                    main_loading.visibility = View.GONE
                     notifyDataSetChanged()
                 }
             })
@@ -111,18 +111,6 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                     notifyItemChanged(clickPosition)
                 }
             })
-        })
-
-        mViewModel.myPostsData.observe(this, Observer {
-            (main_list.adapter as MainAdapter).data = it
-            (main_list.adapter as MainAdapter).notifyDataSetChanged()
-            setUpItemClickListener(it)
-        })
-
-        mViewModel.collectPostsData.observe(this, Observer {
-            (main_list.adapter as MainAdapter).data = it
-            (main_list.adapter as MainAdapter).notifyDataSetChanged()
-            setUpItemClickListener(it)
         })
 
         mViewModel.user.observe(this, Observer {
@@ -189,7 +177,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                 }
                 SUBMIT_CODE -> {
                     if (data?.getBooleanExtra(IS_SUBMITTED, false)!!)
-                        mViewModel.getPosts()
+                        mViewModel.getPosts(this)
                 }
                 else -> {
                 }
@@ -247,9 +235,8 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             nav_main.inflateMenu(R.menu.nav_menu_main_login)
             nav_main.setNavigationItemSelectedListener {
                 when (it.itemId) {
-                    // TODO: 导航
                     R.id.nav_all -> {
-                        mViewModel.getPosts()
+                        mViewModel.getPosts(this)
                         true
                     }
                     R.id.nav_mine -> {
