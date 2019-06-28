@@ -124,12 +124,18 @@ class PostRepo private constructor() {
                 post?.let {
                     bmobService.queryData(
                         BmobConfig.TABLE_USER,
-                        "{\"faceToken\":\"${it.faceBean.faceToken}\"}")
+                        "{\"faceToken\":\"${it.faceBean.faceToken}\"}"
+                    )
                 }
             }
             .flatMap {
                 JsonUtil.toBean<BmobSimilarFaceReturn>(it.source())?.let {
                     bmobService.deleteData(BmobConfig.TABLE_USER, it.results[0].objectId!!)
+                }
+            }
+            .flatMap {
+                post?.let {
+                    facePPService.setRemoveFace(FacePPConfig.USER_FACE_SET_TOKEN, it.faceBean.faceToken)
                 }
             }
             .flatMap {
