@@ -28,13 +28,26 @@
             android:maxLines="5"
             android:textSize="20dp" />
 
-        <Button
-            android:id="@+id/dialog_one_button"
-            android:textSize="16dp"
-            android:backgroundTint="#ffffff"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/dialog_first_button"
+                android:textSize="16dp"
+                android:backgroundTint="#ffffff"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/dialog_second_button"
+                android:textSize="16dp"
+                android:visibility="gone"
+                android:layout_marginLeft="16dp"
+                android:backgroundTint="#ffffff"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

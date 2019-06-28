@@ -25,15 +25,26 @@ object DialogUtils {
     fun showTipDialog(
         context: Context,
         tip: String,
-        buttonText: String,
-        clickListener: (View) -> (Unit)
+        firstButtonText: String,
+        firstClickListener: (CustomDialog) -> (Unit) = {},
+        secondButtonText: String = "",
+        secondClickListener: (CustomDialog) -> (Unit) = {}
     ): CustomDialog {
         return CustomDialog.show(context, R.layout.dialog_onetext) { c, v ->
             v.findViewById<TextView>(R.id.dialog_one_textview).text = tip
-            v.findViewById<Button>(R.id.dialog_one_button).apply {
-                text = buttonText
+            v.findViewById<Button>(R.id.dialog_first_button).apply {
+                text = firstButtonText
                 setOnClickListener {
-                    clickListener.invoke(it)
+                    firstClickListener.invoke(c)
+                }
+            }
+            if (secondButtonText.isNotEmpty()) {
+                v.findViewById<Button>(R.id.dialog_second_button).apply {
+                    visibility = View.VISIBLE
+                    text = secondButtonText
+                    setOnClickListener {
+                        secondClickListener.invoke(c)
+                    }
                 }
             }
         }

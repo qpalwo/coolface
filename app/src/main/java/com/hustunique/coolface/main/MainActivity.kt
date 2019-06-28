@@ -109,16 +109,19 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                 (main_list.adapter as MainAdapter).apply {
                     (data as MutableList)[clickPosition] = it!!
                     notifyItemChanged(clickPosition)
+                    clickPosition = -1
                 }
             })
         })
 
         mViewModel.user.observe(this, Observer {
             val headerView = nav_main.getHeaderView(0)
-//            val avatarView = headerView.findViewById<ImageView>(R.id.iv_main_avatar)
+            val avatarView = headerView.findViewById<ImageView>(R.id.iv_main_avatar)
             val nicknameView = headerView.findViewById<TextView>(R.id.tv_main_nickname)
-            // TODO: 登录
-//            nicknameView.text = it.nickname
+            val emailView = headerView.findViewById<TextView>(R.id.tv_main_email)
+            Glide.with(this).load(it.avatar).apply(RequestOptions.circleCropTransform()).into(avatarView)
+            nicknameView.text = it.nickname
+            emailView.text = it.username
         })
         main_activity_camera_fb.setOnClickListener {
             floatingActionsMenu.collapse()
@@ -130,6 +133,11 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         }
         main_me.setOnClickListener {
             main_drawerlayout.openDrawer(START)
+        }
+        main_refresh_layout.setOnRefreshListener {
+            mViewModel.updatePosts(this) {
+                main_refresh_layout.finishRefresh(true)
+            }
         }
     }
 
@@ -177,7 +185,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                 }
                 SUBMIT_CODE -> {
                     if (data?.getBooleanExtra(IS_SUBMITTED, false)!!)
-                        mViewModel.getPosts(this)
+                        mViewModel.updatePosts(this)
                 }
                 else -> {
                 }
@@ -236,15 +244,15 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             nav_main.setNavigationItemSelectedListener {
                 when (it.itemId) {
                     R.id.nav_all -> {
-                        mViewModel.getPosts(this)
+                        mViewModel.updatePosts(this, 0)
                         true
                     }
                     R.id.nav_mine -> {
-                        mViewModel.updateMyPosts()
+                        mViewModel.updatePosts(this, 1)
                         true
                     }
                     R.id.nav_star -> {
-                        mViewModel.updateCollectPosts()
+                        mViewModel.updatePosts(this, 2)
                         true
                     }
                     R.id.nav_logout -> {

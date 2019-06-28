@@ -20,10 +20,7 @@ import com.hustunique.coolface.bean.User
 import com.hustunique.coolface.login.LoginActivity
 import com.hustunique.coolface.picture.PictureActivity
 import com.hustunique.coolface.show.BaseShowFragment
-import com.hustunique.coolface.util.AnimationUtil
-import com.hustunique.coolface.util.DisplayUtil
-import com.hustunique.coolface.util.LiveDataUtil
-import com.hustunique.coolface.util.TextUtil
+import com.hustunique.coolface.util.*
 import com.hustunique.coolface.view.DragCardView
 import com.hustunique.coolface.view.LikeButton
 import kotlinx.android.synthetic.main.base_show_card.*
@@ -68,7 +65,12 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
             LiveDataUtil.useData(it, { post ->
                 this.post = post!!
                 if (!BmobUser.isLogin()) {
-                    startActivity(LoginActivity::class.java)
+                    getOuterActivity().supportStartPostponedEnterTransition()
+                    DialogUtils.showTipDialog(context!!, "您没有登录", "前往登录", {
+                        startActivity(LoginActivity::class.java)
+                    }, "返回", {
+                        getOuterActivity().supportFinishAfterTransition()
+                    })
                     return@useData
                 }
 

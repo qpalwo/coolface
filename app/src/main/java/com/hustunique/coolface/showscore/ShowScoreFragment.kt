@@ -93,9 +93,9 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
                         "no face detected" -> "图片中没有脸"
                         else -> "网络开小差了：$s"
                     }
-                    DialogUtils.showTipDialog(context!!, tip, "确认") {
+                    DialogUtils.showTipDialog(context!!, tip, "确认", {
                         this@ShowScoreFragment.getOuterActivity().finish()
-                    }
+                    })
                     getAnimationBound().pauseAnimation()
                     Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show()
                 })
@@ -113,9 +113,9 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
                     "no face detected" -> "图片中没有脸"
                     else -> "网络开小差了：$s"
                 }
-                DialogUtils.showTipDialog(context!!, tip, "确认") {
+                DialogUtils.showTipDialog(context!!, tip, "确认", {
                     this@ShowScoreFragment.getOuterActivity().finish()
-                }
+                })
                 getAnimationBound().pauseAnimation()
                 Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show()
             })
@@ -154,9 +154,9 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
                 analy_similar_user_name.text = it?.faceOwnerName
                 getAnimationBound().pauseAnimation()
             }, error = { s, d ->
-                DialogUtils.showTipDialog(context!!, "网络开小差了", "确认") {
-                    this@ShowScoreFragment.getOuterActivity().finish()
-                }
+//                DialogUtils.showTipDialog(context!!, "网络开小差了", "确认", {
+//                    this@ShowScoreFragment.getOuterActivity().finish()
+//                })
                 Toast.makeText(context, s, Toast.LENGTH_SHORT).show()
                 getAnimationBound().pauseAnimation()
             })
@@ -174,9 +174,9 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
             }, {
                 progressDialog = DialogUtils.showProgressDialog(context!!)
             }, { s, p ->
-                DialogUtils.showTipDialog(context!!, "网络开小差了", "确认") {
+                DialogUtils.showTipDialog(context!!, "网络开小差了", "确认", {
                     this@ShowScoreFragment.getOuterActivity().finish()
-                }
+                })
             })
         }
         )

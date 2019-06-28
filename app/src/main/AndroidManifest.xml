@@ -26,15 +26,14 @@
         android:usesCleartextTraffic="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".login.ResetActivity"></activity>
-        <activity android:name=".showscore.ShowScoreActivity"></activity>
+        <activity android:name=".login.ResetActivity" />
         <activity android:name=".login.SignupActivity" />
         <activity android:name=".login.LoginActivity" />
         <activity android:name=".main.MainActivity"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -46,7 +45,7 @@
 
         <provider
             android:name="cn.bmob.v3.util.BmobContentProvider"
-            android:authorities="com.hustunique.coolface.BmobContentProvider"></provider>
+            android:authorities="com.hustunique.coolface.BmobContentProvider" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.hustunique.coolface.fileProvider"

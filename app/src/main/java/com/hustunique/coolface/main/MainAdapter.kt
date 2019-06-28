@@ -1,5 +1,6 @@
 package com.hustunique.coolface.main
 
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
@@ -7,7 +8,6 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.PopupMenu
 import android.widget.TextView
-import android.widget.Toast
 import cn.bmob.v3.BmobUser
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
@@ -19,6 +19,7 @@ import com.hustunique.coolface.R
 import com.hustunique.coolface.base.BaseAdapter
 import com.hustunique.coolface.base.ViewHolder
 import com.hustunique.coolface.bean.Post
+import com.hustunique.coolface.login.LoginActivity
 import com.hustunique.coolface.util.AnimationUtil
 import com.hustunique.coolface.util.DialogUtils
 import com.hustunique.coolface.util.TextUtil
@@ -77,9 +78,19 @@ class MainAdapter(val mViewModel: MainViewModel) : BaseAdapter<Post>(R.layout.po
 
         likeButton.onCheckedListener = object : LikeButton.OnCheckedListener {
             override fun onChanged(isChecked: Boolean) {
-                // TODO: 登录逻辑有问题
                 if (!BmobUser.isLogin()) {
-                    Toast.makeText(holder.itemView.context, "请登录", Toast.LENGTH_SHORT).show()
+                    likeButton.setChecked(!isChecked)
+                    DialogUtils.showTipDialog(holder.itemView.context, "您要登录才能点赞哦", "前往登录", {
+                        holder.itemView.context.startActivity(
+                            Intent(
+                                holder.itemView.context,
+                                LoginActivity::class.java
+                            )
+                        )
+                    }, "返回", {
+                        it.doDismiss()
+                    })
+                    return
                 }
 
                 Log.i(TAG, "isChecked: $isChecked | like：$like")
@@ -131,9 +142,9 @@ class MainAdapter(val mViewModel: MainViewModel) : BaseAdapter<Post>(R.layout.po
                             }, {
                                 dialog = DialogUtils.showProgressDialog(holder.itemView.context, "删除中。。。")
                             }, {
-                                dialog = DialogUtils.showTipDialog(holder.itemView.context, "网络开小差了", "确认") {
-                                    dialog?.doDismiss()
-                                }
+                                DialogUtils.showTipDialog(holder.itemView.context, "网络开小差了", "确认", {
+                                    it.doDismiss()
+                                })
                             })
                             true
                         } else {

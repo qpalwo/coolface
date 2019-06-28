@@ -60,4 +60,6 @@ dependencies {
     implementation 'com.github.ctiao:ndkbitmap-x86:0.9.21'
 
     implementation 'com.kongzue.dialog:dialog:2.5.1'
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-28'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-28'
 }

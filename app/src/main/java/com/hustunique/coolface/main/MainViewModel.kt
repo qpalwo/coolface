@@ -47,7 +47,23 @@ class MainViewModel : ViewModel() {
         pictureData.value = Resource.loading()
     }
 
-    fun getPosts(activity: MainActivity) {
+    fun updatePosts(activity: MainActivity, status: Int = this.status, onSuccess: () -> Unit = {}) {
+        when (status) {
+            0 -> {
+                getPosts(activity, onSuccess)
+            }
+            1 -> {
+                updateMyPosts()
+                onSuccess.invoke()
+            }
+            2 -> {
+                updateCollectPosts()
+                onSuccess.invoke()
+            }
+        }
+    }
+
+    private fun getPosts(activity: MainActivity, onSuccess: () -> Unit = {}) {
         status = 0
         postRepo.getPosts(MutableLiveData<Resource<List<Post>>>().apply {
             observe(activity, Observer {
@@ -55,20 +71,23 @@ class MainViewModel : ViewModel() {
                     posts.removeAll(posts)
                     posts.addAll(postsList!!)
                     postsData.postValue(Resource.success(posts))
+                    onSuccess.invoke()
                 })
             })
         })
     }
 
     fun updatePostAt(position: Int) {
-        val targetPostId: String = postsData.value?.data?.get(position)?.objectId!!
-        postRepo.getPost(targetPostId, postData)
+        if (position < postsData.value?.data?.size!!) {
+            val targetPostId: String = postsData.value?.data?.get(position)?.objectId!!
+            postRepo.getPost(targetPostId, postData)
+        }
     }
 
     /**
      * 显示收藏的动态
      */
-    fun updateCollectPosts() {
+    private fun updateCollectPosts() {
         status = 2
         postsData.postValue(Resource.success(
             posts.filter {
@@ -95,7 +114,7 @@ class MainViewModel : ViewModel() {
     /**
      * 显示我的动态
      */
-    fun updateMyPosts() {
+    private fun updateMyPosts() {
         status = 1
         postsData.postValue(Resource.success(posts.filter {
             it.username == BmobUser.getCurrentUser(User::class.java).nickname
