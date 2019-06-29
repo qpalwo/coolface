@@ -96,16 +96,19 @@ class PictureRepo private constructor() {
     }
 
     @SuppressLint("CheckResult")
-    fun mergeFace(templateUrl: String, mergePicture: String, pictureData: MutableLiveData<Resource<String>>) {
+    fun mergeFace(templatePicture: String, mergePicture: String, pictureData: MutableLiveData<Resource<String>>) {
         Single.just(mergePicture)
             .subscribeOn(Schedulers.io())
             .flatMap {
-                val compressedFile = Luban.with(CoolFaceApplication.mApplicationContext)
+                val mergeFile = Luban.with(CoolFaceApplication.mApplicationContext)
                     .load(it)
                     .get()
+                val templateFile = Luban.with(CoolFaceApplication.mApplicationContext)
+                    .load(templatePicture)
+                    .get()
                 facePPService.mergeFace(
-                    templateUrl,
-                    "[upload]${compressedFile[0].absolutePath}",
+                    "[upload]${templateFile[0].absolutePath}",
+                    "[upload]${mergeFile[0].absolutePath}",
                     BeautifyLevel.mergeRate
                 )
             }
