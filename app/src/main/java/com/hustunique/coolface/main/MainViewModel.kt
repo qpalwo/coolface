@@ -151,6 +151,7 @@ class MainViewModel : ViewModel() {
                         }
                     }
                 })
+                user.postValue(it)
             }
         }, onError)
     }

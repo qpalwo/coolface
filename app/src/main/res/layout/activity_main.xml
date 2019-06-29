@@ -32,8 +32,9 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center|start"
-                    android:src="@drawable/ic_me_circle_36dp"
-                    android:tint="#ffffff" />
+                    android:background="@drawable/ic_me_circle_36dp"
+                    android:backgroundTint="#ffffff"
+                    />
 
                 <TextView
                     android:id="@+id/main_title"
@@ -44,6 +45,15 @@
                     android:text="@string/app_name"
                     android:textColor="#ffffff"
                     android:textSize="@dimen/titleText" />
+
+                <ImageView
+                    android:id="@+id/main_rank"
+                    android:layout_gravity="center|end"
+                    android:backgroundTint="@color/colorPrimaryDark"
+                    android:layout_marginEnd="20dp"
+                    android:background="@mipmap/rank"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp" />
             </FrameLayout>
         </androidx.appcompat.widget.Toolbar>
 

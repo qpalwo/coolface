@@ -122,6 +122,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                 val nicknameView = headerView.findViewById<TextView>(R.id.tv_main_nickname)
                 val emailView = headerView.findViewById<TextView>(R.id.tv_main_email)
                 Glide.with(this).load(it.avatar).apply(RequestOptions.circleCropTransform()).into(avatarView)
+                Glide.with(this).load(it.avatar).apply(RequestOptions.circleCropTransform()).into(main_me)
                 nicknameView.text = it.nickname
                 emailView.text = it.username
             }
