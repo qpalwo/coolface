@@ -60,11 +60,8 @@ class PostRepo private constructor() {
         } else {
             callback.value = Resource.loading()
         }
-        facePPService.setAddFace(FacePPConfig.USER_FACE_SET_TOKEN, faceData.face_token)
+        smmsService.upload("[upload]${pictureRepo.beautifiedPicture!!.absolutePath}")
             .subscribeOn(Schedulers.io())
-            .flatMap {
-                smmsService.upload("[upload]${pictureRepo.beautifiedPicture!!.absolutePath}")
-            }
             .flatMap {
                 pictureInfo = it
                 post = Post(
@@ -94,6 +91,9 @@ class PostRepo private constructor() {
                         )
                     )
                 }
+            }
+            .flatMap {
+                facePPService.setAddFace(FacePPConfig.USER_FACE_SET_TOKEN, faceData.face_token)
             }
             .subscribe({
                 callback.postValue(Resource.success(post))
