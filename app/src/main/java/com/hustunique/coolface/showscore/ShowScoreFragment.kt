@@ -17,10 +17,7 @@ import com.hustunique.coolface.bean.Resource
 import com.hustunique.coolface.main.MainActivity
 import com.hustunique.coolface.picture.PictureActivity
 import com.hustunique.coolface.show.BaseShowFragment
-import com.hustunique.coolface.util.DialogUtils
-import com.hustunique.coolface.util.DisplayUtil
-import com.hustunique.coolface.util.LiveDataUtil
-import com.hustunique.coolface.util.TextUtil
+import com.hustunique.coolface.util.*
 import com.kongzue.dialog.v2.CustomDialog
 import kotlinx.android.synthetic.main.fra_analy_result.*
 
@@ -93,7 +90,7 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
                         "no face detected" -> "图片中没有脸"
                         else -> "网络开小差了：$s"
                     }
-                    DialogUtils.showTipDialog(context!!, tip, "确认", {
+                    DialogUtil.showTipDialog(context!!, tip, "确认", {
                         this@ShowScoreFragment.getOuterActivity().finish()
                     })
                     getAnimationBound().pauseAnimation()
@@ -113,7 +110,7 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
                     "no face detected" -> "图片中没有脸"
                     else -> "网络开小差了：$s"
                 }
-                DialogUtils.showTipDialog(context!!, tip, "确认", {
+                DialogUtil.showTipDialog(context!!, tip, "确认", {
                     this@ShowScoreFragment.getOuterActivity().finish()
                 })
                 getAnimationBound().pauseAnimation()
@@ -142,7 +139,7 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
                         .build()
                 )
                 Glide.with(this).load(glideUrl).into(analy_similar_star_image)
-                analy_similar_star_name.text = it?.faceOwnerName
+                analy_similar_star_name.text = it.faceOwnerName
             })
         })
 
@@ -150,11 +147,11 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
             LiveDataUtil.useData(it, {
                 mSimilarUser = it?.faceUrl!!
 
-                Glide.with(this).load(it?.faceUrl).into(analy_similar_user_image)
-                analy_similar_user_name.text = it?.faceOwnerName
+                Glide.with(this).load(it.faceUrl).into(analy_similar_user_image)
+                analy_similar_user_name.text = it.faceOwnerName
                 getAnimationBound().pauseAnimation()
             }, error = { s, d ->
-//                DialogUtils.showTipDialog(context!!, "网络开小差了", "确认", {
+                //                DialogUtil.showTipDialog(context!!, "网络开小差了", "确认", {
 //                    this@ShowScoreFragment.getOuterActivity().finish()
 //                })
                 Toast.makeText(context, s, Toast.LENGTH_SHORT).show()
@@ -172,9 +169,9 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
                 progressDialog?.doDismiss()
                 this@ShowScoreFragment.getOuterActivity().finish()
             }, {
-                progressDialog = DialogUtils.showProgressDialog(context!!)
+                progressDialog = DialogUtil.showProgressDialog(context!!)
             }, { s, p ->
-                DialogUtils.showTipDialog(context!!, "网络开小差了", "确认", {
+                DialogUtil.showTipDialog(context!!, "网络开小差了", "确认", {
                     this@ShowScoreFragment.getOuterActivity().finish()
                 })
             })

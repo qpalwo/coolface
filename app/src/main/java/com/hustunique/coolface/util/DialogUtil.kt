@@ -7,7 +7,7 @@ import android.widget.TextView
 import com.hustunique.coolface.R
 import com.kongzue.dialog.v2.CustomDialog
 
-object DialogUtils {
+object DialogUtil {
 
     fun showProgressDialog(context: Context, message: String = ""): CustomDialog {
         return CustomDialog.show(context, R.layout.dialog_progress) { c, v ->

@@ -46,8 +46,8 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
         getAnimationBound().setPadding(
             80f,
             80f,
-            height / 2 - 1050f,
-            height / 2 - 1050f
+            height / 2 - 950f,
+            height / 2 - 950f
         )
     }
 
@@ -61,90 +61,16 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
         // 先延迟进入的动画，让图片加载完再进来
         getOuterActivity().supportPostponeEnterTransition()
         dmContext = mViewModel.getDmContext()
-        mViewModel.postData.observe(this, Observer {
-            LiveDataUtil.useData(it, { post ->
-                this.post = post!!
-                if (!BmobUser.isLogin()) {
-                    getOuterActivity().supportStartPostponedEnterTransition()
-                    DialogUtils.showTipDialog(context!!, "您没有登录", "前往登录", {
-                        startActivity(LoginActivity::class.java)
-                    }, "返回", {
-                        getOuterActivity().supportFinishAfterTransition()
-                    })
-                    return@useData
-                }
 
-                like = post.likeUser?.contains(BmobUser.getCurrentUser(User::class.java).username) ?: false
-
-                fra_show_likecount.text = post?.likeCount?.toString()
-
-                fra_show_like.setChecked(like)
-
-                fra_show_collect.setChecked(
-                    post.favouriteUser?.contains(BmobUser.getCurrentUser(User::class.java).username) ?: false
-                )
-
-                Glide.with(this).load(post?.faceBean?.faceUrl).addListener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        getOuterActivity().supportStartPostponedEnterTransition()
-                        return true
-                    }
-
-                    override fun onResourceReady(
-                        resource: Drawable?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        dataSource: DataSource?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        // 进入动画开始
-                        getOuterActivity().supportStartPostponedEnterTransition()
-                        return false
-                    }
-                }).into(fra_show_card_image)
-
-                fra_show_card_score.text = post?.face?.attributes?.beauty?.let {
-                    if (it.female_score > it.male_score)
-                        it.female_score.toString()
-                    else
-                        it.male_score.toString()
-                }
-                fra_show_likecount.text = post?.likeCount.toString()
-
-                fra_age.text = post?.face?.attributes?.age?.value?.toString()
-
-                fra_sex.text = post?.face?.attributes?.gender?.value.toString()
-
-                val parser = mViewModel.getParser()
-                fra_show_dm.setCallback(object : DrawHandler.Callback {
-                    override fun drawingFinished() {
-                        if (!fra_show_dm.isPaused)
-                            fra_show_dm.pause()
-                    }
-
-                    override fun danmakuShown(danmaku: BaseDanmaku?) {}
-
-                    override fun updateTimer(timer: DanmakuTimer?) {}
-
-                    override fun prepared() {
-                        post?.comments?.let {
-                            fra_show_dm.start()
-                            showDanmas(it)
-                        }
-                    }
-                })
-                fra_show_dm.prepare(parser, dmContext)
-                fra_show_dm.enableDanmakuDrawingCache(true)
-            })
-        })
-
-
-        TextUtil.setDefaultTypeface(fra_show_card_score, fra_age_tip, fra_age, fra_sex, fra_sex_tip, fra_show_likecount)
+        TextUtil.setDefaultTypeface(
+            fra_show_card_message,
+            fra_show_card_score,
+            fra_age_tip,
+            fra_age,
+            fra_sex,
+            fra_sex_tip,
+            fra_show_likecount
+        )
 
         // 让动画只播放一次
         AnimationUtil.lottiePlayOnce(fra_show_like_ani, fra_show_colle_ani)
@@ -191,6 +117,92 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
                 putString(PictureActivity.PICTURE, post.faceBean.faceUrl)
             }, options.toBundle())
         }
+
+        mViewModel.postData.observe(this, Observer {
+            LiveDataUtil.useData(it, { post ->
+                this.post = post!!
+                if (!BmobUser.isLogin()) {
+                    getOuterActivity().supportStartPostponedEnterTransition()
+                    DialogUtil.showTipDialog(context!!, "您没有登录", "前往登录", {
+                        startActivity(LoginActivity::class.java)
+                    }, "返回", {
+                        getOuterActivity().supportFinishAfterTransition()
+                    })
+                    return@useData
+                }
+
+                like = post.likeUser?.contains(BmobUser.getCurrentUser(User::class.java).username) ?: false
+
+                fra_show_likecount.text = post.likeCount.toString()
+
+                fra_show_like.setChecked(like)
+
+                fra_show_collect.setChecked(
+                    post.favouriteUser?.contains(BmobUser.getCurrentUser(User::class.java).username) ?: false
+                )
+
+                Glide.with(this).load(post.faceBean.faceUrl).addListener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        getOuterActivity().supportStartPostponedEnterTransition()
+                        return true
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        // 进入动画开始
+                        getOuterActivity().supportStartPostponedEnterTransition()
+                        return false
+                    }
+                }).into(fra_show_card_image)
+
+                fra_show_card_score.text = post.face?.attributes?.beauty?.let {
+                    if (it.female_score > it.male_score)
+                        it.female_score.toString()
+                    else
+                        it.male_score.toString()
+                }
+                fra_show_likecount.text = post.likeCount.toString()
+
+                fra_age.text = post.face?.attributes?.age?.value?.toString()
+
+                fra_sex.text = post.face?.attributes?.gender?.value.toString()
+
+                fra_show_card_message.text = post.message
+
+                fra_user_nickname.text = post.username
+
+                val parser = mViewModel.getParser()
+                fra_show_dm.setCallback(object : DrawHandler.Callback {
+                    override fun drawingFinished() {
+                        if (!fra_show_dm.isPaused)
+                            fra_show_dm.pause()
+                    }
+
+                    override fun danmakuShown(danmaku: BaseDanmaku?) {}
+
+                    override fun updateTimer(timer: DanmakuTimer?) {}
+
+                    override fun prepared() {
+                        post.comments?.let {
+                            fra_show_dm.start()
+                            showDanmas(it)
+                        }
+                    }
+                })
+                fra_show_dm.prepare(parser, dmContext)
+                fra_show_dm.enableDanmakuDrawingCache(true)
+            })
+        })
     }
 
     /**

@@ -184,8 +184,6 @@ class BoundAnimationLayout(context: Context?, attrs: AttributeSet?) : LinearLayo
                     }
                 }
 
-
-
         boundAnimation.playTogether(moveAnimator, paintColorAnimator)
     }
 

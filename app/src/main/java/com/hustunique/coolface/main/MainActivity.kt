@@ -27,6 +27,7 @@ import com.hustunique.coolface.base.BaseActivity
 import com.hustunique.coolface.base.ListOnClickListener
 import com.hustunique.coolface.bean.Post
 import com.hustunique.coolface.bean.User
+import com.hustunique.coolface.fusion.FusionFragment
 import com.hustunique.coolface.login.LoginActivity
 import com.hustunique.coolface.main.navigation.NicknameCardFragment
 import com.hustunique.coolface.show.BaseShowCard
@@ -130,6 +131,10 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         main_activity_gallery_fb.setOnClickListener {
             floatingActionsMenu.collapse()
             startGallery()
+        }
+        main_activity_fusion_fb.setOnClickListener {
+            floatingActionsMenu.collapse()
+            BaseShowCard.start(this, FusionFragment())
         }
         main_me.setOnClickListener {
             main_drawerlayout.openDrawer(START)

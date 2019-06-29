@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.PopupMenu
 import android.widget.TextView
 import cn.bmob.v3.BmobUser
 import com.airbnb.lottie.LottieAnimationView
@@ -21,7 +20,8 @@ import com.hustunique.coolface.base.ViewHolder
 import com.hustunique.coolface.bean.Post
 import com.hustunique.coolface.login.LoginActivity
 import com.hustunique.coolface.util.AnimationUtil
-import com.hustunique.coolface.util.DialogUtils
+import com.hustunique.coolface.util.DialogUtil
+import com.hustunique.coolface.util.PopMenuUtil
 import com.hustunique.coolface.util.TextUtil
 import com.hustunique.coolface.view.LikeButton
 import com.kongzue.dialog.v2.CustomDialog
@@ -80,7 +80,7 @@ class MainAdapter(val mViewModel: MainViewModel) : BaseAdapter<Post>(R.layout.po
             override fun onChanged(isChecked: Boolean) {
                 if (!BmobUser.isLogin()) {
                     likeButton.setChecked(!isChecked)
-                    DialogUtils.showTipDialog(holder.itemView.context, "您要登录才能点赞哦", "前往登录", {
+                    DialogUtil.showTipDialog(holder.itemView.context, "您要登录才能点赞哦", "前往登录", {
                         holder.itemView.context.startActivity(
                             Intent(
                                 holder.itemView.context,
@@ -131,27 +131,24 @@ class MainAdapter(val mViewModel: MainViewModel) : BaseAdapter<Post>(R.layout.po
         holder.itemView.apply {
             setOnLongClickListener {
                 if (mViewModel.status == 1) {
-                    val popMenu = PopupMenu(holder.itemView.context, holder.itemView)
-                    popMenu.menuInflater.inflate(R.menu.pop_delete, popMenu.menu)
-                    popMenu.show()
                     var dialog: CustomDialog? = null
-                    popMenu.setOnMenuItemClickListener {
-                        return@setOnMenuItemClickListener if (it.title == "删除") {
-                            mViewModel.deleteAt(position, {
-                                dialog?.doDismiss()
-                            }, {
-                                dialog = DialogUtils.showProgressDialog(holder.itemView.context, "删除中。。。")
-                            }, {
-                                DialogUtils.showTipDialog(holder.itemView.context, "网络开小差了", "确认", {
-                                    it.doDismiss()
+                    PopMenuUtil.pop(holder.itemView.context, holder.itemView, R.menu.pop_delete)
+                        .setOnMenuItemClickListener {
+                            return@setOnMenuItemClickListener if (it.title == "删除") {
+                                mViewModel.deleteAt(position, {
+                                    dialog?.doDismiss()
+                                }, {
+                                    dialog = DialogUtil.showProgressDialog(holder.itemView.context, "删除中。。。")
+                                }, {
+                                    DialogUtil.showTipDialog(holder.itemView.context, "网络开小差了", "确认", {
+                                        it.doDismiss()
+                                    })
                                 })
-                            })
-                            true
-                        } else {
-                            false
+                                true
+                            } else {
+                                false
+                            }
                         }
-
-                    }
                     return@setOnLongClickListener true
                 }
                 return@setOnLongClickListener false
