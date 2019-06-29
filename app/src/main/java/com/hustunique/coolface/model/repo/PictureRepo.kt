@@ -7,6 +7,7 @@ import com.hustunique.coolface.bean.Resource
 import com.hustunique.coolface.model.remote.RetrofitService
 import com.hustunique.coolface.model.remote.bean.bmob.BmobSimilarFaceReturn
 import com.hustunique.coolface.model.remote.bean.facepp.Face
+import com.hustunique.coolface.model.remote.bean.facepp.FacePPMergeReturn
 import com.hustunique.coolface.model.remote.bean.facepp.FacePPSearchSimilarReturn
 import com.hustunique.coolface.model.remote.bean.facepp.SimilarFaceInfo
 import com.hustunique.coolface.model.remote.config.BeautifyLevel
@@ -23,8 +24,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import okio.buffer
 import okio.sink
+import retrofit2.HttpException
 import top.zibin.luban.Luban
 import java.io.File
+import java.nio.charset.Charset
 import java.util.*
 
 /**
@@ -128,6 +131,9 @@ class PictureRepo private constructor() {
                 }
             }, {
                 pictureData.postValue(Resource.error("merge error"))
+                val a = it as HttpException
+                val b = a.response().errorBody()?.source()?.readString(Charsets.UTF_8)
+                val c = 0
             })
     }
 

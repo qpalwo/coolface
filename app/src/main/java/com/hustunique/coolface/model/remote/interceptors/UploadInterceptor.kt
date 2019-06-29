@@ -14,19 +14,19 @@ class UploadInterceptor : Interceptor {
             return chain.proceed(chain.request())
         }
         val oldBody = request.body() as FormBody
-        var upload = -1
+        var upload = ArrayList<Int>()
         for (i in 0 until oldBody.size()) {
             if (oldBody.value(i).contains("[upload]"))
-                upload = i
+                upload.add(i)
         }
-        if (upload < 0)
+        if (upload.size == 0)
             return chain.proceed(chain.request())
         val requestBuilder = request.newBuilder()
         val multipartBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
 
         for (i in 0 until oldBody.size()) {
-            if (i != upload) {
+            if (!upload.contains(i)) {
                 multipartBody.addFormDataPart(oldBody.encodedName(i), oldBody.value(i))
                 continue
             }
