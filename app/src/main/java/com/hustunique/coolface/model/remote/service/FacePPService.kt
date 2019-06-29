@@ -57,7 +57,7 @@ interface FacePPService {
     @POST(NetConfig.FACEPP_MEtHOD_MERGE)
     @FormUrlEncoded
     fun mergeFace(
-        @Field("template_url") templatePicture: String,
+        @Field("template_file") templatePicture: String,
         @Field("merge_file") mergePicture: String,
         @Field("merge_rate") mergeRate: Int
     ): Single<FacePPMergeReturn>
