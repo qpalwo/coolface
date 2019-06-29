@@ -1,26 +1,28 @@
 package com.hustunique.coolface.fusion
 
 import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.animation.ValueAnimator.INFINITE
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Point
 import android.net.Uri
 import android.provider.MediaStore
 import android.view.View
-import android.view.View.GONE
-import android.view.View.INVISIBLE
+import android.view.View.*
 import android.widget.Button
 import androidx.core.content.FileProvider
 import androidx.core.view.children
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.hustunique.coolface.R
 import com.hustunique.coolface.model.repo.PictureRepo
 import com.hustunique.coolface.show.BaseShowFragment
 import com.hustunique.coolface.util.FileUtil
+import com.hustunique.coolface.util.LiveDataUtil
 import kotlinx.android.synthetic.main.fra_fusion.*
 import java.io.File
 
@@ -42,6 +44,10 @@ class FusionFragment : BaseShowFragment(R.layout.fra_fusion, FusionViewModel::cl
     private var fusionImageCroppedUri = ""
 
     private var animationSet: AnimatorSet = AnimatorSet()
+    private var resultShowAnimator: AnimatorSet? = null
+
+    private val fusionImageStartPoint: Point = Point()
+    private val templateImageStartPoint: Point = Point()
 
     private lateinit var mViewModel: FusionViewModel
     override fun init() {
@@ -51,6 +57,16 @@ class FusionFragment : BaseShowFragment(R.layout.fra_fusion, FusionViewModel::cl
 
     override fun initView(view: View) {
         super.initView(view)
+        fusionImageStartPoint.x = fusion_fusion_image.x.toInt()
+        fusionImageStartPoint.y = fusion_fusion_image.y.toInt()
+        templateImageStartPoint.x = fusion_template_image.x.toInt()
+        templateImageStartPoint.y = fusion_template_image.y.toInt()
+
+
+    }
+
+    override fun initContact(context: Context?) {
+        super.initContact(context)
         fusion_template_tip.setOnClickListener {
             val bottomDialog = BottomSheetDialog(context!!)
             val bottomDialogView = layoutInflater.inflate(R.layout.bottom_sheet_dialog, null)
@@ -86,11 +102,25 @@ class FusionFragment : BaseShowFragment(R.layout.fra_fusion, FusionViewModel::cl
         }
 
         fusion_confirm.setOnClickListener {
-            fusion()
+            fusion {
+                mViewModel.mergeFace(templateImageFile!!, fusionImageFile!!)
+            }
         }
+
+        mViewModel.mergeResult.observe(this, Observer {
+            LiveDataUtil.useData(it, {
+                showResult(it!!)
+            }, error = { s, d ->
+                toast(s!!)
+            })
+        })
     }
 
-    private fun fusion() {
+    /**
+     * 传入的是开始融合的表达式
+     *
+     */
+    private fun fusion(startMerge: () -> Unit) {
         val targetX = fusion_result_image.x + 36
         val targetY = fusion_result_image.y + 64
         fusion_template_tip.visibility = INVISIBLE
@@ -99,9 +129,6 @@ class FusionFragment : BaseShowFragment(R.layout.fra_fusion, FusionViewModel::cl
             ValueAnimator.ofFloat(fusion_fusion_image.x, targetX).apply {
                 duration = 1500
                 addUpdateListener {
-                    if (it.currentPlayTime == 0L) {
-                        // TODO: 开始融合
-                    }
                     fusion_fusion_image.x = it.animatedValue as Float
                 }
             }
@@ -138,16 +165,11 @@ class FusionFragment : BaseShowFragment(R.layout.fra_fusion, FusionViewModel::cl
             duration = 1500
             repeatCount = INFINITE
             addUpdateListener {
+                if (it.currentPlayTime == 0L) {
+                    startMerge.invoke()
+                }
                 fusion_template_image.rotation = it.animatedValue as Float
                 fusion_fusion_image.rotation = -(it.animatedValue as Float)
-            }
-        }
-
-        val alphaAnimator = ValueAnimator.ofFloat(1f, 0f).apply {
-            duration = 1500
-            addUpdateListener {
-                fusion_template_image.alpha = it.animatedValue as Float
-                fusion_fusion_image.alpha = it.animatedValue as Float
             }
         }
 
@@ -168,6 +190,58 @@ class FusionFragment : BaseShowFragment(R.layout.fra_fusion, FusionViewModel::cl
             )
             start()
         }
+
+        if (resultShowAnimator == null) {
+            resultShowAnimator = AnimatorSet()
+
+            val fusionImageDisappearAnimator = ValueAnimator.ofFloat(1f, 0f).apply {
+                duration = 1500
+                addUpdateListener {
+                    fusion_template_image.alpha = it.animatedValue as Float
+                    fusion_fusion_image.alpha = it.animatedValue as Float
+                }
+            }
+
+            val resultAppearAnimator = ValueAnimator.ofFloat(fusion_result_image.alpha, 1f).apply {
+                duration = 1500
+                addUpdateListener {
+                    fusion_result_image.alpha = it.animatedValue as Float
+                }
+            }
+
+            val resultShowAndFusionMiss = AnimatorSet().apply {
+                playTogether(fusionImageDisappearAnimator, resultAppearAnimator)
+            }
+
+            val fusionImageAppearAnimator = ValueAnimator.ofFloat(0f, 1f).apply {
+                duration = 1500
+                addUpdateListener {
+                    fusion_template_image.alpha = it.animatedValue as Float
+                    fusion_fusion_image.alpha = it.animatedValue as Float
+                }
+            }
+
+            (resultShowAnimator as AnimatorSet).apply {
+                playSequentially(resultShowAndFusionMiss, fusionImageAppearAnimator)
+            }
+        }
+    }
+
+    private fun showResult(resultUrl: String) {
+        animationSet.pause()
+        fusion_template_image.apply {
+            rotation = 0f
+            x = templateImageStartPoint.x.toFloat()
+            y = templateImageStartPoint.y.toFloat()
+            visibility = VISIBLE
+        }
+        fusion_fusion_image.apply {
+            rotation = 0f
+            x = fusionImageStartPoint.x.toFloat()
+            y = fusionImageStartPoint.y.toFloat()
+            visibility = VISIBLE
+        }
+        Glide.with(this).load(resultUrl).into(fusion_result_image)
     }
 
     override fun onDestroyView() {
@@ -178,11 +252,7 @@ class FusionFragment : BaseShowFragment(R.layout.fra_fusion, FusionViewModel::cl
     private fun startCamera() {
         val requestCode = CAMERA_CODE
         val file = mViewModel.getNewPictureFile()
-        if (clickPosition == TEMPLATE_CODE) {
-            templateImageFile = file!!
-        } else if (clickPosition == FUSION_CODE) {
-            fusionImageFile = file!!
-        }
+
         file.let {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION +
@@ -247,17 +317,23 @@ class FusionFragment : BaseShowFragment(R.layout.fra_fusion, FusionViewModel::cl
                     }
                 }
                 CROP_CODE -> {
-                    Glide.with(this).load(PictureRepo.getInstance().getFile()).into(
+                    val file = PictureRepo.getInstance().getFile()
+                    if (clickPosition == TEMPLATE_CODE) {
+                        templateImageFile = file!!
+                    } else if (clickPosition == FUSION_CODE) {
+                        fusionImageFile = file!!
+                    }
+                    Glide.with(this).load(file).into(
                         when (clickPosition) {
                             TEMPLATE_CODE -> {
-                                templateImageCroppedUri = PictureRepo.getInstance().getFile()!!.absolutePath
+                                templateImageCroppedUri = file!!.absolutePath
                                 fusion_template_tip.children.forEach {
                                     it.visibility = GONE
                                 }
                                 fusion_template_image
                             }
                             FUSION_CODE -> {
-                                fusionImageCroppedUri = PictureRepo.getInstance().getFile()!!.absolutePath
+                                fusionImageCroppedUri = file!!.absolutePath
                                 fusion_fusion_tip.children.forEach {
                                     it.visibility = GONE
                                 }

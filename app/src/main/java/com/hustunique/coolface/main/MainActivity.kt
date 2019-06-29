@@ -116,13 +116,15 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         })
 
         mViewModel.user.observe(this, Observer {
-            val headerView = nav_main.getHeaderView(0)
-            val avatarView = headerView.findViewById<ImageView>(R.id.iv_main_avatar)
-            val nicknameView = headerView.findViewById<TextView>(R.id.tv_main_nickname)
-            val emailView = headerView.findViewById<TextView>(R.id.tv_main_email)
-            Glide.with(this).load(it.avatar).apply(RequestOptions.circleCropTransform()).into(avatarView)
-            nicknameView.text = it.nickname
-            emailView.text = it.username
+            if (it != null) {
+                val headerView = nav_main.getHeaderView(0)
+                val avatarView = headerView.findViewById<ImageView>(R.id.iv_main_avatar)
+                val nicknameView = headerView.findViewById<TextView>(R.id.tv_main_nickname)
+                val emailView = headerView.findViewById<TextView>(R.id.tv_main_email)
+                Glide.with(this).load(it.avatar).apply(RequestOptions.circleCropTransform()).into(avatarView)
+                nicknameView.text = it.nickname
+                emailView.text = it.username
+            }
         })
         main_activity_camera_fb.setOnClickListener {
             floatingActionsMenu.collapse()
