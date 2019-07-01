@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/analy_myimage"
@@ -11,9 +11,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:minHeight="350dp"
-        android:transitionName="@string/image_shared"
         android:scaleType="fitCenter"
         android:src="@color/colorAccent2"
+        android:transitionName="@string/image_shared"
         app:layout_constraintEnd_toStartOf="@+id/analy_similar_star_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -36,8 +36,8 @@
         android:layout_height="0dp"
         android:layout_margin="4dp"
         android:layout_marginTop="8dp"
-        android:transitionName="@string/image_shared"
         android:src="@color/colorAccent"
+        android:transitionName="@string/image_shared"
         app:layout_constraintBottom_toTopOf="@+id/analy_similar_user_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/analy_myimage"
@@ -47,8 +47,8 @@
         android:id="@+id/analy_similar_star_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="25dp"
         android:textColor="@color/colorAccent"
+        android:textSize="25dp"
         app:layout_constraintBottom_toBottomOf="@+id/analy_similar_star_image"
         app:layout_constraintEnd_toEndOf="@+id/analy_similar_star_image"
         app:layout_constraintStart_toStartOf="@+id/analy_similar_star_image"
@@ -91,8 +91,8 @@
         android:id="@+id/analy_similar_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="25dp"
         android:textColor="@color/colorAccent"
+        android:textSize="25dp"
         app:layout_constraintBottom_toBottomOf="@+id/analy_similar_user_image"
         app:layout_constraintEnd_toEndOf="@+id/analy_similar_user_image"
         app:layout_constraintStart_toStartOf="@+id/analy_similar_user_image"
@@ -104,41 +104,26 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:hint="说点什么吧"
         android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/analy_submit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/analy_tip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="脸色不好～注意休息哦"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="25dp"
-        app:layout_constraintBottom_toTopOf="@+id/analy_gender_tip"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/analy_myimage" />
+        app:layout_constraintTop_toBottomOf="@+id/analy_glass_tip" />
 
     <ImageView
         android:id="@+id/analy_gender_tip"
         android:layout_width="36dp"
         android:layout_height="36dp"
+        android:layout_marginTop="24dp"
         android:src="@mipmap/ic_gender"
         android:tint="@color/colorPrimary"
-        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toStartOf="@+id/analy_gender"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintTop_toBottomOf="@id/analy_tip"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/analy_myimage"
         tools:layout_editor_absoluteY="405dp" />
 
     <TextView
@@ -146,10 +131,10 @@
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:text="Loading"
         android:textColor="@color/colorPrimary"
         android:textSize="25dp"
-        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/analy_gender_tip"
         app:layout_constraintEnd_toStartOf="@id/analy_emotion_tip"
         app:layout_constraintStart_toEndOf="@+id/analy_gender_tip"
@@ -201,10 +186,10 @@
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:text="Loading"
         android:textColor="@color/colorPrimary"
         android:textSize="25dp"
-        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/analy_age_tip"
         app:layout_constraintEnd_toStartOf="@id/analy_ethnicity_tip"
         app:layout_constraintHorizontal_bias="0.5"
@@ -244,26 +229,23 @@
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:src="@mipmap/ic_glass"
         android:tint="@color/colorPrimary"
-        app:layout_constraintBottom_toTopOf="@+id/analy_post_message"
         app:layout_constraintEnd_toStartOf="@+id/analy_glass"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/analy_age"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/analy_age" />
 
     <TextView
         android:id="@+id/analy_glass"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:text="Loading"
         android:textColor="@color/colorPrimary"
         android:textSize="25dp"
-        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/analy_glass_tip"
         app:layout_constraintEnd_toStartOf="@id/analy_mouthstatus_tip"
         app:layout_constraintHorizontal_bias="0.5"
@@ -298,20 +280,19 @@
         app:layout_constraintTop_toTopOf="@+id/analy_mouthstatus_tip" />
 
 
-
     <Button
         android:id="@+id/analy_submit"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginHorizontal="10dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:backgroundTint="@color/colorAccent"
         android:text="提  交"
         android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/analy_post_message" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

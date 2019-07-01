@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
+    android:transitionName="@string/image_shared"
     android:orientation="vertical"
     app:cardCornerRadius="10dp">
 
@@ -20,7 +21,7 @@
             android:adjustViewBounds="true"
             android:minHeight="300dp"
             android:src="@drawable/ic_me_circle_36dp"
-            android:transitionName="@string/image_shared"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

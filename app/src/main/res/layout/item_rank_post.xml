@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_rank_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
+    android:transitionName="@string/image_shared"
     app:cardCornerRadius="16dp"
     app:cardElevation="16dp">
 
@@ -13,8 +15,8 @@
 
         <ImageView
             android:id="@+id/item_rank_image"
-            android:layout_width="130dp"
-            android:layout_height="200dp"
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
             android:layout_margin="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -22,23 +24,26 @@
 
         <ImageView
             android:id="@+id/item_rank_pk"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp"
             android:src="@mipmap/text_pk"
-            app:layout_constraintBottom_toBottomOf="@+id/item_rank_image"
-            app:layout_constraintStart_toStartOf="@+id/item_rank_image" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:text="No."
             android:textSize="35dp"
+            android:textColor="@color/colorPrimaryDark"
             app:layout_constraintEnd_toStartOf="@+id/item_rank_rank"
             app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@id/item_rank_image"
             app:layout_constraintTop_toTopOf="@+id/item_rank_image" />
 
@@ -48,9 +53,8 @@
             android:layout_height="wrap_content"
             android:text="1"
             android:textSize="35dp"
+            android:textColor="@color/colorPrimaryDark"
             app:layout_constraintBottom_toBottomOf="@+id/textView"
-            app:layout_constraintEnd_toStartOf="@+id/textView"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/textView"
             app:layout_constraintTop_toTopOf="@+id/textView" />
 
@@ -60,25 +64,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="Loading。。。"
-            android:textSize="25dp"
-            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            android:text="Loading"
+            android:textSize="40dp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintBottom_toTopOf="@+id/item_rank_username"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/item_rank_rank"
-            app:layout_constraintTop_toTopOf="@+id/textView" />
-
-        <TextView
-            android:id="@+id/item_rank_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:maxLines="3"
-            android:text="Loading。。。"
-            android:textSize="25dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/item_rank_image"
+            app:layout_constraintStart_toEndOf="@id/item_rank_image"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <TextView
@@ -86,15 +77,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:text="Loading。。。"
             android:textSize="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/item_rank_image"
-            app:layout_constraintTop_toBottomOf="@+id/item_rank_message" />
+            app:layout_constraintBottom_toBottomOf="@id/item_rank_image"
+            app:layout_constraintStart_toEndOf="@+id/item_rank_image" />
 
         <com.hustunique.coolface.view.LikeButton
             android:id="@+id/item_rank_button"
@@ -102,9 +89,9 @@
             android:layout_height="40dp"
             android:layout_marginEnd="8dp"
             app:accentColor="@color/colorPrimaryDark"
-            app:layout_constraintBottom_toBottomOf="@+id/item_rank_likecount"
+            app:layout_constraintBottom_toBottomOf="@+id/item_rank_username"
             app:layout_constraintEnd_toStartOf="@+id/item_rank_likecount"
-            app:layout_constraintTop_toTopOf="@+id/item_rank_likecount"
+            app:layout_constraintTop_toTopOf="@+id/item_rank_username"
             app:ltheme="heart" />
 
         <TextView
@@ -112,20 +99,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
             android:text="0"
             android:textSize="26dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/item_rank_button"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_rank_username" />
+            app:layout_constraintTop_toTopOf="@id/item_rank_button" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/item_rank_like_ani"
-        android:visibility="gone"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_gravity="center"
+        android:visibility="gone"
         app:lottie_fileName="like.json" />
 </androidx.cardview.widget.CardView>

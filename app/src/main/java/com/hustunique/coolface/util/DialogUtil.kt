@@ -15,6 +15,7 @@ object DialogUtil {
                 v.findViewById<TextView>(R.id.dialog_progress_message).apply {
                     visibility = View.VISIBLE
                     text = message
+                    TextUtil.setDefaultTypeface(this)
                 }
             } else {
                 v.findViewById<TextView>(R.id.dialog_progress_message).visibility = View.GONE
@@ -31,7 +32,10 @@ object DialogUtil {
         secondClickListener: (CustomDialog) -> (Unit) = {}
     ): CustomDialog {
         return CustomDialog.show(context, R.layout.dialog_onetext) { c, v ->
-            v.findViewById<TextView>(R.id.dialog_one_textview).text = tip
+            v.findViewById<TextView>(R.id.dialog_one_textview).apply {
+                text = tip
+                TextUtil.setDefaultTypeface(this)
+            }
             v.findViewById<Button>(R.id.dialog_first_button).apply {
                 text = firstButtonText
                 setOnClickListener {

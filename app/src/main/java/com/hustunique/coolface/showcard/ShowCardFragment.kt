@@ -44,8 +44,8 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
         mViewModel = viewModel as ShowCardViewModel
         val height = DisplayUtil.getHeight(getOuterActivity())
         getAnimationBound().setPadding(
-            80f,
-            80f,
+            70f,
+            70f,
             height / 2 - 950f,
             height / 2 - 950f
         )
@@ -178,6 +178,51 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
                 fra_age.text = post.face?.attributes?.age?.value?.toString()
 
                 fra_gender.text = post.face?.attributes?.gender?.value.toString()
+
+                fra_ethnicity.text = post.face?.attributes!!.ethnicity.value
+
+                fra_glass.text = post.face?.attributes!!.glass.value
+
+                fra_mouthstatus.text = post.face?.attributes!!.mouthstatus.let {
+                    when (listOf(it.close, it.open, it.surgical_mask_or_respirator, it.other_occlusion).let {
+                        it.indexOf(it.max())
+                    }) {
+                        0 -> {
+                            "Close"
+                        }
+                        1 -> {
+                            "Open"
+                        }
+                        2 -> {
+                            "Mask"
+                        }
+                        else -> {
+                            "Other"
+                        }
+                    }
+                }
+
+                fra_emotion.text = post.face?.attributes!!.emotion.let {
+                    when (listOf(
+                        it.anger,
+                        it.disgust,
+                        it.fear,
+                        it.happiness,
+                        it.neutral,
+                        it.sadness,
+                        it.surprise
+                    ).toMutableList().let {
+                        it.indexOf(it.max())
+                    }) {
+                        0 -> "Angry"
+                        1 -> "Disgusted"
+                        2 -> "Scared"
+                        3 -> "Happy"
+                        5 -> "Sad"
+                        6 -> "Surprise"
+                        else -> "Neutral"
+                    }
+                }
 
                 fra_show_card_message.text = post.message
 

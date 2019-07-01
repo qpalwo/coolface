@@ -19,7 +19,9 @@ import com.hustunique.coolface.picture.PictureActivity
 import com.hustunique.coolface.show.BaseShowFragment
 import com.hustunique.coolface.util.*
 import com.kongzue.dialog.v2.CustomDialog
+import kotlinx.android.synthetic.main.base_show_card.*
 import kotlinx.android.synthetic.main.fra_analy_result.*
+import kotlinx.android.synthetic.main.fra_show_card.*
 
 class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreViewModel::class.java) {
     private lateinit var mViewModel: ShowScoreViewModel
@@ -43,7 +45,6 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
     override fun initView(view: View) {
         super.initView(view)
         TextUtil.setDefaultTypeface(
-            analy_tip,
             analy_gender,
             analy_age,
             analy_similar_star_name,
@@ -105,6 +106,50 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
                 analy_score.text = it?.attributes?.beauty?.male_score?.toString()
                 analy_gender.text = it?.attributes?.gender?.value
                 analy_age.text = it?.attributes?.age?.value.toString()
+                analy_ethnicity.text = it?.attributes!!.ethnicity.value
+
+                analy_glass.text = it?.attributes!!.glass.value
+
+                analy_mouthstatus.text = it?.attributes!!.mouthstatus.let {
+                    when (listOf(it.close, it.open, it.surgical_mask_or_respirator, it.other_occlusion).let {
+                        it.indexOf(it.max())
+                    }) {
+                        0 -> {
+                            "Close"
+                        }
+                        1 -> {
+                            "Open"
+                        }
+                        2 -> {
+                            "Mask"
+                        }
+                        else -> {
+                            "Other"
+                        }
+                    }
+                }
+
+                analy_emotion.text = it?.attributes!!.emotion.let {
+                    when (listOf(
+                        it.anger,
+                        it.disgust,
+                        it.fear,
+                        it.happiness,
+                        it.neutral,
+                        it.sadness,
+                        it.surprise
+                    ).toMutableList().let {
+                        it.indexOf(it.max())
+                    }) {
+                        0 -> "Angry"
+                        1 -> "Disgusted"
+                        2 -> "Scared"
+                        3 -> "Happy"
+                        5 -> "Sad"
+                        6 -> "Surprise"
+                        else -> "Neutral"
+                    }
+                }
                 mViewModel.similar()
             }, error = { s, face ->
                 val tip: String = when (s) {
@@ -195,11 +240,12 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
 
     private fun showProgress() {
         val height = DisplayUtil.getHeight(getOuterActivity())
+        val marginVer = (height - 2200) / 2.toFloat()
         getAnimationBound().setPadding(
-            80f,
-            80f,
-            height / 2 - 1040f,
-            height / 2 - 1040f
+            60f,
+            60f,
+            marginVer,
+            marginVer
         )
         getAnimationBound().isLoop = true
         getAnimationBound().playAnimation()

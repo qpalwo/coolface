@@ -9,6 +9,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.app.ActivityOptionsCompat
 import cn.bmob.v3.BmobUser
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
@@ -135,21 +136,41 @@ class MainAdapter(val mViewModel: MainViewModel, data: List<Post>? = null) :
         }
 
         pk.setOnClickListener {
-            BaseShowCard.start(
-                holder.itemView.context as BaseActivity,
-                PkFragment(),
-                Bundle().apply {
-                    putSerializable(
-                        holder.itemView.context.getString(R.string.post),
-                        this@MainAdapter.data!![position]
+            if (!BmobUser.isLogin()) {
+                DialogUtil.showTipDialog(holder.itemView.context, "您要登录才能点赞哦", "前往登录", {
+                    holder.itemView.context.startActivity(
+                        Intent(
+                            holder.itemView.context,
+                            LoginActivity::class.java
+                        )
                     )
+                }, "返回", {
+                    it.doDismiss()
                 })
+            } else {
+                val options =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        holder.itemView.context as MainActivity,
+                        sharedWeights[position],
+                        holder.itemView.context!!.getString(R.string.image_shared)
+                    )
+                BaseShowCard.start(
+                    holder.itemView.context as BaseActivity,
+                    PkFragment(),
+                    Bundle().apply {
+                        putSerializable(
+                            holder.itemView.context.getString(R.string.post),
+                            this@MainAdapter.data!![position]
+                        )
+                    }, options.toBundle(), MainActivity.PK_POST
+                )
+            }
         }
 
         if (sharedWeights.size > position)
-            sharedWeights[position] = holder.itemView
+            sharedWeights[position] = holder.getView(R.id.post_card)
         else
-            sharedWeights.add(holder.itemView)
+            sharedWeights.add(holder.getView(R.id.post_card))
 
         // 设置长按删除
         holder.itemView.apply {

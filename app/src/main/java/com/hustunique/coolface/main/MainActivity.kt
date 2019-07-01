@@ -52,6 +52,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
 
     companion object {
         val IS_SUBMITTED = "is_submitted"
+        val PK_POST = 1010
     }
 
     private var scoreWillShow = true
@@ -239,26 +240,15 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                     if (data?.getBooleanExtra(IS_SUBMITTED, false)!!)
                         mViewModel.updatePosts(this)
                 }
+                PK_POST -> {
+                    BaseShowCard.start(this, ShowScoreFragment(), requestCode = SUBMIT_CODE)
+                }
                 else -> {
                 }
             }
         }
     }
 
-    private fun startCamera() {
-        val file = mViewModel.getNewPictureFile()
-        file?.let {
-            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION +
-                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-            val imgUri = FileProvider.getUriForFile(this, FileUtil.FILE_PROVIDER_AUTHORITY, it)
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri)
-            intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString())
-            intent.resolveActivity(packageManager)?.let {
-                startActivityForResult(intent, CAMERA_CODE)
-            }
-        }
-    }
 
     @SuppressLint("InflateParams")
     private fun initDrawer() {
@@ -330,6 +320,22 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             }
         }
     }
+
+    private fun startCamera() {
+        val file = mViewModel.getNewPictureFile()
+        file?.let {
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION +
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            val imgUri = FileProvider.getUriForFile(this, FileUtil.FILE_PROVIDER_AUTHORITY, it)
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri)
+            intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString())
+            intent.resolveActivity(packageManager)?.let {
+                startActivityForResult(intent, CAMERA_CODE)
+            }
+        }
+    }
+
 
     private fun startGallery() {
         val intent = Intent(Intent.ACTION_PICK)

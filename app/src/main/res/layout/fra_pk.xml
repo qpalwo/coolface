@@ -23,7 +23,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imageView4"
+                android:id="@+id/pk_opponent_image"
                 android:layout_width="180dp"
                 android:layout_height="250dp"
                 android:layout_marginStart="16dp"
@@ -37,10 +37,11 @@
                 android:layout_height="50dp"
                 android:gravity="center"
                 android:text="username"
-                android:textSize="20dp"
+                android:textSize="30dp"
+                android:textColor="@color/colorPrimaryDark"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView4"
-                app:layout_constraintTop_toTopOf="@+id/imageView4" />
+                app:layout_constraintStart_toEndOf="@+id/pk_opponent_image"
+                app:layout_constraintTop_toTopOf="@+id/pk_opponent_image" />
 
             <TextView
                 android:id="@+id/pk_opponent_score"
@@ -51,10 +52,11 @@
                 android:layout_marginBottom="8dp"
                 android:gravity="center"
                 android:text="0"
-                android:textSize="120dp"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+                android:textSize="100dp"
+                android:textColor="@color/colorAccent2"
+                app:layout_constraintBottom_toBottomOf="@+id/pk_opponent_image"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView4"
+                app:layout_constraintStart_toEndOf="@+id/pk_opponent_image"
                 app:layout_constraintTop_toBottomOf="@+id/pk_opponent_username" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -100,6 +102,11 @@
             android:background="#ffffff"
             android:src="@mipmap/ic_pk" />
     </androidx.cardview.widget.CardView>
+    <com.hustunique.coolface.view.BoundAnimationLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </com.hustunique.coolface.view.BoundAnimationLayout>
+
 
     <androidx.cardview.widget.CardView
         android:id="@+id/pk_mine_card"
@@ -120,8 +127,8 @@
 
             <ImageView
                 android:id="@+id/pk_mine_image"
-                android:layout_width="180dp"
-                android:layout_height="250dp"
+                android:layout_width="185dp"
+                android:layout_height="255dp"
                 android:layout_margin="8dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/fusion_background"
@@ -165,9 +172,10 @@
                 android:layout_height="50dp"
                 android:gravity="center"
                 android:text="My Username"
-                android:textSize="20dp"
+                android:textSize="30dp"
+                android:textColor="@color/colorPrimaryDark"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/pk_tip"
+                app:layout_constraintStart_toEndOf="@+id/pk_mine_image"
                 app:layout_constraintTop_toTopOf="@id/pk_mine_image" />
 
             <TextView
@@ -178,10 +186,11 @@
                 android:layout_marginBottom="8dp"
                 android:gravity="center"
                 android:text="0"
-                android:textSize="120dp"
+                android:textSize="100dp"
+                android:textColor="@color/colorAccent2"
                 app:layout_constraintBottom_toBottomOf="@id/pk_mine_image"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/pk_tip"
+                app:layout_constraintStart_toEndOf="@+id/pk_mine_image"
                 app:layout_constraintTop_toBottomOf="@+id/pk_mine_username" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -216,6 +225,7 @@
         android:layout_marginEnd="8dp"
         android:text="上传"
         android:textColor="#ffffff"
+        android:enabled="false"
         android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
