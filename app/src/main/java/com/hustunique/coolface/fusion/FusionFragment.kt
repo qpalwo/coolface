@@ -267,6 +267,7 @@ class FusionFragment : BaseShowFragment(R.layout.fra_fusion, FusionViewModel::cl
 
     private fun showResult(resultUrl: String) {
         animationSet.pause()
+        
         fusion_template_image.apply {
             rotation = 0f
             x = templateImageStartPoint?.x!!.toFloat()
