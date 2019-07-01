@@ -1,6 +1,7 @@
 package com.hustunique.coolface.util
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.media.MediaScannerConnection
 import android.provider.MediaStore
 import com.hustunique.coolface.base.CoolFaceApplication
@@ -54,7 +55,7 @@ object FileUtil {
                 CoolFaceApplication.mApplicationContext.contentResolver,
                 inPut.absolutePath,
                 inPut.name,
-                null
+                "file"
             )
             MediaScannerConnection
                 .scanFile(
@@ -63,9 +64,34 @@ object FileUtil {
                     arrayOf("image/jpeg")
                 ) { p, uri ->
                     onSuccess?.run {
-                        this(p)
+                        invoke(p)
                     }
                 }
+        } catch (e: Exception) {
+            onError?.run {
+                this(e.message.toString())
+            }
+        }
+    }
+
+    fun save2Gallery(bitmap: Bitmap, onSuccess: ((String) -> Unit)? = null, onError: ((String) -> Unit)? = null) {
+        try {
+            MediaStore.Images.Media.insertImage(
+                CoolFaceApplication.mApplicationContext.contentResolver,
+                bitmap,
+                bitmap.toString(),
+                "file"
+            )
+//            MediaScannerConnection
+//                .scanFile(
+//                    CoolFaceApplication.mApplicationContext,
+//                    arrayOf(inPut.absolutePath),
+//                    arrayOf("image/jpeg")
+//                ) { p, uri ->
+//                    onSuccess?.run {
+//                        invoke(p)
+//                    }
+//                }
         } catch (e: Exception) {
             onError?.run {
                 this(e.message.toString())

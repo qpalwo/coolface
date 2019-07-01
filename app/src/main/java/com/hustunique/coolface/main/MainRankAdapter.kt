@@ -14,7 +14,6 @@ import com.hustunique.coolface.base.BaseActivity
 import com.hustunique.coolface.base.BaseAdapter
 import com.hustunique.coolface.base.ViewHolder
 import com.hustunique.coolface.bean.Post
-import com.hustunique.coolface.bean.User
 import com.hustunique.coolface.login.LoginActivity
 import com.hustunique.coolface.pk.PkFragment
 import com.hustunique.coolface.show.BaseShowCard
@@ -32,7 +31,7 @@ class MainRankAdapter(private var posts: List<Post>, val mViewModel: MainViewMod
         super.onBindView(holder, position)
         val post = data!![position]
         // 是否在点赞的列表里
-        var isLike = post.likeUser?.contains(mViewModel.user.value!!.username) ?: false
+        var isLike = post.likeUser?.contains(mViewModel.user.value?.username) ?: false
 
         val rankTextView = holder.getView<TextView>(R.id.item_rank_rank)
         val usernameTextView = holder.getView<TextView>(R.id.item_rank_username)
