@@ -18,11 +18,11 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:src="@mipmap/ic_score"
         android:tint="@color/colorAccentLight"
         app:layout_constraintBottom_toBottomOf="@+id/fra_show_card_image"
@@ -69,69 +69,183 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fra_show_card_image" />
 
-    <TextView
-        android:id="@+id/fra_sex_tip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+
+    <ImageView
+        android:id="@+id/fra_gender_tip"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:layout_marginTop="8dp"
-        android:text="性别:"
-        android:textColor="@color/colorPrimary"
-        android:textSize="30dp"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintEnd_toStartOf="@+id/fra_sex"
+        android:src="@mipmap/ic_gender"
+        android:tint="@color/colorPrimary"
+        app:layout_constraintEnd_toStartOf="@+id/fra_gender"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@+id/fra_show_card_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fra_show_card_message" />
 
     <TextView
-        android:id="@+id/fra_sex"
-        android:layout_width="wrap_content"
+        android:id="@+id/fra_gender"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:text="Loading"
         android:textColor="@color/colorPrimary"
-        android:textSize="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/fra_sex_tip"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/fra_sex_tip"
-        app:layout_constraintTop_toTopOf="@+id/fra_sex_tip" />
+        android:textSize="25dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/fra_gender_tip"
+        app:layout_constraintEnd_toStartOf="@id/fra_emotion_tip"
+        app:layout_constraintStart_toEndOf="@+id/fra_gender_tip"
+        app:layout_constraintTop_toTopOf="@+id/fra_gender_tip" />
+
+    <ImageView
+        android:id="@+id/fra_emotion_tip"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="8dp"
+        android:src="@mipmap/ic_emotion"
+        android:tint="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/fra_gender_tip"
+        app:layout_constraintEnd_toStartOf="@+id/fra_emotion"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/fra_gender"
+        app:layout_constraintTop_toTopOf="@+id/fra_gender_tip" />
 
     <TextView
-        android:id="@+id/fra_age_tip"
-        android:layout_width="wrap_content"
+        android:id="@+id/fra_emotion"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:text="年龄:"
+        android:layout_marginStart="8dp"
+        android:text="Loading"
         android:textColor="@color/colorPrimary"
-        android:textSize="30dp"
+        android:textSize="25dp"
+        app:layout_constraintBottom_toBottomOf="@+id/fra_emotion_tip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/fra_emotion_tip"
+        app:layout_constraintTop_toTopOf="@+id/fra_emotion_tip" />
+
+    <ImageView
+        android:id="@+id/fra_age_tip"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:src="@mipmap/ic_age"
+        android:tint="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/analy_post_message"
         app:layout_constraintEnd_toStartOf="@+id/fra_age"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fra_sex_tip" />
+        app:layout_constraintTop_toBottomOf="@+id/fra_gender_tip" />
 
     <TextView
         android:id="@+id/fra_age"
-        android:layout_width="wrap_content"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:text="Loading"
         android:textColor="@color/colorPrimary"
-        android:textSize="30dp"
+        android:textSize="25dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/fra_age_tip"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/fra_ethnicity_tip"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/fra_age_tip"
         app:layout_constraintTop_toTopOf="@+id/fra_age_tip" />
+
+    <ImageView
+        android:id="@+id/fra_ethnicity_tip"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="8dp"
+        android:src="@mipmap/ic_ethnicity"
+        android:tint="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/fra_age_tip"
+        app:layout_constraintEnd_toStartOf="@+id/fra_ethnicity"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/fra_age"
+        app:layout_constraintTop_toTopOf="@+id/fra_age_tip" />
+
+    <TextView
+        android:id="@+id/fra_ethnicity"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Loading"
+        android:textColor="@color/colorPrimary"
+        android:textSize="25dp"
+        app:layout_constraintBottom_toBottomOf="@+id/fra_ethnicity_tip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/fra_ethnicity_tip"
+        app:layout_constraintTop_toTopOf="@+id/fra_ethnicity_tip" />
+
+
+    <ImageView
+        android:id="@+id/fra_glass_tip"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:src="@mipmap/ic_glass"
+        android:tint="@color/colorPrimary"
+        app:layout_constraintEnd_toStartOf="@+id/fra_glass"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fra_age" />
+
+    <TextView
+        android:id="@+id/fra_glass"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Loading"
+        android:textColor="@color/colorPrimary"
+        android:textSize="25dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/fra_glass_tip"
+        app:layout_constraintEnd_toStartOf="@id/fra_mouthstatus_tip"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/fra_glass_tip"
+        app:layout_constraintTop_toTopOf="@+id/fra_glass_tip" />
+
+    <ImageView
+        android:id="@+id/fra_mouthstatus_tip"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="8dp"
+        android:src="@mipmap/ic_mask"
+        android:tint="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/fra_glass_tip"
+        app:layout_constraintEnd_toStartOf="@+id/fra_mouthstatus"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/fra_glass"
+        app:layout_constraintTop_toTopOf="@+id/fra_glass_tip" />
+
+    <TextView
+        android:id="@+id/fra_mouthstatus"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Loading"
+        android:textColor="@color/colorPrimary"
+        android:textSize="25dp"
+        app:layout_constraintBottom_toBottomOf="@+id/fra_mouthstatus_tip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/fra_mouthstatus_tip"
+        app:layout_constraintTop_toTopOf="@+id/fra_mouthstatus_tip" />
+
+
 
     <TextView
         android:id="@+id/fra_user_nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:text="用户名"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/fra_show_like"
@@ -157,13 +271,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:text="0"
         android:textSize="25dp"
         app:layout_constraintBottom_toBottomOf="@+id/fra_show_like"
         app:layout_constraintEnd_toStartOf="@+id/fra_show_collect"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/fra_show_like"
-        app:layout_constraintTop_toTopOf="@+id/fra_show_like"
-        android:text="0"/>
+        app:layout_constraintTop_toTopOf="@+id/fra_show_like" />
 
     <com.hustunique.coolface.view.LikeButton
         android:id="@+id/fra_show_like"
@@ -175,15 +289,15 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fra_age_tip"
+        app:layout_constraintTop_toBottomOf="@+id/fra_glass_tip"
         app:ltheme="heart" />
 
     <com.hustunique.coolface.view.LikeButton
         android:id="@+id/fra_show_collect"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         app:accentColor="@color/colorAccent2"
         app:layout_constraintBottom_toBottomOf="@+id/fra_show_like"
         app:layout_constraintEnd_toEndOf="parent"
@@ -202,7 +316,7 @@
         android:backgroundTint="@color/colorAccent"
         android:text="发 送"
         android:textColor="#ffffff"
-        android:textSize="16dp"
+        android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/fra_show_card_image"
         app:layout_constraintTop_toBottomOf="@+id/fra_show_like" />
@@ -220,14 +334,14 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/fra_show_like_ani"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/fra_show_card_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:lottie_fileName="like.json" />
+        app:lottie_fileName="like_more.json" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/fra_show_colle_ani"

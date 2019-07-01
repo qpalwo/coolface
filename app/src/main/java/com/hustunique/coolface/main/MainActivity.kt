@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import cn.bmob.v3.BmobUser
@@ -24,6 +25,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.hustunique.coolface.R
 import com.hustunique.coolface.base.BaseActivity
+import com.hustunique.coolface.base.BaseAdapter
 import com.hustunique.coolface.base.ListOnClickListener
 import com.hustunique.coolface.bean.Post
 import com.hustunique.coolface.bean.User
@@ -36,6 +38,7 @@ import com.hustunique.coolface.showscore.ShowScoreFragment
 import com.hustunique.coolface.util.FileUtil
 import com.hustunique.coolface.util.LiveDataUtil
 import com.hustunique.coolface.util.TextUtil
+import com.scwang.smartrefresh.layout.constant.RefreshState
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -68,21 +71,7 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         super.initView()
         main_list.adapter = MainAdapter(mViewModel)
         main_list.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
-        val headerView = nav_main.getHeaderView(0)
-        val avatarView = headerView.findViewById<ImageView>(R.id.iv_main_avatar)
-        val nicknameView = headerView.findViewById<TextView>(R.id.tv_main_nickname)
-        mViewModel.user.observe(this, Observer {
-            initDrawer()
-            nicknameView.text = if (BmobUser.isLogin()) it.nickname else "未登录"
-            if (BmobUser.isLogin()) {
-                Glide.with(this)
-                    .load(it.avatar)
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(avatarView)
-            } else {
-                avatarView.setImageResource(R.mipmap.logo)
-            }
-        })
+
         initDrawer()
 
         TextUtil.setDefaultTypeface(main_title)
@@ -94,20 +83,56 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         super.initContact()
         mViewModel.postsData.observe(this, Observer {
             LiveDataUtil.useData(it, {
-                (main_list.adapter as MainAdapter).apply {
-                    data = it
+                if (main_refresh_layout.state == RefreshState.Refreshing)
+                    main_refresh_layout.finishRefresh(true)
+                when (mViewModel.status) {
+                    0, 1, 2 -> {
+                        main_list.adapter = MainAdapter(mViewModel, it)
+                        main_list.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
+                    }
+                    3 -> {
+                        main_list.adapter = MainRankAdapter(it!!, mViewModel)
+                        main_list.layoutManager = LinearLayoutManager(this)
+                    }
+                }
+                (main_list.adapter as BaseAdapter<Post>).apply {
+                    data = it!!.toMutableList()
+
                     main_loading.visibility = View.GONE
                     notifyDataSetChanged()
+                    clickListener = object : ListOnClickListener {
+                        override fun onClick(position: Int, v: View) {
+                            clickPosition = position
+                            val options =
+                                ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                    this@MainActivity,
+                                    main_list.adapter.let {
+                                        when (it) {
+                                            is MainRankAdapter -> {
+                                                it.getSharedWeight(position)
+                                            }
+                                            else -> {
+                                                (it as MainAdapter).getSharedWeight(position)
+                                            }
+                                        }
+                                    },
+                                    getString(R.string.image_shared)
+                                )
+                            BaseShowCard.start(this@MainActivity, ShowCardFragment(), Bundle().apply {
+                                putSerializable(
+                                    getString(R.string.post),
+                                    it!![position]
+                                )
+                            }, options.toBundle())
+                        }
+                    }
                 }
             })
-            it?.data?.let {
-                setUpItemClickListener(it)
-            }
         })
 
         mViewModel.postData.observe(this, Observer {
             LiveDataUtil.useData(it, {
-                (main_list.adapter as MainAdapter).apply {
+                (main_list.adapter as BaseAdapter<Post>).apply {
                     (data as MutableList)[clickPosition] = it!!
                     notifyItemChanged(clickPosition)
                     clickPosition = -1
@@ -116,15 +141,30 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
         })
 
         mViewModel.user.observe(this, Observer {
+            val headerView = nav_main.getHeaderView(0)
+            val avatarView = headerView.findViewById<ImageView>(R.id.iv_main_avatar)
+            val nicknameView = headerView.findViewById<TextView>(R.id.tv_main_nickname)
+            val emailView = headerView.findViewById<TextView>(R.id.tv_main_email)
+            initDrawer()
+
             if (it != null) {
-                val headerView = nav_main.getHeaderView(0)
-                val avatarView = headerView.findViewById<ImageView>(R.id.iv_main_avatar)
-                val nicknameView = headerView.findViewById<TextView>(R.id.tv_main_nickname)
-                val emailView = headerView.findViewById<TextView>(R.id.tv_main_email)
-                Glide.with(this).load(it.avatar).apply(RequestOptions.circleCropTransform()).into(avatarView)
-                Glide.with(this).load(it.avatar).apply(RequestOptions.circleCropTransform()).into(main_me)
-                nicknameView.text = it.nickname
-                emailView.text = it.username
+                nicknameView.text = if (BmobUser.isLogin()) it.nickname else "未登录"
+                emailView.text = if (BmobUser.isLogin()) it.username else ""
+
+                if (BmobUser.isLogin()) {
+                    Glide.with(this)
+                        .load(it.avatar)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(avatarView)
+                    Glide.with(this).load(it.avatar).apply(RequestOptions.circleCropTransform()).into(main_me)
+                } else {
+                    avatarView.setImageResource(R.mipmap.logo)
+                }
+            } else {
+                avatarView.setImageResource(R.mipmap.logo)
+                main_me.setImageDrawable(null)
+                nicknameView.text = "未登录"
+                emailView.text = ""
             }
         })
         main_activity_camera_fb.setOnClickListener {
@@ -143,9 +183,13 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             main_drawerlayout.openDrawer(START)
         }
         main_refresh_layout.setOnRefreshListener {
-            mViewModel.updatePosts(this) {
-                main_refresh_layout.finishRefresh(true)
-            }
+            mViewModel.updatePosts(this)
+        }
+        main_rank.setOnClickListener {
+            if (mViewModel.status != 3)
+                mViewModel.updatePosts(this, 3)
+            else
+                mViewModel.updatePosts(this, 0)
         }
     }
 
@@ -264,9 +308,8 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                         true
                     }
                     R.id.nav_logout -> {
-                        BmobUser.logOut()
+                        mViewModel.logOut()
                         Toast.makeText(applicationContext, "已退出", Toast.LENGTH_SHORT).show()
-                        mViewModel.user.value = BmobUser.getCurrentUser(User::class.java)
                         false
                     }
                     else -> false
@@ -315,27 +358,6 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
             intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString())
             intent.putExtra("noFaceDetection", true)
             startActivityForResult(intent, CROP_CODE)
-        }
-    }
-
-    private fun setUpItemClickListener(posts: List<Post>) {
-        (main_list.adapter as MainAdapter).clickListener = object : ListOnClickListener {
-            override fun onClick(position: Int, v: View) {
-                clickPosition = position
-                val options =
-                    ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        this@MainActivity,
-                        (main_list.adapter as MainAdapter).getSharedWeight(position),
-                        getString(R.string.image_shared)
-                    )
-                BaseShowCard.start(this@MainActivity, ShowCardFragment(), Bundle().apply {
-                    putSerializable(
-                        getString(R.string.post),
-                        posts[position]
-                    )
-                }, options.toBundle())
-
-            }
         }
     }
 

@@ -23,10 +23,11 @@ class MainViewModel : ViewModel() {
      * 0：所有动态
      * 1：我的
      * 2：收藏
+     * 3：排行榜
      */
     var status = 0
 
-    val posts: MutableList<Post> = ArrayList()
+    private val posts: MutableList<Post> = ArrayList()
 
     /**
      * 整个列表更新
@@ -42,39 +43,73 @@ class MainViewModel : ViewModel() {
     fun init(activity: MainActivity) {
         postRepo = PostRepo.getInstance()
         user.value = BmobUser.getCurrentUser(User::class.java)
-        getPosts(activity)
+        updatePosts(activity, 0)
         pictureRepo = PictureRepo.getInstance()
         pictureData.value = Resource.loading()
     }
 
-    fun updatePosts(activity: MainActivity, status: Int = this.status, onSuccess: () -> Unit = {}) {
+    fun updatePosts(activity: MainActivity, status: Int = this.status) {
         when (status) {
             0 -> {
-                getPosts(activity, onSuccess)
+                updateAllPosts(activity) {
+                    postsData.postValue(Resource.success(it))
+                }
             }
             1 -> {
-                updateMyPosts()
-                onSuccess.invoke()
+                updateMyPosts(activity)
             }
             2 -> {
-                updateCollectPosts()
-                onSuccess.invoke()
+                updateCollectPosts(activity)
             }
+            3 -> {
+                updateRankPosts(activity)
+            }
+        }
+        this.status = status
+    }
+
+    /**
+     * 显示排行榜
+     */
+    private fun updateRankPosts(activity: MainActivity) {
+        updateAllPosts(activity) {
+            postsData.postValue(Resource.success(it.sortedWith(Comparator { o1, o2 ->
+                val o1Beauty = o1.face!!.attributes.beauty.let {
+                    if (it.female_score > it.male_score)
+                        it.female_score
+                    else
+                        it.male_score
+                }
+                val o2Beauty = o2.face!!.attributes.beauty.let {
+                    if (it.female_score > it.male_score)
+                        it.female_score
+                    else
+                        it.male_score
+                }
+                return@Comparator when {
+                    o1Beauty < o2Beauty -> 1
+                    o1Beauty == o2Beauty -> 0
+                    else -> -1
+                }
+            })))
         }
     }
 
-    private fun getPosts(activity: MainActivity, onSuccess: () -> Unit = {}) {
-        status = 0
-        postRepo.getPosts(MutableLiveData<Resource<List<Post>>>().apply {
-            observe(activity, Observer {
-                LiveDataUtil.useData(it, { postsList ->
-                    posts.removeAll(posts)
-                    posts.addAll(postsList!!)
-                    postsData.postValue(Resource.success(posts))
-                    onSuccess.invoke()
+    private fun updateAllPosts(
+        activity: MainActivity,
+        onSuccess: (List<Post>) -> Unit = {}
+    ) {
+        activity.runOnUiThread {
+            postRepo.getPosts(MutableLiveData<Resource<List<Post>>>().apply {
+                observe(activity, Observer {
+                    LiveDataUtil.useData(it, { postsList ->
+                        posts.removeAll(posts)
+                        posts.addAll(postsList!!)
+                        onSuccess.invoke(posts)
+                    })
                 })
             })
-        })
+        }
     }
 
     fun updatePostAt(position: Int) {
@@ -87,25 +122,28 @@ class MainViewModel : ViewModel() {
     /**
      * 显示收藏的动态
      */
-    private fun updateCollectPosts() {
-        status = 2
-        postsData.postValue(Resource.success(
-            posts.filter {
-                it.favouriteUser?.contains(BmobUser.getCurrentUser(User::class.java).username) ?: false
-            }
-        ))
+    private fun updateCollectPosts(activity: MainActivity) {
+        updateAllPosts(activity) {
+            postsData.postValue(Resource.success(
+                it.filter {
+                    it.favouriteUser?.contains(BmobUser.getCurrentUser(User::class.java).username) ?: false
+                }
+            ))
+        }
     }
 
-    fun deleteAt(position: Int, onSuccess:() -> (Unit),onLoading: () -> (Unit), onError: (String) -> (Unit)) {
+    fun deleteAt(
+        activity: MainActivity,
+        position: Int,
+        onSuccess: () -> (Unit),
+        onLoading: () -> (Unit),
+        onError: (String) -> (Unit)
+    ) {
         if (status == 1) {
             onLoading.invoke()
             postRepo.deletePost(postsData.value?.data?.get(position)?.objectId!!, {
                 posts.remove(postsData.value?.data?.get(position)!!)
-                when (status) {
-                    0 -> postsData.postValue(Resource.success(posts))
-                    1 -> updateMyPosts()
-                    2 -> updateCollectPosts()
-                }
+                updateMyPosts(activity)
                 onSuccess.invoke()
             }, onError)
         }
@@ -114,11 +152,12 @@ class MainViewModel : ViewModel() {
     /**
      * 显示我的动态
      */
-    private fun updateMyPosts() {
-        status = 1
-        postsData.postValue(Resource.success(posts.filter {
-            it.username == BmobUser.getCurrentUser(User::class.java).nickname
-        }))
+    private fun updateMyPosts(activity: MainActivity) {
+        updateAllPosts(activity) {
+            postsData.postValue(Resource.success(it.filter {
+                it.username == BmobUser.getCurrentUser(User::class.java).nickname
+            }))
+        }
     }
 
     fun like(positon: Int, onError: ((String) -> Unit)) {
@@ -159,4 +198,10 @@ class MainViewModel : ViewModel() {
     fun getNewPictureFile() = PictureRepo.getInstance().getNewFile()
 
     fun getPictureFile() = pictureRepo.getFile()
+
+    fun logOut() {
+        BmobUser.logOut()
+        user.postValue(null)
+    }
+
 }

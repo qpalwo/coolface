@@ -2,10 +2,12 @@ package com.hustunique.coolface.main
 
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.ImageView
 import android.widget.TextView
 import cn.bmob.v3.BmobUser
 import com.airbnb.lottie.LottieAnimationView
@@ -15,10 +17,13 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.hustunique.coolface.R
+import com.hustunique.coolface.base.BaseActivity
 import com.hustunique.coolface.base.BaseAdapter
 import com.hustunique.coolface.base.ViewHolder
 import com.hustunique.coolface.bean.Post
 import com.hustunique.coolface.login.LoginActivity
+import com.hustunique.coolface.pk.PkFragment
+import com.hustunique.coolface.show.BaseShowCard
 import com.hustunique.coolface.util.AnimationUtil
 import com.hustunique.coolface.util.DialogUtil
 import com.hustunique.coolface.util.PopMenuUtil
@@ -26,7 +31,8 @@ import com.hustunique.coolface.util.TextUtil
 import com.hustunique.coolface.view.LikeButton
 import com.kongzue.dialog.v2.CustomDialog
 
-class MainAdapter(val mViewModel: MainViewModel) : BaseAdapter<Post>(R.layout.post_item) {
+class MainAdapter(val mViewModel: MainViewModel, data: List<Post>? = null) :
+    BaseAdapter<Post>(R.layout.item_main_post, data?.toMutableList()) {
     private val sharedWeights: ArrayList<View> = ArrayList()
     private val TAG = "MainAdapter"
 
@@ -36,11 +42,16 @@ class MainAdapter(val mViewModel: MainViewModel) : BaseAdapter<Post>(R.layout.po
         val likeCount = holder.getView<TextView>(R.id.post_like_count)
         val likeButton = holder.getView<LikeButton>(R.id.post_like_button)
         val likeAnimation = holder.getView<LottieAnimationView>(R.id.post_like_ani)
+        val loadingAnimation = holder.getView<LottieAnimationView>(R.id.post_loading)
+        val message = holder.getView<TextView>(R.id.post_message)
+        val username = holder.getView<TextView>(R.id.post_username)
+        val image = holder.getView<ImageView>(R.id.post_image)
+        val pk = holder.getView<ImageView>(R.id.post_pk)
 
         TextUtil.setDefaultTypeface(
             likeCount,
-            holder.getView(R.id.post_message),
-            holder.getView(R.id.post_username)
+            message,
+            username
         )
 
         Glide.with(holder.itemView.context).load(post.faceBean.faceUrl).addListener(object : RequestListener<Drawable> {
@@ -60,16 +71,16 @@ class MainAdapter(val mViewModel: MainViewModel) : BaseAdapter<Post>(R.layout.po
                 dataSource: DataSource?,
                 isFirstResource: Boolean
             ): Boolean {
-                holder.getView<LottieAnimationView>(R.id.post_loading).apply {
+                loadingAnimation.apply {
                     pauseAnimation()
                     visibility = GONE
                 }
                 return false
             }
-        }).into(holder.getView(R.id.post_image))
+        }).into(image)
 
-        holder.getView<TextView>(R.id.post_message).text = post.message
-        holder.getView<TextView>(R.id.post_username).text = post.username
+        message.text = post.message
+        username.text = post.username
         likeCount.text = post.likeCount.toString()
 
         // 是否在点赞的列表里
@@ -122,6 +133,19 @@ class MainAdapter(val mViewModel: MainViewModel) : BaseAdapter<Post>(R.layout.po
                 }
             }
         }
+
+        pk.setOnClickListener {
+            BaseShowCard.start(
+                holder.itemView.context as BaseActivity,
+                PkFragment(),
+                Bundle().apply {
+                    putSerializable(
+                        holder.itemView.context.getString(R.string.post),
+                        this@MainAdapter.data!![position]
+                    )
+                })
+        }
+
         if (sharedWeights.size > position)
             sharedWeights[position] = holder.itemView
         else
@@ -135,7 +159,7 @@ class MainAdapter(val mViewModel: MainViewModel) : BaseAdapter<Post>(R.layout.po
                     PopMenuUtil.pop(holder.itemView.context, holder.itemView, R.menu.pop_delete)
                         .setOnMenuItemClickListener {
                             return@setOnMenuItemClickListener if (it.title == "删除") {
-                                mViewModel.deleteAt(position, {
+                                mViewModel.deleteAt(holder.itemView.context as MainActivity, position, {
                                     dialog?.doDismiss()
                                 }, {
                                     dialog = DialogUtil.showProgressDialog(holder.itemView.context, "删除中。。。")

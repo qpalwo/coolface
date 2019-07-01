@@ -7,26 +7,33 @@
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
     android:orientation="vertical"
-
     app:cardCornerRadius="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-
         <ImageView
             android:id="@+id/post_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="300dp"
             android:adjustViewBounds="true"
-            android:transitionName="@string/image_shared"
+            android:minHeight="300dp"
             android:src="@drawable/ic_me_circle_36dp"
+            android:transitionName="@string/image_shared"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/post_pk"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:src="@mipmap/text_pk"
+            app:layout_constraintBottom_toBottomOf="@+id/post_image"
+            app:layout_constraintEnd_toEndOf="@+id/post_image" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/post_loading"
@@ -34,13 +41,13 @@
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:lottie_fileName="cubos_loading.json"
             app:layout_constraintBottom_toBottomOf="@+id/post_image"
             app:layout_constraintEnd_toEndOf="@+id/post_image"
             app:layout_constraintStart_toStartOf="@+id/post_image"
-            app:layout_constraintTop_toTopOf="@+id/post_image" />
+            app:layout_constraintTop_toTopOf="@+id/post_image"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="cubos_loading.json"
+            app:lottie_loop="true" />
 
 
         <com.airbnb.lottie.LottieAnimationView

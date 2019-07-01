@@ -119,6 +119,7 @@
 
     <ImageView
         android:id="@+id/fusion_result_image"
+        android:transitionName="@string/image_shared"
         android:layout_width="185dp"
         android:layout_height="325dp"
         android:layout_margin="8dp"

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
  * 泛型T写的是这个Adapter对应的Bean的类型，可以不写
  */
 abstract class BaseAdapter<Data>(
-    @LayoutRes val itemLayoutRes: Int, var data: List<Data>? = null
+    @LayoutRes val itemLayoutRes: Int, var data: MutableList<Data>? = null
 ) :
     RecyclerView.Adapter<ViewHolder>() {
 

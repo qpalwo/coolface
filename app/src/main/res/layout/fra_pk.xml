@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/pk_opponent_card"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="180dp"
+                android:layout_height="250dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/pk_opponent_username"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:gravity="center"
+                android:text="username"
+                android:textSize="25dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView4"
+                app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
+            <TextView
+                android:id="@+id/pk_opponent_score"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center"
+                android:text="0"
+                android:textSize="120dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView4"
+                app:layout_constraintTop_toBottomOf="@+id/pk_opponent_username" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/pk_opponent_ani"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            app:lottie_fileName="success.json" />
+    </androidx.cardview.widget.CardView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/pk_center_ani"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="flow1.json"
+            app:lottie_loop="true" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/pk_icon_background"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            app:cardCornerRadius="50dp">
+
+            <ImageView
+                android:id="@+id/pk_icon"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:background="#ffffff"
+                android:src="@mipmap/ic_pk" />
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/pk_me_card"
+        android:layout_margin="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        app:cardCornerRadius="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/pk_me_ani"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            app:lottie_fileName="success.json" />
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

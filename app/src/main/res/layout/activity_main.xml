@@ -49,9 +49,8 @@
                 <ImageView
                     android:id="@+id/main_rank"
                     android:layout_gravity="center|end"
-                    android:backgroundTint="@color/colorPrimaryDark"
                     android:layout_marginEnd="20dp"
-                    android:background="@mipmap/rank"
+                    android:background="@mipmap/ic_rank"
                     android:layout_width="30dp"
                     android:layout_height="30dp" />
             </FrameLayout>
@@ -75,7 +74,7 @@
                 android:id="@+id/main_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:listitem="@layout/post_item" />
+                tools:listitem="@layout/item_main_post" />
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
         <com.airbnb.lottie.LottieAnimationView

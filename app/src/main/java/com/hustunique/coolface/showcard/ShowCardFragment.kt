@@ -65,10 +65,12 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
         TextUtil.setDefaultTypeface(
             fra_show_card_message,
             fra_show_card_score,
-            fra_age_tip,
             fra_age,
-            fra_sex,
-            fra_sex_tip,
+            fra_gender,
+            fra_emotion,
+            fra_ethnicity,
+            fra_glass,
+            fra_mouthstatus,
             fra_show_likecount
         )
 
@@ -175,7 +177,7 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
 
                 fra_age.text = post.face?.attributes?.age?.value?.toString()
 
-                fra_sex.text = post.face?.attributes?.gender?.value.toString()
+                fra_gender.text = post.face?.attributes?.gender?.value.toString()
 
                 fra_show_card_message.text = post.message
 

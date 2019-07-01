@@ -43,15 +43,17 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
     override fun initView(view: View) {
         super.initView(view)
         TextUtil.setDefaultTypeface(
-            analy_age_tip,
-            analy_sex_tip,
             analy_tip,
-            analy_sex,
+            analy_gender,
             analy_age,
             analy_similar_star_name,
             analy_similar_user_name,
             analy_submit,
-            analy_score
+            analy_score,
+            analy_emotion,
+            analy_glass,
+            analy_ethnicity,
+            analy_mouthstatus
         )
 
     }
@@ -101,7 +103,7 @@ class ShowScoreFragment : BaseShowFragment(R.layout.fra_analy_result, ShowScoreV
         mViewModel.scoringData.observe(this, Observer {
             LiveDataUtil.useData(it, {
                 analy_score.text = it?.attributes?.beauty?.male_score?.toString()
-                analy_sex.text = it?.attributes?.gender?.value
+                analy_gender.text = it?.attributes?.gender?.value
                 analy_age.text = it?.attributes?.age?.value.toString()
                 mViewModel.similar()
             }, error = { s, face ->
