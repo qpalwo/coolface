@@ -126,7 +126,7 @@ class PictureRepo private constructor() {
             .subscribe({
                 if (it?.let {
                         pictureData.postValue(Resource.success(it))
-                        FileUtil.save2Gallery(it)
+//                        FileUtil.save2Gallery(it)
                     } == null) {
                     pictureData.postValue(Resource.error("merge error"))
                 }

@@ -1,15 +1,9 @@
 package com.hustunique.coolface.util
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.os.Environment
+import android.media.MediaScannerConnection
 import android.provider.MediaStore
-import androidx.core.content.FileProvider
 import com.hustunique.coolface.base.CoolFaceApplication
-import okio.buffer
-import okio.sink
-import okio.source
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -57,18 +51,21 @@ object FileUtil {
         try {
             val inPut = File(path)
             MediaStore.Images.Media.insertImage(
-                CoolFaceApplication.mApplicationContext.getContentResolver(),
+                CoolFaceApplication.mApplicationContext.contentResolver,
                 inPut.absolutePath,
                 inPut.name,
                 null
             )
-            val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-            val uri = FileProvider.getUriForFile(CoolFaceApplication.mApplicationContext, FILE_PROVIDER_AUTHORITY, inPut)
-            intent.data = uri
-            CoolFaceApplication.mApplicationContext.sendBroadcast(intent)
-            onSuccess?.run {
-                this("success")
-            }
+            MediaScannerConnection
+                .scanFile(
+                    CoolFaceApplication.mApplicationContext,
+                    arrayOf(inPut.absolutePath),
+                    arrayOf("image/jpeg")
+                ) { p, uri ->
+                    onSuccess?.run {
+                        this(p)
+                    }
+                }
         } catch (e: Exception) {
             onError?.run {
                 this(e.message.toString())
