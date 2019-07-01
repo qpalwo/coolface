@@ -94,6 +94,15 @@ class FacePPAttrUtil private constructor() {
                 .addEmotion()
                 .addGender()
                 .addAge()
+                .addBlur()
+                .addEthnicity()
+                .addEyeGaze()
+                .addEyeStatus()
+                .addFaceQuality()
+                .addHeadPose()
+                .addMouthStatus()
+                .addSkinStatus()
+                .addSmiling()
                 .build()
     }
 
