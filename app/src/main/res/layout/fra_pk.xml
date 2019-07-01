@@ -37,8 +37,8 @@
                 android:layout_height="50dp"
                 android:gravity="center"
                 android:text="username"
-                android:textSize="30dp"
                 android:textColor="@color/colorPrimaryDark"
+                android:textSize="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/pk_opponent_image"
                 app:layout_constraintTop_toTopOf="@+id/pk_opponent_image" />
@@ -52,8 +52,8 @@
                 android:layout_marginBottom="8dp"
                 android:gravity="center"
                 android:text="0"
-                android:textSize="80dp"
                 android:textColor="@color/colorAccent2"
+                android:textSize="80dp"
                 app:layout_constraintBottom_toBottomOf="@+id/pk_opponent_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/pk_opponent_image"
@@ -78,7 +78,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/pk_icon_background"
         app:lottie_autoPlay="true"
-        app:lottie_fileName="flow1.json"
+        app:lottie_fileName="flow.json"
         app:lottie_loop="true" />
 
     <androidx.cardview.widget.CardView
@@ -111,7 +111,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         app:cardCornerRadius="8dp"
-        app:layout_constraintBottom_toTopOf="@id/pk_confirm"
+        app:layout_constraintBottom_toTopOf="@id/pk_post"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/pk_icon_background">
@@ -125,6 +125,7 @@
                 android:layout_width="145dp"
                 android:layout_height="215dp"
                 android:layout_margin="8dp"
+                android:scaleType="centerCrop"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/fusion_background"
                 android:padding="5dp"
@@ -167,8 +168,8 @@
                 android:layout_height="50dp"
                 android:gravity="center"
                 android:text="My Username"
-                android:textSize="30dp"
                 android:textColor="@color/colorPrimaryDark"
+                android:textSize="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/pk_mine_image"
                 app:layout_constraintTop_toTopOf="@id/pk_mine_image" />
@@ -181,8 +182,8 @@
                 android:layout_marginBottom="8dp"
                 android:gravity="center"
                 android:text="0"
-                android:textSize="80dp"
                 android:textColor="@color/colorAccent2"
+                android:textSize="80dp"
                 app:layout_constraintBottom_toBottomOf="@id/pk_mine_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/pk_mine_image"
@@ -195,22 +196,19 @@
             android:layout_height="match_parent"
             android:visibility="invisible"
             app:lottie_fileName="success.json" />
+
+        <TextView
+            android:id="@+id/pk_mine_result"
+            android:text="You Lose"
+            android:textColor="#000000"
+            android:textSize="30dp"
+            android:layout_marginStart="20dp"
+            android:visibility="invisible"
+            android:rotation="-30"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content" />
     </androidx.cardview.widget.CardView>
 
-    <Button
-        android:id="@+id/pk_confirm"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:backgroundTint="@color/colorAccent"
-        android:text="PK！！"
-        android:textColor="#ffffff"
-        android:textSize="25dp"
-        app:layout_constraintEnd_toStartOf="@+id/pk_post"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pk_mine_card" />
 
     <Button
         android:id="@+id/pk_post"
@@ -218,13 +216,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:enabled="false"
         android:text="上传"
         android:textColor="#ffffff"
-        android:enabled="false"
         android:textSize="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintBottom_toBottomOf="@id/pk_confirm"
-        app:layout_constraintStart_toEndOf="@+id/pk_confirm"
-        app:layout_constraintTop_toTopOf="@id/pk_confirm" />
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

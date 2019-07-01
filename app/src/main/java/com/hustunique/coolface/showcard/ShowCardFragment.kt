@@ -71,7 +71,8 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
             fra_ethnicity,
             fra_glass,
             fra_mouthstatus,
-            fra_show_likecount
+            fra_show_likecount,
+            fra_user_nickname
         )
 
         // 让动画只播放一次

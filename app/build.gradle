@@ -7,6 +7,20 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('/home/fourfire/Android/keystore/fourfireKeystore.jks')
+            storePassword '123456'
+            keyAlias = 'coolface'
+            keyPassword '123456'
+        }
+        debug {
+            storeFile file('/home/fourfire/Android/keystore/fourfireKeystore.jks')
+            storePassword '123456'
+            keyAlias = 'coolface'
+            keyPassword '123456'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.hustunique.coolface"
@@ -14,6 +28,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+        signingConfig signingConfigs.debug
     }
     buildTypes {
         release {

@@ -94,6 +94,7 @@ class MainAdapter(val mViewModel: MainViewModel, data: List<Post>? = null) :
                 if (!BmobUser.isLogin()) {
                     likeButton.setChecked(!isChecked)
                     DialogUtil.showTipDialog(holder.itemView.context, "您要登录才能点赞哦", "前往登录", {
+                        it.doDismiss()
                         holder.itemView.context.startActivity(
                             Intent(
                                 holder.itemView.context,

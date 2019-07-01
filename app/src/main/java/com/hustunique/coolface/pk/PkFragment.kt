@@ -7,8 +7,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.widget.Button
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
@@ -18,7 +17,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.hustunique.coolface.R
 import com.hustunique.coolface.bean.Post
 import com.hustunique.coolface.bean.User
-import com.hustunique.coolface.main.MainActivity
 import com.hustunique.coolface.show.BaseShowFragment
 import com.hustunique.coolface.util.*
 import com.kongzue.dialog.v2.CustomDialog
@@ -32,7 +30,7 @@ class PkFragment : BaseShowFragment(R.layout.fra_pk, PkViewModel::class.java) {
     private lateinit var post: Post
     private lateinit var mViewModel: PkViewModel
 
-    private lateinit var mineImage: Uri
+    private var mineImage: Uri? = null
 
     private var dialog: CustomDialog? = null
 
@@ -48,7 +46,14 @@ class PkFragment : BaseShowFragment(R.layout.fra_pk, PkViewModel::class.java) {
 
     override fun initView(view: View) {
         super.initView(view)
-        TextUtil.setDefaultTypeface(pk_opponent_score, pk_opponent_username, pk_mine_username, pk_mine_score)
+
+        TextUtil.setDefaultTypeface(
+            pk_mine_result,
+            pk_opponent_score,
+            pk_opponent_username,
+            pk_mine_username,
+            pk_mine_score
+        )
 
         Glide.with(this).load(post.faceBean.faceUrl).into(pk_opponent_image)
 
@@ -67,6 +72,7 @@ class PkFragment : BaseShowFragment(R.layout.fra_pk, PkViewModel::class.java) {
         super.initContact(context)
         mViewModel.scoringData.observe(this, Observer {
             LiveDataUtil.useData(it, {
+                pk_post.backgroundTintList = context!!.getColorStateList(R.color.colorAccent)
                 pk_mine_score.text = it?.attributes!!.beauty.let {
                     if (it.female_score > it.male_score) {
                         it.female_score.toInt().toString()
@@ -74,6 +80,7 @@ class PkFragment : BaseShowFragment(R.layout.fra_pk, PkViewModel::class.java) {
                         it.male_score.toInt().toString()
                     }
                 }
+                showMineResult()
                 showSuccessAnimation()
                 dialog?.doDismiss()
                 pk_post.isEnabled = true
@@ -86,7 +93,7 @@ class PkFragment : BaseShowFragment(R.layout.fra_pk, PkViewModel::class.java) {
             })
         })
 
-        pk_tip.setOnClickListener {
+        pk_mine_image.setOnClickListener {
             val bottomDialog = BottomSheetDialog(context!!)
             val bottomDialogView = layoutInflater.inflate(R.layout.bottom_sheet_dialog, null)
             bottomDialogView.findViewById<Button>(R.id.bottom_sheet_camera).setOnClickListener {
@@ -101,14 +108,20 @@ class PkFragment : BaseShowFragment(R.layout.fra_pk, PkViewModel::class.java) {
             bottomDialog.show()
         }
 
-        pk_confirm.setOnClickListener {
-            dialog = DialogUtil.showProgressDialog(context!!, "评分中")
-            mViewModel.scoring()
-        }
-
         pk_post.setOnClickListener {
             getOuterActivity().setResult(Activity.RESULT_OK)
             getOuterActivity().supportFinishAfterTransition()
+        }
+    }
+
+    private fun showMineResult() {
+        pk_mine_result.visibility = VISIBLE
+        if (pk_opponent_score.text.toString().toDouble() > pk_mine_score.text.toString().toDouble()) {
+            pk_mine_result.text = "You Lost"
+            pk_mine_result.setTextColor(context!!.getColorStateList(android.R.color.darker_gray))
+        } else {
+            pk_mine_result.text = "You Win"
+            pk_mine_result.setTextColor(context!!.getColorStateList(R.color.colorAccent2))
         }
     }
 
@@ -132,7 +145,7 @@ class PkFragment : BaseShowFragment(R.layout.fra_pk, PkViewModel::class.java) {
                 CAMERA_CODE -> {
                     mViewModel.getPictureFile()?.let {
                         mineImage = FileProvider.getUriForFile(context!!, FileUtil.FILE_PROVIDER_AUTHORITY, it)
-                        crop(mineImage)
+                        crop(mineImage!!)
                     }
                 }
                 GALLERY_CODE -> {
@@ -149,6 +162,9 @@ class PkFragment : BaseShowFragment(R.layout.fra_pk, PkViewModel::class.java) {
     }
 
     private fun setMineImage() {
+        pk_mine_result.visibility = INVISIBLE
+        dialog = DialogUtil.showProgressDialog(context!!, "评分中")
+        mViewModel.scoring()
         pk_tip.visibility = GONE
         Glide.with(this).load(mineImage).into(pk_mine_image)
     }
