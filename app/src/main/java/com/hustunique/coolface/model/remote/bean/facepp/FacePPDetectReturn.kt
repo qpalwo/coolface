@@ -25,11 +25,57 @@ data class Attributes(
     val emotion: Emotion,
     val gender: Gender,
     val glass: Glass,
+    val ethnicity: Ethnicity,
+    val blur: Blur,
+    val mouthstatus: Mouthstatus,
+    val eyegaze: Eyegaze,
+    val skinstatus: Skinstatus,
+    val facequality: Facequality,
     val headpose: Headpose,
     val smile: Smile
 )
 
 data class Glass(
+    val value: String
+)
+
+data class Facequality(
+    val value: Float,
+    val threshold: Float
+)
+
+data class Skinstatus(
+    val health: Float,
+    val stain: Float,
+    val acne: Float,
+    val dark_circle: Float
+)
+
+data class Eyegaze(
+    val left_eye_gaze: Gaze,
+    val right_eye_gaze: Gaze
+)
+
+data class Gaze(
+    val position_x_coordinate: Float,
+    val position_y_coordinate: Float,
+    val vector_x_component: Float,
+    val vector_y_component: Float,
+    val vector_z_component: Float
+)
+
+data class Mouthstatus(
+    val surgical_mask_or_respirator: Float,
+    val other_occlusion: Float,
+    val close: Float,
+    val open: Float
+)
+
+data class Blur(
+    val value: String
+)
+
+data class Ethnicity(
     val value: String
 )
 
