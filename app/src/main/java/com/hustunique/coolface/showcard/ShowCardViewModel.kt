@@ -48,11 +48,6 @@ class ShowCardViewModel : ViewModel() {
             }
 
         }
-        postRepo.addComment(postData.value?.data?.objectId!!, content) {
-            (postData.value?.data?.comments as MutableList).apply {
-                removeAt(indexOf(content))
-            }
-        }
 
         if (dmView.isPaused)
             dmView.resume()

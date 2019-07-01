@@ -123,10 +123,8 @@ class FusionFragment : BaseShowFragment(R.layout.fra_fusion, FusionViewModel::cl
                 animationSet = AnimatorSet()
                 fusion_confirm.isEnabled = true
             }, error = { s, d ->
-                animationSet.cancel()
-                animationSet = AnimatorSet()
-                fusion_confirm.isEnabled = false
                 DialogUtil.showTipDialog(context!!, "融合出错了。嘤嘤嘤", "确定", {
+                    reset()
                     it.doDismiss()
                 })
                 toast(s!!)
@@ -265,9 +263,33 @@ class FusionFragment : BaseShowFragment(R.layout.fra_fusion, FusionViewModel::cl
         }
     }
 
+    private fun reset() {
+        animationSet.cancel()
+        animationSet = AnimatorSet()
+        resultShowAnimator?.cancel()
+        resultShowAnimator = null
+        fusion_confirm.isEnabled = true
+        fusion_fusion_tip.visibility = VISIBLE
+        fusion_template_tip.visibility = VISIBLE
+        fusion_template_image.apply {
+            x = templateImageStartPoint?.x!!.toFloat()
+            y = templateImageStartPoint?.y!!.toFloat()
+            rotation = 0f
+            alpha = 1f
+        }
+        fusion_fusion_image.apply {
+            x = fusionImageStartPoint?.x!!.toFloat()
+            y = fusionImageStartPoint?.y!!.toFloat()
+            rotation = 0f
+            alpha = 1f
+        }
+        fusion_result_image.apply {
+            alpha = 1f
+        }
+    }
+
     private fun showResult(resultUrl: String) {
         animationSet.pause()
-        
         fusion_template_image.apply {
             rotation = 0f
             x = templateImageStartPoint?.x!!.toFloat()
