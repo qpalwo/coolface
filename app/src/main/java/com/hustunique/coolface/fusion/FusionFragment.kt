@@ -304,7 +304,11 @@ class FusionFragment : BaseShowFragment(R.layout.fra_fusion, FusionViewModel::cl
     private fun startCamera() {
         val requestCode = CAMERA_CODE
         val file = mViewModel.getNewPictureFile()
-
+        if (clickPosition == TEMPLATE_CODE) {
+            templateImageFile = file!!
+        } else if (clickPosition == FUSION_CODE) {
+            fusionImageFile = file!!
+        }
         file.let {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION +
