@@ -1,10 +1,19 @@
 package com.hustunique.coolface.util
 
 import android.content.Context
-import android.content.ContextWrapper
+import android.content.Intent
+import android.net.Uri
+import android.os.Environment
+import android.provider.MediaStore
+import androidx.core.content.FileProvider
+import com.hustunique.coolface.base.CoolFaceApplication
+import okio.buffer
+import okio.sink
+import okio.source
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 /**
  * @author  : Xiao Yuxuan
@@ -42,5 +51,29 @@ object FileUtil {
             e.printStackTrace()
             null
         }
+    }
+
+    fun save2Gallery(path: String, onSuccess: ((String) -> Unit)? = null, onError: ((String) -> Unit)? = null) {
+        try {
+            val inPut = File(path)
+            MediaStore.Images.Media.insertImage(
+                CoolFaceApplication.mApplicationContext.getContentResolver(),
+                inPut.absolutePath,
+                inPut.name,
+                null
+            )
+            val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+            val uri = FileProvider.getUriForFile(CoolFaceApplication.mApplicationContext, FILE_PROVIDER_AUTHORITY, inPut)
+            intent.data = uri
+            CoolFaceApplication.mApplicationContext.sendBroadcast(intent)
+            onSuccess?.run {
+                this("success")
+            }
+        } catch (e: Exception) {
+            onError?.run {
+                this(e.message.toString())
+            }
+        }
+
     }
 }
