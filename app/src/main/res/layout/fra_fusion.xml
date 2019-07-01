@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/fusion_template_image"
-        android:layout_width="167dp"
-        android:layout_height="293dp"
+        android:layout_width="137dp"
+        android:layout_height="243dp"
         android:layout_margin="8dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/fusion_background"
@@ -50,8 +50,8 @@
 
     <ImageView
         android:id="@+id/fusion_fusion_image"
-        android:layout_width="167dp"
-        android:layout_height="293dp"
+        android:layout_width="137dp"
+        android:layout_height="243dp"
         android:layout_marginEnd="8dp"
         android:padding="5dp"
         android:background="@drawable/fusion_background"

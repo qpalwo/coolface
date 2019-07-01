@@ -32,7 +32,7 @@ class MainRankAdapter(private var posts: List<Post>, val mViewModel: MainViewMod
         super.onBindView(holder, position)
         val post = data!![position]
         // 是否在点赞的列表里
-        var isLike = post.likeUser?.contains(BmobUser.getCurrentUser(User::class.java).nickname) ?: false
+        var isLike = post.likeUser?.contains(mViewModel.user.value!!.username) ?: false
 
         val rankTextView = holder.getView<TextView>(R.id.item_rank_rank)
         val usernameTextView = holder.getView<TextView>(R.id.item_rank_username)
@@ -45,6 +45,7 @@ class MainRankAdapter(private var posts: List<Post>, val mViewModel: MainViewMod
 
         val image = holder.getView<ImageView>(R.id.item_rank_image)
         val pk = holder.getView<ImageView>(R.id.item_rank_pk)
+
 
         TextUtil.setDefaultTypeface(
             rankTextView,

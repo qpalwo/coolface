@@ -62,6 +62,7 @@ class MainAdapter(val mViewModel: MainViewModel, data: List<Post>? = null) :
                 target: Target<Drawable>?,
                 isFirstResource: Boolean
             ): Boolean {
+
                 return true
             }
 

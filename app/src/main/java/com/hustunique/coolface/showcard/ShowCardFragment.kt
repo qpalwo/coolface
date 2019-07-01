@@ -44,8 +44,8 @@ class ShowCardFragment : BaseShowFragment(R.layout.fra_show_card, ShowCardViewMo
         mViewModel = viewModel as ShowCardViewModel
         val height = DisplayUtil.getHeight(getOuterActivity())
         getAnimationBound().setPadding(
-            70f,
-            70f,
+            80f,
+            80f,
             height / 2 - 950f,
             height / 2 - 950f
         )

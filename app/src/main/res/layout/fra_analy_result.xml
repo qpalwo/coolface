@@ -25,7 +25,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
         android:textColor="@color/colorAccent2"
-        android:textSize="25dp"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/analy_myimage"
         app:layout_constraintEnd_toEndOf="@+id/analy_myimage"
         app:layout_constraintStart_toStartOf="@+id/analy_myimage" />
@@ -48,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorAccent"
-        android:textSize="25dp"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/analy_similar_star_image"
         app:layout_constraintEnd_toEndOf="@+id/analy_similar_star_image"
         app:layout_constraintStart_toStartOf="@+id/analy_similar_star_image"
@@ -69,8 +69,8 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:rotation="-15"
         android:src="@mipmap/cover_similar_star"
         android:tint="@color/colorTran"
@@ -80,8 +80,8 @@
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:rotation="-15"
         android:src="@mipmap/cover_similar_user"
         app:layout_constraintStart_toStartOf="@+id/analy_similar_user_image"
@@ -92,7 +92,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorAccent"
-        android:textSize="25dp"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/analy_similar_user_image"
         app:layout_constraintEnd_toEndOf="@+id/analy_similar_user_image"
         app:layout_constraintStart_toStartOf="@+id/analy_similar_user_image"
@@ -128,13 +128,13 @@
 
     <TextView
         android:id="@+id/analy_gender"
-        android:layout_width="110dp"
+        android:layout_width="90dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:text="Loading"
         android:textColor="@color/colorPrimary"
-        android:textSize="25dp"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/analy_gender_tip"
         app:layout_constraintEnd_toStartOf="@id/analy_emotion_tip"
         app:layout_constraintStart_toEndOf="@+id/analy_gender_tip"
@@ -156,12 +156,12 @@
 
     <TextView
         android:id="@+id/analy_emotion"
-        android:layout_width="110dp"
+        android:layout_width="90dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="Loading"
         android:textColor="@color/colorPrimary"
-        android:textSize="25dp"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/analy_emotion_tip"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/analy_emotion_tip"
@@ -183,13 +183,13 @@
 
     <TextView
         android:id="@+id/analy_age"
-        android:layout_width="110dp"
+        android:layout_width="90dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:text="Loading"
         android:textColor="@color/colorPrimary"
-        android:textSize="25dp"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/analy_age_tip"
         app:layout_constraintEnd_toStartOf="@id/analy_ethnicity_tip"
         app:layout_constraintHorizontal_bias="0.5"
@@ -212,12 +212,12 @@
 
     <TextView
         android:id="@+id/analy_ethnicity"
-        android:layout_width="110dp"
+        android:layout_width="90dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="Loading"
         android:textColor="@color/colorPrimary"
-        android:textSize="25dp"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/analy_ethnicity_tip"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/analy_ethnicity_tip"
@@ -239,13 +239,13 @@
 
     <TextView
         android:id="@+id/analy_glass"
-        android:layout_width="110dp"
+        android:layout_width="90dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:text="Loading"
         android:textColor="@color/colorPrimary"
-        android:textSize="25dp"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/analy_glass_tip"
         app:layout_constraintEnd_toStartOf="@id/analy_mouthstatus_tip"
         app:layout_constraintHorizontal_bias="0.5"
@@ -268,12 +268,12 @@
 
     <TextView
         android:id="@+id/analy_mouthstatus"
-        android:layout_width="110dp"
+        android:layout_width="90dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="Loading"
         android:textColor="@color/colorPrimary"
-        android:textSize="25dp"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/analy_mouthstatus_tip"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/analy_mouthstatus_tip"
