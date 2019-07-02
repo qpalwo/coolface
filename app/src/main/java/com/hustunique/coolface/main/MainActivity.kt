@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import cn.bmob.v3.BmobUser
+import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -103,6 +104,8 @@ class MainActivity : BaseActivity(R.layout.activity_main, MainViewModel::class.j
                     notifyDataSetChanged()
                     clickListener = object : ListOnClickListener {
                         override fun onClick(position: Int, v: View) {
+                            if (v.findViewById<LottieAnimationView>(R.id.post_loading).isAnimating)
+                                return
                             clickPosition = position
                             val options =
                                 ActivityOptionsCompat.makeSceneTransitionAnimation(
